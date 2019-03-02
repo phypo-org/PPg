@@ -1,0 +1,7 @@
+Pb avec les aspects en mode LINE : perte de la couleur pour une partie
+des traces ulterieur : glDisable( LIGHTING ) sans glEnable ?
+
+Pb  avec les CompilObjs 
+
+A qoui sert le Parent dans ModelBase ? en tout cas il empeche un
+partage propre d"un modele par plusieur Node
