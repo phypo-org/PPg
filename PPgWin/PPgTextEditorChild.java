@@ -1,31 +1,28 @@
 package org.phypo.PPg.PPgWin;
-
-
 import java.awt.BorderLayout;
 
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
-
 
 //***********************************
 
-public class PPgHelpChild extends PPgFrameChild{
+@SuppressWarnings("serial")
+public class PPgTextEditorChild extends PPgFrameChild{
 
-	public PPgHelpChild(  String pPage ){
+	public PPgTextEditorChild(  String pTitle,String pStr ){
 
-		super( pPage );
+		super( pTitle );
 
 		getContentPane().setLayout( new BorderLayout() );
 
-		PPHtml lHtml = new PPHtml( pPage );
-		//JTextArea lHtml = new JTextArea( pPage );
-		JScrollPane lScroll  = new JScrollPane(lHtml,	
+		JTextArea lText = new JTextArea( pStr );
+		JScrollPane lScroll  = new JScrollPane(lText,	
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		getContentPane().add( lScroll, BorderLayout.CENTER );
 		setDefaultCloseOperation( WindowConstants.HIDE_ON_CLOSE );		
 	}
-
 }
 //***********************************

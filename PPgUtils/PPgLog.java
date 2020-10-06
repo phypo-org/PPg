@@ -1,21 +1,48 @@
 package org.phypo.PPg.PPgUtils;
 
-
-import java.util.*;
-import java.io.*;
-import java.lang.*;
-
+import java.io.FileNotFoundException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 //*************************************************
 
-public class PPgLog extends PrintStream{
+public class PPgLog{
 
-		public static PPgLog Out = new PPgLog( System.out );
-		public static PPgLog Err = new PPgLog( System.err );;
+	public static PrintStream Out =  System.out ;
+	public static PrintStream Err =  System.err;
 
+	public static PrintStream Dbg = new PrintStream( new OutputStream() {
+		public void write(int b) {
+			//DO NOTHING
+		}}
+	);
 
-		PPgLog( OutputStream pOut ){
-				super( pOut );
+	//Add file support !!!!
+	static public boolean UseFile( String iFilename ){
+		try {
+			PrintStream lTmp = new PrintStream(  iFilename );
+			if( Dbg == Out )
+				Dbg = lTmp;
+			Out = lTmp ;
+			Err = lTmp ;
+			return true;
+		} catch (FileNotFoundException e) {				
+			return false;
 		}
+	}	
+	static public boolean UseDbgFile( String iFilename ){
+		try {
+			Dbg = new PrintStream(  iFilename );
+			return true;
+		} catch (FileNotFoundException e) {				
+			return false;
+		}
+	}
+	
+	static public boolean UseDbg( ){
+		Dbg = Out;
+		return true;
+	}
+
 }
 //*************************************************

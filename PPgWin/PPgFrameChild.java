@@ -1,6 +1,6 @@
 package org.phypo.PPg.PPgWin;
 import java.awt.Rectangle;
-import java.beans.PropertyVetoException;
+import java.beans.PropertyVetoException; 
 
 import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameEvent;
@@ -36,6 +36,14 @@ public class PPgFrameChild extends JInternalFrame implements InternalFrameListen
               true);//iconifiable
 
 	init( pName );
+    }
+    
+    //-------------------------------------
+    public String getStringLocation(){
+  	return ""+((int)getLocation().getX())+","+
+				((int)getLocation().getY())+","+
+				((int)getSize().getWidth())+","+
+				((int)getSize().getHeight());
     }
     //-------------------------------------
     protected void init(  String p_name ){

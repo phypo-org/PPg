@@ -31,36 +31,42 @@ import org.phypo.PPg.PPgUtils.PPgIniFile;
 
 //***********************************
 public abstract class PPgAppli extends JFrame
-    implements ActionListener, ItemListener, InternalFrameListener {
+implements ActionListener, ItemListener, InternalFrameListener {
 
-	 public JDesktopPane c_desktop;
-	 public JMenuBar     c_menubar;
-	 public JToolBar     c_toolbar;
+	public JDesktopPane c_desktop;
+	public JMenuBar     cMenubar;
+	public JToolBar     cToolbar;
 
-		DateFormat cDateFormat =  DateFormat.getDateTimeInstance();
-		DateFormat getDateFormat() { return cDateFormat;}
+	DateFormat cDateFormat =  DateFormat.getDateTimeInstance();
+	DateFormat getDateFormat() { return cDateFormat;}
 
 	public static PPgAppli TheAppli;
 	public static PPgAppli GetAppli() { return TheAppli; }
 	public static DateFormat GetDateFormat() { return TheAppli.cDateFormat; }
-	
-		public static Color sGlobalForeground = null;
-		public static Color sGlobalBackground = null;
 
-		public static void SetGlobalForeground( Color pColor ) { 
-				sGlobalForeground=pColor;
-				if( pColor!= null && TheAppli != null )
-						TheAppli.setForeground( pColor );
+	public static Color sGlobalForeground = null;
+	public static Color sGlobalBackground = null;
+
+	public static void SetGlobalForeground( Color pColor ) { 
+		sGlobalForeground=pColor;
+		if( pColor!= null && TheAppli != null ){
+			System.out.println( "setForeground");
+			TheAppli.getContentPane().setForeground( pColor );
+			TheAppli.setForeground( pColor );
 		}
-		public static void SetGlobalBackground( Color pColor ) { 
-				sGlobalBackground=pColor;
-				if( pColor!= null  && TheAppli != null  )
-						TheAppli.setBackground( pColor );
+	}
+	public static void SetGlobalBackground( Color pColor ) { 
+		sGlobalBackground=pColor;
+		if( pColor!= null  && TheAppli != null  ){
+			System.out.println( "setBackground");
+			TheAppli.getContentPane().setBackground( pColor );
+			TheAppli.setBackground( pColor );
 		}
+	}
 
 
 	//-------------------------------------
-public 	PPgAppli( String p_str, boolean p_desk ){
+	public 	PPgAppli( String p_str, boolean p_desk ){
 		super( p_str );
 		TheAppli = this;
 
@@ -69,23 +75,23 @@ public 	PPgAppli( String p_str, boolean p_desk ){
 		//of the screen.
 		int inset = 50;
 		Dimension screenSize = new Dimension( 1024, 800 );// Toolkit.getDefaultToolkit().getScreenSize();
-	 
+
 		setBounds(inset, inset, 
-							screenSize.width - inset*2, 
-							screenSize.height-inset*2);
-		
-		
+				screenSize.width - inset*2, 
+				screenSize.height-inset*2);
+
+
 		//---- Quit this app when the big window closes. 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
-		
-		getContentPane().setLayout( new BorderLayout());
-    c_toolbar = new JToolBar();
 
-		getContentPane().add( c_toolbar, BorderLayout.NORTH );
+		getContentPane().setLayout( new BorderLayout());
+		cToolbar = new JToolBar();
+
+		getContentPane().add( cToolbar, BorderLayout.NORTH );
 
 		if( p_desk ){			
 			//Set up the GUI.
@@ -98,20 +104,24 @@ public 	PPgAppli( String p_str, boolean p_desk ){
 		//		createFrameDraw(); //Create first window
 		//		setContentPane(c_desktop);
 
-		setJMenuBar(c_menubar = new JMenuBar());
+		setJMenuBar(cMenubar = new JMenuBar());
 
 
 	}
 	//-------------------------------------
-		public 	JMenuItem  addItem( JMenu p_menu, String p_str, boolean pActif ){
-				JMenuItem lItem =  addItem(  p_menu, p_str );
-				lItem.setEnabled(pActif  );
+	public String getStringLocation(){
+		return PPgWinUtils.GetStringLocation(this);
+	}
+	//-------------------------------------
+	public 	JMenuItem  addItem( JMenu p_menu, String p_str, boolean pActif ){
+		JMenuItem lItem =  addItem(  p_menu, p_str );
+		lItem.setEnabled(pActif  );
 
-				return lItem;
-		}		
+		return lItem;
+	}		
 	//-------------------------------------
 
-		public 	JMenuItem  addItem( JMenu p_menu, String p_str ){
+	public 	JMenuItem  addItem( JMenu p_menu, String p_str ){
 
 		JMenuItem l_item = new JMenuItem( p_str);
 
@@ -121,7 +131,7 @@ public 	PPgAppli( String p_str, boolean p_desk ){
 		return l_item;
 	}
 	//-------------------------------------
-public 	JMenuItem  addAbout( JMenu p_menu ){
+	public 	JMenuItem  addAbout( JMenu p_menu ){
 
 		JMenuItem l_item = new JMenuItem( "About");
 
@@ -130,23 +140,23 @@ public 	JMenuItem  addAbout( JMenu p_menu ){
 		p_menu.add( l_item);
 		return l_item;
 	}
-		//-------------------------------------
+	//-------------------------------------
 
-		public JMenu getFileMenu() { return null; }
-		public JMenu getEditMenu() { return null; }
-		public JMenu getViewMenu() { return null; }
-		public JMenu getWindowsMenu() { return null; }
+	public JMenu getFileMenu() { return null; }
+	public JMenu getEditMenu() { return null; }
+	public JMenu getViewMenu() { return null; }
+	public JMenu getWindowsMenu() { return null; }
 
-		//-------------------------------------
-		//-------------------------------------
-		//-------------------------------------
-public 	JButton addButtonToToolbar( String p_str ){
+	//-------------------------------------
+	//-------------------------------------
+	//-------------------------------------
+	public 	JButton addButtonToToolbar( String p_str ){
 
 		JButton  l_button = new JButton( p_str );
 
 		l_button.setActionCommand( "p_str");
 		l_button.addActionListener( this );
-		c_toolbar.add( l_button );
+		cToolbar.add( l_button );
 		return l_button;
 	}
 	//-------------------------------------
@@ -176,46 +186,46 @@ public 	JButton addButtonToToolbar( String p_str ){
 		c_desktop.remove(p_frame); 
 	}
 
-		public void log( String pStr ){
-		}
-		//-------------------------------------
-		public void saveConfigIni( PPgIniFile pIni, String pSection ){
-				pIni.set( pSection, "Mother", 
-									((int)getLocation().getX())+","+
-									((int)getLocation().getY())+","+
-									((int)getSize().getWidth())+","+
-									((int)getSize().getHeight()) );
-		}
-		//-------------------------------------
-		public void readConfigIni( PPgIniFile pIni, String pSection ){
-				Rectangle lRect = PPgIniFile.GetRectangle( pIni.get( pSection, "Mother" ), "," );
-				if( lRect != null)	setBounds( lRect);
-		}
+	public void log( String pStr ){
+	}
+	//-------------------------------------
+	public void saveConfigIni( PPgIniFile pIni, String pSection ){
+		pIni.set( pSection, "Mother", 
+				((int)getLocation().getX())+","+
+						((int)getLocation().getY())+","+
+						((int)getSize().getWidth())+","+
+						((int)getSize().getHeight()) );
+	}
+	//-------------------------------------
+	public void readConfigIni( PPgIniFile pIni, String pSection ){
+		Rectangle lRect = PPgIniFile.GetRectangle( pIni.get( pSection, "Mother" ), "," );
+		if( lRect != null)	setBounds( lRect);
+	}
 
-		public  PPgIniFile  getStdIniFile() { return null; }
+	public  PPgIniFile  getStdIniFile() { return null; }
 
-    //-------------------------------------
-    public void 	internalFrameActivated(InternalFrameEvent e){
-	// Invoked when an internal frame is activated.
-    }
-    public void 	internalFrameClosed(InternalFrameEvent e){
-	//Invoked when an internal frame has been closed.
-    }
-    public void 	internalFrameClosing(InternalFrameEvent e){
-	//Invoked when an internal frame is in the process of being closed.
-    }
-    public void 	internalFrameDeactivated(InternalFrameEvent e){
-	//Invoked when an internal frame is de-activated.
-    }
-    public void 	internalFrameDeiconified(InternalFrameEvent e){
-	//Invoked when an internal frame is de-iconified.
-    }
-   public  void 	internalFrameIconified(InternalFrameEvent e){
-	//Invoked when an internal frame is iconified.
-    }
-    public void 	internalFrameOpened(InternalFrameEvent e){
-	//Invoked when a internal frame has been opened.
-    }
+	//-------------------------------------
+	public void 	internalFrameActivated(InternalFrameEvent e){
+		// Invoked when an internal frame is activated.
+	}
+	public void 	internalFrameClosed(InternalFrameEvent e){
+		//Invoked when an internal frame has been closed.
+	}
+	public void 	internalFrameClosing(InternalFrameEvent e){
+		//Invoked when an internal frame is in the process of being closed.
+	}
+	public void 	internalFrameDeactivated(InternalFrameEvent e){
+		//Invoked when an internal frame is de-activated.
+	}
+	public void 	internalFrameDeiconified(InternalFrameEvent e){
+		//Invoked when an internal frame is de-iconified.
+	}
+	public  void 	internalFrameIconified(InternalFrameEvent e){
+		//Invoked when an internal frame is iconified.
+	}
+	public void 	internalFrameOpened(InternalFrameEvent e){
+		//Invoked when a internal frame has been opened.
+	}
 
 };
 //***********************************

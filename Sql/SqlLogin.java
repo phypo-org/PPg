@@ -17,6 +17,7 @@ import org.phypo.PPg.PPgWin.PPgInputField;
 import org.phypo.PPg.PPgUtils.*;
 
 // **********************************
+@SuppressWarnings("serial")
 public class SqlLogin extends JDialog
     implements  ActionListener	{
     SqlServer cServer;
@@ -64,7 +65,7 @@ public class SqlLogin extends JDialog
 	    setLocation( pX, pY );
 
 
-	PPgTrace.Traceln( cServer.cMachine ); 
+	Log.Trace( cServer.cMachine ); 
 	getContentPane().setLayout( new BorderLayout() );
 
 	cPanel =	new JPanel();
@@ -82,7 +83,7 @@ public class SqlLogin extends JDialog
 	cPanel.add( cFieldPort );
 	cFieldUser = new PPgInputField( "User",    cServer.cUser, PPgField.HORIZONTAL  );
 	cPanel.add( cFieldUser );
-	cFieldPass = new PPgInputField( "Pass",    cServer.cPass, PPgField.HORIZONTAL  );
+	cFieldPass = new PPgInputField( "Pass",    cServer.cPass, PPgField.HORIZONTAL, '*'  );
 	cPanel.add( cFieldPass );
 	cFieldBase = new PPgInputField( "Base",    cServer.cBase, PPgField.HORIZONTAL  );
 	cPanel.add( cFieldBase );	

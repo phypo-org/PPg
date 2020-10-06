@@ -9,33 +9,56 @@ import java.io.FileReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
 //**********************************************************
+@SuppressWarnings("serial")
 public class PPgTable extends AbstractTableModel {
 	 		
 		
     protected PPgTableLine cPrototype = null;
-    protected List<PPgTableLine>        cTableObj    = new ArrayList<PPgTableLine>();
+    protected ArrayList<PPgTableLine>   cTableObj    = new ArrayList<PPgTableLine>();
     protected JTable      cTable       = null;
     protected boolean     cIsEditable = true;
     protected TableRowSorter cRowFilter = null;
 
-    public List<PPgTableLine> getList()     { return cTableObj; }
+    public ArrayList<PPgTableLine> getList()     { return cTableObj; }
     public void setList(ArrayList<PPgTableLine> pList) {  cTableObj = pList; }
     public JTable getJTable() { return cTable; }
-
+    
+    public int[] getSelectedRowsRaw() {
+    	return  getJTable().getSelectedRows();
+    	}
+   public int[] getSelectedRows() {
+    	int lRows[] = getJTable().getSelectedRows();
+    		for( int i=0; i<lRows.length;i++) {
+    			lRows[i] = cTable.convertRowIndexToModel(lRows[i]);
+    		}
+    		return lRows;
+    	}
+ 
+    public ArrayList<PPgTableLine> getSelectedRowsArray() {
+    	
+    	ArrayList<PPgTableLine> lSelect = new ArrayList<>();
+    	int lRowsInd[] = getSelectedRows() ;
+    	for( int i :  lRowsInd ) {
+    		lSelect.add( cTableObj.get(i));
+    		//lSelect.add( cTableObj.get(cTable.convertRowIndexToModel(i)) );
+   	}
+    	return lSelect;
+	}
+	
+	
     public TableRowSorter getRowFilter() {  return cRowFilter; }
+   
 
     public void setTableEditable( boolean pBool ) { cIsEditable = pBool; }
     //-------------
     public void clear() { cTableObj.clear(); }
     //-------------
-    public PPgTable(PPgTableLine pPrototype, List<PPgTableLine> pList){
+    public PPgTable(PPgTableLine pPrototype, ArrayList<PPgTableLine> pList){
 				
 	cPrototype = pPrototype;
 	if( pList == null )
@@ -47,7 +70,7 @@ public class PPgTable extends AbstractTableModel {
 	cTable.setRowSorter( (cRowFilter = new TableRowSorter( this) ) );
 
 
-	cTable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
+//	cTable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
     }			
     //-------------
     public void add( PPgTableLine pLine ){
@@ -94,10 +117,9 @@ public class PPgTable extends AbstractTableModel {
 		cTableObj.get(pRow).setValueAt(value, pCol);
 	    }
     }
-
     // ------------------------------
     public void selectLine( int pLine ){
-	if( pLine > -1 ){
+	if( pLine > -1 ){ //?????????????????????
 	    cTable.changeSelection( pLine, 0, false, false );
 	    cTable.changeSelection( pLine, 2, false, true );						
 	}

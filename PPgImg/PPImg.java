@@ -4,12 +4,7 @@ package org.phypo.PPg.PPgImg;
 
 
 
-import java.awt.geom.*;
 import java.awt.*;
-import java.awt.geom.Point2D.*;
-import java.awt.event.*;
-
-
 import javax.swing.ImageIcon;
 
 
@@ -17,6 +12,10 @@ import javax.swing.ImageIcon;
 
 public class PPImg extends ImageIcon  implements  PPgImgBase {
 		
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4571075702893794403L;
 		int lSz=0;
 
 		public PPImg( String pStr ){
@@ -31,6 +30,30 @@ public class PPImg extends ImageIcon  implements  PPgImgBase {
 		}
 
 		void prepareNextDraw( int pState, int pSequence, double pAngle ){
+		}
+
+		@Override
+		public int getAnimNbState() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int getAnimSizeSequence() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public double getAnimDuration() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void draw(Graphics2D pG, int pX, int pY, int pState, double pTimeSeq) {
+			// TODO Auto-generated method stub
+			
 		}
 };
 //*************************************************

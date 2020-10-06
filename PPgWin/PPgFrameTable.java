@@ -3,36 +3,59 @@ package org.phypo.PPg.PPgWin;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
+import javax.swing.table.TableColumnModel;
 
+import org.phypo.PPg.PPgUtils.Log;
+
+import java.util.ArrayList;
 import java.util.regex.*;
 
 //***********************************
+@SuppressWarnings("serial")
 public class PPgFrameTable extends PPgFrameChild 
     implements MouseListener, ActionListener{
 		
     PPgTable cTable=null;
     public PPgTable getTable() { return cTable;}
+    public JTable getJTable() { return cTable.getJTable();}
 
-    JPanel      cSudPanel;
-    JPanel      cNorthPanel = null;;
-    JLabel      cStatus;
-    JScrollPane cScrollpane;
+    JPanel      cSudPanel = null;
+    protected JPanel      cNorthPanel = null;
+    JLabel      cStatus =null;
+    JScrollPane cScrollpane=null;
 
     JTextField cFilterText  = null;
     JButton    cFilterButton= null;
-
-
+    
+   public ArrayList<PPgTableLine> getList()     { return cTable.cTableObj; }
+   public ArrayList<PPgTableLine> getSelectedRowsArray() { return cTable.getSelectedRowsArray(); }
+ 
+    public TableColumnModel getColumnModel() { return cTable.getJTable().getColumnModel(); }
     public JLabel getStatus() { return cStatus; }
-
+    
+    public void setBackground( Color bg ) {
+    	super.setBackground(bg);
+    	
+    	if( cSudPanel != null )    cSudPanel.setBackground(bg);        
+    	if( cNorthPanel != null )  cNorthPanel.setBackground(bg);
+    	if( cStatus != null )      cStatus.setBackground(bg);
+    	if( cScrollpane != null )  cScrollpane.setBackground(bg);
+    	if( cFilterText != null )  cFilterText.setBackground(bg);
+    	if( cFilterButton != null )cFilterButton.setBackground(bg);
+    	
+    //	cTable.setBackground(bg);
+    }
+    //-------------------------------------
+    protected JPanel getButtonPanel() { return cNorthPanel;}
     //-------------------------------------
     void filterRegex(){
 	String lText = cFilterText.getText();
@@ -48,7 +71,7 @@ public class PPgFrameTable extends PPgFrameChild
 		}
 	    }				
     }
-    //-------------------------------------
+    //----------------------TableColumnModel---------------
     void filterBase(){
 	String lText = cFilterText.getText();
 	if (lText == null || lText.length() == 0) {
@@ -61,7 +84,16 @@ public class PPgFrameTable extends PPgFrameChild
 		} catch (PatternSyntaxException pse) {
 		    System.err.println("PPFrameTable : Bad regex pattern :" + lText );
 		}
-	    }				
+	    } 				
+    }
+    //-------------------------------------
+    public void clearFilter() {
+    	cFilterText.setText("");
+		filterBase();
+		forceRedraw();
+    }
+    public void actionFilterChange( ActionEvent e){
+    	
     }
     //-------------------------------------
     public PPgFrameTable( String pName, PPgTable pTable, boolean pFilterFlag, boolean pClosable ){				
@@ -84,14 +116,15 @@ public class PPgFrameTable extends PPgFrameChild
 	    cFilterButton.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 			filterBase();
-			updateStatusRowCount();
+			forceRedraw();
 		    }
 		});
 						
 	    cFilterText.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    actionFilterChange(e);
 			filterBase();
-			updateStatusRowCount();
+			forceRedraw();
 		    }
 		});						
 	}
@@ -106,7 +139,6 @@ public class PPgFrameTable extends PPgFrameChild
 	cSudPanel = new JPanel();		
 	cSudPanel.setLayout( new GridLayout( 1, 0 )); 
 	cStatus   = new JLabel( "");
-
 	cSudPanel.add( cStatus );				
 
 	getContentPane().add( cSudPanel, BorderLayout.SOUTH );				
@@ -122,11 +154,19 @@ public class PPgFrameTable extends PPgFrameChild
     public void setSelectionMode(  int pModel ){
 	cTable.getJTable().setSelectionMode( pModel );
     }
-    //-------------------------------------------		
-    public void add( PPgTableLine pLine ){	
+    //-------------------------------------------	
+    public void forceRedraw() {
+    	cTable.fireTableDataChanged();
+    	updateStatusRowCount();
+    }
+     //-------------------------------------------		
+    public void addLineAndRedraw( PPgTableLine pLine ){	
 	cTable.add( pLine );
-	cTable.fireTableDataChanged();
-	updateStatusRowCount();
+	forceRedraw();
+    }
+    //-------------------------------------------		
+    public void addLine( PPgTableLine pLine ){	
+	cTable.add( pLine );
     }
     //-------------------------------------------		
     public void updateStatusRowCount()
@@ -154,7 +194,7 @@ public class PPgFrameTable extends PPgFrameChild
     //-------------------------- 
     public void mouseReleased( MouseEvent pEv )    {;}
     public void mouseEntered( MouseEvent pEv )    {;}
-    public void mouseExited( MouseEvent pEv )     {;}
+    public void mouseExited( MouseEvent pEv )     {;} 
     public void mouseClicked( MouseEvent pEv )     {;}	
     //-------------------------------------------
     //-------------------------------------------
@@ -194,15 +234,15 @@ public class PPgFrameTable extends PPgFrameChild
 	return false;
     }
      //-------------------------------------
-    public void fireTableDataChanged(){
-	getTable().fireTableDataChanged();
-    }
+    // obsolete !!!!!!!!!!
+  //  public void fireTableDataChanged(){
+//	getTable().fireTableDataChanged();
+   // }
      //-------------------------------------
     public void removeLineAndRedraw( int iPos ) {
 	if( removeLine( iPos ) ) {
-	    fireTableDataChanged();
-	    updateStatusRowCount();
-	}
+		forceRedraw();
+		}
     }
     //-------------------------------------
     public void clear() { getTable().clear();}

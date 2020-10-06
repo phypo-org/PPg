@@ -1,20 +1,6 @@
 package org.phypo.PPg.PPgData;
 
 
-import java.io.*;
-import java.util.*;
-import java.lang.*;
-
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.image.*;
-import javax.imageio.*;
-import javax.imageio.stream.ImageOutputStream;
-import javax.swing.*;
-
-import org.phypo.PPg.PPgUtils.*;
-
-
 //*************************************************
 
 public class AttributPool {

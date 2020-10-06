@@ -3,16 +3,17 @@ package org.phypo.PPg.PPgWin;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
 
+import java.util.ArrayList;
 import java.util.regex.*;
 
 
@@ -20,8 +21,13 @@ import java.util.regex.*;
 public class PPgPanelTable extends JPanel
     implements MouseListener, ActionListener{
 		
-    PPgTable cTable=null;
+    protected PPgTable cTable=null;
     public PPgTable getTable() { return cTable;}
+    public JTable getJTable() { return cTable.getJTable();}
+    public int[] getSelectedRows() { return getJTable().getSelectedRows(); }
+
+    public ArrayList<PPgTableLine> getSelectedRowsArray() { return cTable.getSelectedRowsArray(); }
+    	
 
     JPanel      cSudPanel;
     JPanel      cNorthPanel = null;;
@@ -47,7 +53,22 @@ public class PPgPanelTable extends JPanel
 		}
 	    }				
     }
+    //-------------------------------------
 
+    public void setBackground( Color bg ) {
+    	super.setBackground(bg);
+    	
+    	if( cSudPanel != null )    cSudPanel.setBackground(bg);
+        
+    	if( cNorthPanel != null )  cNorthPanel.setBackground(bg);
+    	if( cStatus != null )      cStatus.setBackground(bg);
+    	if( cScrollpane != null )  cScrollpane.setBackground(bg);
+    	if( cFilterText != null )  cFilterText.setBackground(bg);
+    	if( cFilterButton != null )cFilterButton.setBackground(bg);
+    	
+    //	cTable.setBackground(bg);
+    }
+   
     //-------------------------------------
     void filterBase(){
 	String lText = cFilterText.getText();
@@ -62,7 +83,8 @@ public class PPgPanelTable extends JPanel
 		    System.err.println("PPFrameTable : Bad regex pattern :" + lText );
 		}
 	    }				
-    }		//-------------------------------------
+    }
+    //-------------------------------------
     public PPgPanelTable( String pName, PPgTable pTable, boolean pFilterFlag ){				
 				
 	cTable = pTable;
@@ -118,6 +140,10 @@ public class PPgPanelTable extends JPanel
 	cTable.getJTable().setSelectionMode( pModel );
     }
     //-------------------------------------------		
+    public void simpleAdd( PPgTableLine pLine ){	
+    	cTable.add( pLine );
+    }
+   //-------------------------------------------		
     public void add( PPgTableLine pLine ){	
 	cTable.add( pLine );
 	cTable.fireTableDataChanged();

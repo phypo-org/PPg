@@ -48,9 +48,9 @@ public class PPgSubImg extends PPgImg {
 		}
 
 		//------------------------------------------------
-		init(){
-				lSemiWidth  = cWidth /2;
-				lSemiHeight = cHeight/2;
+		void init(){
+				cSemiWidth  = cWidth /2;
+				cSemiHeight = cHeight/2;
 		}
 		//------------------------------------------------
 
@@ -58,9 +58,14 @@ public class PPgSubImg extends PPgImg {
 		public int getHeight() { return cHeight; }
 
 		public void draw( Graphics2D pG, int pX, int pY ) {
-				pX -= lSemiWidth;
-				pY -= lSemiHeight;
-				pG.drawImage( getImage(),  pX, pY, ,  null);	
+				pX -= cSemiWidth;
+				pY -= cSemiHeight;
+				pG.drawImage( getImage(),  pX, pY,  null);	
+		}
+
+		private Image getImage() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 		public void prepareNextDraw( int pState, int pSequence, double pAngle ){

@@ -125,6 +125,30 @@ public	StringBuilder nextToken( String p_toeat, String p_forend ){
 		//		System.out.println( "nextToken->" + l_strbuf );
 		return l_strbuf;
 	}
+//------------
+public	String nextTokenString( String p_toeat, String p_forend ){		
+	StringBuilder lTmp =  nextToken(p_toeat, p_forend );
+	if( lTmp == null) return "";
+	return lTmp.toString();
+}
+//------------
+public	String nextTokenStringTrim( String p_toeat, String p_forend ){		
+	StringBuilder lTmp =  nextToken(p_toeat, p_forend );
+	if( lTmp == null) return "";
+	return lTmp.toString().trim();
+}
+//------------
+public	String nextTokenString( ){		
+	StringBuilder lTmp =  nextToken(c_toeat, c_forend);
+	if( lTmp == null) return "";
+	return lTmp.toString();
+}
+//------------
+public	String nextTokenStringTrim( ){		
+	StringBuilder lTmp =  nextToken(c_toeat, c_forend );
+	if( lTmp == null) return "";
+	return lTmp.toString().trim();
+}
 	//------------
 public	StringBuilder getParagraph( String p_toeat, char p_begin, char p_end, boolean p_depsep ){
 		

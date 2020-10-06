@@ -1,22 +1,12 @@
 package org.phypo.PPg.PPgImg;
 
 
-import org.w3c.dom.*;
-
 import java.io.*;
-import java.util.*;
-import java.lang.*;
 import java.awt.*;
 
 
-import java.awt.*;
-import java.awt.geom.*;
 import java.awt.Image;
 import java.awt.image.*;
-import javax.imageio.*;
-import javax.imageio.stream.ImageOutputStream;
-
-import javax.swing.*;
 
  
 

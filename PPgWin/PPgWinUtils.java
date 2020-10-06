@@ -10,14 +10,12 @@ import java.io.File;
 import java.awt.event.*;
 import javax.swing.*;
 
-import java.text.DateFormat;
-import java.net.*;
-import java.awt.image.*;
 import java.awt.geom.Point2D;
 
 
 import org.phypo.PPg.PPgUtils.*;
 import org.phypo.PPg.PPgImg.*;
+
 
 //***********************************
 public class PPgWinUtils {
@@ -56,7 +54,26 @@ public class PPgWinUtils {
 				pMenu.add( lItem);
 				return lItem;
 		}
-	//-------------------------------------
+		//-------------------------------------
+		public static 	JMenuItem  AddMenuItem( JPopupMenu pMenu, String pStr, ActionListener pListen ){
+			JMenuItem lItem = null;
+			
+			if( pStr == null || pStr.length() == 0 ) {			
+				pMenu.add( new JSeparator() );
+			} else {
+				lItem = new JMenuItem( pStr);				
+				lItem.addActionListener( pListen );	 				
+				pMenu.add( lItem);
+			}
+			return lItem;
+		}
+		//-------------------------------------
+		public static void AddMenuItem( JPopupMenu pMenu, String pTabStr[], ActionListener pListen ){
+			for( String lStrMenu : pTabStr) {
+				AddMenuItem(pMenu , lStrMenu, pListen);
+			}
+		}	
+//-------------------------------------
 		public static 	JMenuItem  AddMenuItem( Container pMenu, String pStr, ActionListener pListen, int  pShortcut ){
 
 				JMenuItem lItem = new JMenuItem( pStr, pShortcut );
@@ -133,6 +150,18 @@ public class PPgWinUtils {
 				return lButton;
 		}
 		//------------------------------------------------------------
+		public static JButton MakeButton( String pStr, ActionListener pAction, Icon pIcon, int pWidth, int pHeight) {
+				
+				//Create and initialize the button.
+				JButton lButton = new JButton();
+				lButton.setActionCommand(pStr);
+				lButton.addActionListener(pAction);
+				lButton.setSize( pWidth, pHeight);
+				lButton.setPreferredSize(new Dimension(pWidth, pHeight));
+				lButton.setIcon( pIcon );
+				return lButton;
+		}
+		//------------------------------------------------------------
 		public static JButton MakeButton( String pStr, ActionListener pAction, String pImageName, String pHelp) {
 				
 				//Create and initialize the button.
@@ -155,8 +184,7 @@ public class PPgWinUtils {
 		}
 		//------------------------------------------------------------
 		public static JButton MakeButton( String pStr, ActionListener pAction, String pImageName) {
-				
-				
+								
 				return MakeButton( pStr, pAction, pImageName, null) ;
 		}
 		//-------------------------------------
@@ -186,6 +214,16 @@ public class PPgWinUtils {
 		public static JButton MakeButton( String pStr, ActionListener pAction, String pImageName, int pWidth, int pHeight) {
 
 				return MakeButton( pStr, pAction, pImageName, pWidth, pHeight, null) ;
+		}
+		//-------------------------------------
+		public static JCheckBox MakeCheckBox( String pStr, ItemListener pListen, boolean pVal) {
+				
+				//Create and initialize the button.
+				JCheckBox lButton = new JCheckBox(pStr);
+				lButton.setSelected( pVal );
+				lButton.addItemListener( pListen );	
+				
+				return lButton;
 		}
 		//-------------------------------------
 		public static JCheckBox MakeCheckBox( String pStr, ItemListener pListen, boolean pVal, String pImageName, int pWidth, int pHeight) {
@@ -253,7 +291,6 @@ public class PPgWinUtils {
 		public static JToggleButton MakeToggleButton( String pStr, ActionListener pAction, boolean pSelect, ButtonGroup pGroup, String pHelp ) {
 				return MakeToggleButton( pStr, pAction, pSelect, pGroup, null, 0, 0, pHelp );
 		}
-		//-------------------------------------
 		//-------------------------------------
 		//-------------------------------------
 
@@ -495,6 +532,13 @@ public class PPgWinUtils {
 				//		return lFont.getName() + '-' + GetFontStyle( lFont ) + '-' + lFont.getSize();
 					return lFont.getName() ;
 	}
+		//-------------------------------------
+		public static String GetStringLocation(Window iWin ){
+			return ""+((int)iWin.getLocation().getX())+","+
+					((int)iWin.getLocation().getY())+","+
+					((int)iWin.getSize().getWidth())+","+
+					((int)iWin.getSize().getHeight());
+		}
 
 }
 //***********************************
