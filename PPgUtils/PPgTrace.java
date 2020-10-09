@@ -5,6 +5,7 @@ import java.util.Date;
 
 //***********************************
 public class PPgTrace {
+	public enum Type{ Void, Unknown, Debug,Verbose,Info,Busy,Warn,Error,Critic,Fatal};
 
 		private static int sVerbose=0;
 		private static int sDebug=0;
@@ -27,6 +28,7 @@ public class PPgTrace {
 			Date date = new Date(System.currentTimeMillis());
 			return sDateFormatter.format(date);
 		}
+		//-----------------------------
 		
 		public static void Trace( int pVerbose, String pToTrace ){
 			if( sVerbose >= pVerbose  ) {
@@ -54,6 +56,14 @@ public class PPgTrace {
 		//-----------------------------
 		public static void Info( String pToTrace ){
 			PPgLog.Out.println( CurrentDatetime()+" --- : " + pToTrace );
+		}		
+		//-----------------------------
+		public static void BusyNl( String pToTrace ){
+			PPgLog.Out.print( CurrentDatetime() + " ... Busy : " + pToTrace );
+		}		
+		//-----------------------------
+		public static void Busy( String pToTrace ){
+			PPgLog.Out.println( CurrentDatetime()+" ... Busy : " + pToTrace );
 		}		
 		//-----------------------------
 		//-----------------------------

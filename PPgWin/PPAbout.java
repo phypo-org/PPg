@@ -23,7 +23,7 @@ public class PPAbout{
 							+ ( p_copyright != null ? p_copyright+"\n" : "" )
 							+ ( p_licence   != null ? p_licence+ "\n" : "")
 							+ ( p_mail      != null ? p_mail : ""),
-							"About" + p_progname, 
+							"About " + p_progname, 
 							JOptionPane.INFORMATION_MESSAGE);
 
 		else
@@ -33,7 +33,7 @@ public class PPAbout{
 							+ ( p_copyright != null ? p_copyright+"\n" : "" )
 							+ ( p_licence   != null ? p_licence+ "\n" : "")
 							+ ( p_mail      != null ? p_mail : ""),
-							"About" + p_progname, 
+							"About " + p_progname, 
 							JOptionPane.INFORMATION_MESSAGE, pIcon ) ;
 
 	}
