@@ -4,8 +4,6 @@ package org.phypo.PPg.PPgUtils;
 
 
 
-import java.util.StringTokenizer;
-
 import java.util.*;
 import java.io.*;
 
@@ -17,25 +15,25 @@ import java.lang.NumberFormatException;
 import java.net.*;
 
 import java.awt.Image;
-import java.awt.image.*;
-
 import javax.swing.ImageIcon;
-import javax.swing.GrayFilter;
-
-
 import org.phypo.PPg.PPgImg.*;
 
 
 // *********************************************
+@SuppressWarnings("serial")
 public  class PPgIniFile extends Properties{
 
-	//		TreeMap  cMap = new TreeMap();
+	static char sComment=';';
+	static char sCommand='#';
+
+	HashMap<String,String> cVariables=new HashMap<>();
+
+
 	static final String SEP = new String( "." );
 	String cSystemPrefix="";
 
 	// ------------------------------
 	public	PPgIniFile(){			
-		File lFile= null;
 	}
 	// ------------------------------
 	public	PPgIniFile( String pPath, String pFilename ){
@@ -57,7 +55,7 @@ public  class PPgIniFile extends Properties{
 	public boolean readIni( String pPath, String pFileName ){	
 
 		if( pPath != null && pPath.length() > 0  )
-			pFileName = pPath +'/' + pFileName;
+			pFileName = pPath + File.pathSeparatorChar + pFileName;
 
 		return readIni( pFileName );				
 	}
@@ -71,7 +69,7 @@ public  class PPgIniFile extends Properties{
 			}
 		}
 		catch( Exception e){
-			System.err.println("catch " + e + " in PPgIniFile.readIni " + pFileName);
+			Log.Err("readIni - catch " + e + " in PPgIniFile.readIni " + pFileName);
 			e.printStackTrace();
 		}
 		return false;
@@ -81,6 +79,71 @@ public  class PPgIniFile extends Properties{
 		InputStreamReader pReader  = new InputStreamReader( pIStream );
 		return readIni( pReader );
 	}
+	// ------------------------------
+	String resolveVariables( String iStr, int iDepth ) {     // RECURSIF !!!!!!!!!!!!
+	
+		if( cVariables.size() == 0 ) { 
+			Log.Dbg(3, "<"+iStr+"> no var define "+iDepth);
+			return iStr;
+		}
+		if( iDepth > 4 ) { 
+			Log.Dbg(3, "<"+iStr+"> depth too deep "+iDepth);
+			return iStr;
+		}
+
+		StringBuilder lBuild = new StringBuilder();
+
+		int lBegin = 0;
+
+		while( lBegin < iStr.length() ) {
+			
+			Log.Dbg( 3,"Begin:"+lBegin +" <"+lBuild.toString()+">");
+
+			int lPos1 =  iStr.indexOf(sCommand, lBegin ); // search a first separator
+			if( lPos1 == -1 ) { // not found
+				if( lBegin == 0 ) {
+					Log.Dbg(3, "<"+iStr+"> no separator found "+iDepth);
+					return iStr;
+				}
+				lBuild.append( iStr.substring(lBegin));
+				Log.Dbg( 3, "<" + lBuild.toString()+ "> end "+iDepth);
+				return resolveVariables( lBuild.toString(), iDepth+1);
+			} else {  // found
+				
+				int lPos2 = iStr.indexOf(sCommand, lPos1+1 ); // find an other separator
+				Log.Dbg( 3, "pos1:" + lPos1+ " pos2:" + lPos2 );
+				if( lPos2 == -1 ) { // only one
+				//	lBuild.append(iStr.substring(lBegin,lPos1));
+					lBuild.append(iStr.substring(lBegin));
+					Log.Dbg( 3, "<" + lBuild.toString()+ "> one<"+ iStr.substring(lPos1)+"> "+iDepth);
+					return resolveVariables( lBuild.toString(), iDepth+1);  // ending
+				}
+				if( lPos2 == lPos1+1) { // double
+					lBuild.append(iStr.substring(lBegin,lPos2)); // adding the substring with one separator
+					lBegin = lPos2+1;
+					Log.Dbg( 3, "<" + lBuild.toString()+ "> double continue "+iDepth);
+				continue;
+				}
+				// variable ?
+				lBuild.append(iStr.substring(lBegin,lPos1));
+				String lVar = iStr.substring(lPos1+1, lPos2);
+				Log.Dbg( 3, "resolveVariables var:" + lVar );
+				String lVal = cVariables.get(lVar);
+				lBegin = lPos2+1; 
+				
+				if( lVal != null ) {
+					lBuild.append(lVal);
+				}
+				else {
+					lBuild.append("[[[unknown var:"+lVar+"]]]");
+				}
+			}		
+			
+		}
+		Log.Dbg( 3, "<" + lBuild.toString()+ "> end while " +iDepth);
+		return resolveVariables(lBuild.toString(), iDepth+1);
+		
+	}	
 	// ------------------------------
 	public boolean  readIni( InputStreamReader  lFread){		
 		System.out.println(  "   ========================= readIni ======================   " );
@@ -101,22 +164,33 @@ public  class PPgIniFile extends Properties{
 				lNumline++;
 				//System.out.println( lNumline + ">>>" + lSbuf );
 				// Ligne vide ou commentaire
-				if(  lSbuf.length() == 0 || lSbuf.charAt(0) == '#'  || lSbuf.charAt(0) == '\n'
+				if(  lSbuf.length() == 0 || lSbuf.charAt(0) == sComment  || lSbuf.charAt(0) == '\n'
 						|| lSbuf.trim().length() == 0  )
 					continue;
 
 
 				// New phipo 20100629 commande commencant par !
-				if( lSbuf.charAt(0) == '!' ){
+				if( lSbuf.charAt(0) == sCommand ){
 					try{
-						StringTokenizer lTok = new StringTokenizer(lSbuf.substring(1));
-						String lCommand = lTok.nextToken(" \t").trim();
-						if( lCommand != null && lCommand.equals( "include" ) ){
-							String lFileName = lTok.nextToken(" \t").trim();
+						PPgToken lTok = new PPgToken(lSbuf.substring(1));
+						String lCommand = lTok.nextTokenStringTrim();
+
+						if( lCommand == null)  
+							continue;
+
+						if( lCommand.equals( "include" ) ){
+							String lFileName = lTok.nextTokenStringTrim();
 							if( lFileName != null ) {
 								readIni(lFileName ); 
 							}
-						}
+						} else if( lCommand.equals( "set" ) ){
+							String lVar   = lTok.nextTokenStringTrim(" \t","=:");
+							String lValue = lTok.nextTokenStringTrim("","\n");
+							
+							
+							cVariables.put( lVar,lValue);
+							Log.Dbg( 3, "define variable "+lVar+"=<" + lValue+">");
+						}					
 					}	catch( Exception e){
 						System.err.println("catch " + e + " in PPgIniFile.readIni <"+lSbuf+"> while reading commande include" + " line:" +lNumline );
 						e.printStackTrace();
@@ -141,16 +215,24 @@ public  class PPgIniFile extends Properties{
 				}
 
 				try{									
-					StringTokenizer lTok = new StringTokenizer( lSbuf );
-					lCurrentKey         = lTok.nextToken("=").trim();
-					lCurrentValeur      = lTok.nextToken("\n").trim();
-					lCurrentValeur  = lCurrentValeur.substring( 1 ).trim();
+					PPgToken lTok = new PPgToken( lSbuf );
+					lCurrentKey         = lTok.nextTokenStringTrim(" \t","=:");
+					lCurrentValeur      = lTok.nextTokenStringTrim(" \t","\n");
+					Log.Dbg( 3, "<"+lCurrentKey+"><"+lCurrentValeur+">"  );
+
 					//												System.out.println( "VAL " + lCurrentKey + "=" + lCurrentValeur );
 					if( lCurrentSection == null ){
 						System.err.println( "PPgIniFile Error in line:" + lNumline 
 								+ " : No section define for :" + lCurrentKey );
 					}
-					else{
+					else{						
+						Log.Dbg(2, "===== Begin <<<" + lCurrentValeur +">>> =====");
+						String lTmp = resolveVariables(lCurrentValeur, 0);
+						Log.Dbg(1, "===== Finish <<<" + lTmp +">>> =====");
+						if( lTmp != null ) {
+							lCurrentValeur=lTmp;
+						}
+
 						String lStr =  lCurrentSection + SEP +lCurrentKey ;
 						remove( lStr );
 						put( lStr, lCurrentValeur );
@@ -515,7 +597,7 @@ public  class PPgIniFile extends Properties{
 
 		String lStr  = pIni.get( pSection, pKey );
 
-	//	System.out.println(  "****** " +pSection + ":" + pKey +"="+lStr +   "  (" + pDefault +")" );
+		//	System.out.println(  "****** " +pSection + ":" + pKey +"="+lStr +   "  (" + pDefault +")" );
 
 		if( lStr == null )
 			lStr = pDefault;
@@ -529,25 +611,25 @@ public  class PPgIniFile extends Properties{
 		//		System.out.println( "possize:" + lPosSize );
 		double lFlipH = 1;
 		double lFlipV = 1;
-	//	System.out.println( "Icon possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+		//	System.out.println( "Icon possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 
 		if( lPosSize == -1 ) {						
 			lPosSize = lStr.lastIndexOf( '>' );
-	//		System.out.println( "Icon > possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+			//		System.out.println( "Icon > possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			if(lPosSize != -1 ) {
 				lFlipH = -1;
 			}
 		}
 		if( lPosSize == -1 ) {											
 			lPosSize = lStr.lastIndexOf( 'V' );
-	//		System.out.println( "Icon V possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+			//		System.out.println( "Icon V possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			if(lPosSize != -1 ) {
 				lFlipV = -1;
 				System.out.println( "V "+ " Flip:" + lFlipH + " " + lFlipV);
 			}
 		}
 		if( lPosSize == -1 ) {						
-	//		System.out.println( "Icon X possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+			//		System.out.println( "Icon X possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			lPosSize = lStr.lastIndexOf( 'X' );
 			if(lPosSize != -1 ) {
 				lFlipH = -1;
@@ -555,7 +637,7 @@ public  class PPgIniFile extends Properties{
 			}
 		}
 
-	//	System.out.println( "Icon Flip:" + lFlipH + " " + lFlipV);
+		//	System.out.println( "Icon Flip:" + lFlipH + " " + lFlipV);
 
 		int lWidth  = 0;
 		int lHeight = 0;
