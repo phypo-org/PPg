@@ -27,11 +27,18 @@ public  class PPgIniFile extends Properties{
 	static char sCommand='#';
 
 	HashMap<String,String> cVariables=new HashMap<>();
-
+	
+	boolean isVoid( ) { return this.size()> 0; }
 
 	static final String SEP = new String( "." );
 	String cSystemPrefix="";
 
+	static public PPgIniFile GetIni( String pFilename  ) {
+		PPgIniFile lTmp = new PPgIniFile();
+		if( lTmp.readIni( pFilename ) )	
+			return lTmp;
+		return null;
+	}
 	// ------------------------------
 	public	PPgIniFile(){			
 	}
@@ -146,7 +153,7 @@ public  class PPgIniFile extends Properties{
 	}	
 	// ------------------------------
 	public boolean  readIni( InputStreamReader  lFread){		
-		System.out.println(  "   ========================= readIni ======================   " );
+		Log.Dbg(  "   ========================= readIni ======================   " );
 		try {
 
 			String lSbuf;
@@ -160,9 +167,9 @@ public  class PPgIniFile extends Properties{
 
 			while( (lSbuf=lBufread.readLine()) != null) {
 
-				// System.out.println( "ap readLine  " +lNumline + ">>" + lSbuf );
+				// Log.Dbg( "ap readLine  " +lNumline + ">>" + lSbuf );
 				lNumline++;
-				//System.out.println( lNumline + ">>>" + lSbuf );
+				//Log.Dbg( lNumline + ">>>" + lSbuf );
 				// Ligne vide ou commentaire
 				if(  lSbuf.length() == 0 || lSbuf.charAt(0) == sComment  || lSbuf.charAt(0) == '\n'
 						|| lSbuf.trim().length() == 0  )
@@ -192,7 +199,7 @@ public  class PPgIniFile extends Properties{
 							Log.Dbg( 3, "define variable "+lVar+"=<" + lValue+">");
 						}					
 					}	catch( Exception e){
-						System.err.println("catch " + e + " in PPgIniFile.readIni <"+lSbuf+"> while reading commande include" + " line:" +lNumline );
+						Log.Err("catch " + e + " in PPgIniFile.readIni <"+lSbuf+"> while reading commande include" + " line:" +lNumline );
 						e.printStackTrace();
 					}	
 					continue;
@@ -206,12 +213,12 @@ public  class PPgIniFile extends Properties{
 						StringTokenizer lTok = new StringTokenizer(lSbuf.substring(1));
 						lCurrentSection = lTok.nextToken("]").trim();
 					}				catch( Exception e){
-						System.err.println("catch " + e + " in PPgIniFile.readIni <"+lSbuf+"> while reading section"  + " line:" +lNumline);
+						Log.Err("catch " + e + " in PPgIniFile.readIni <"+lSbuf+"> while reading section"  + " line:" +lNumline);
 						e.printStackTrace();
 					}								
 					continue;
 
-					//												System.out.println( "SECTION=" + lCurrentSection );
+					//												Log.Dbg( "SECTION=" + lCurrentSection );
 				}
 
 				try{									
@@ -220,9 +227,9 @@ public  class PPgIniFile extends Properties{
 					lCurrentValeur      = lTok.nextTokenStringTrim(" \t","\n");
 					Log.Dbg( 3, "<"+lCurrentKey+"><"+lCurrentValeur+">"  );
 
-					//												System.out.println( "VAL " + lCurrentKey + "=" + lCurrentValeur );
+					//												Log.Dbg( "VAL " + lCurrentKey + "=" + lCurrentValeur );
 					if( lCurrentSection == null ){
-						System.err.println( "PPgIniFile Error in line:" + lNumline 
+						Log.Err( "PPgIniFile Error in line:" + lNumline 
 								+ " : No section define for :" + lCurrentKey );
 					}
 					else{						
@@ -236,17 +243,17 @@ public  class PPgIniFile extends Properties{
 						String lStr =  lCurrentSection + SEP +lCurrentKey ;
 						remove( lStr );
 						put( lStr, lCurrentValeur );
-						//														System.out.println( "->" + lStr  + "=" + lCurrentValeur );
+						//														Log.Dbg( "->" + lStr  + "=" + lCurrentValeur );
 					}			 					
 				} catch( Exception e){
-					System.err.println("catch " + e + " in PPgIniFile.readIni while reding values for section "  + lCurrentSection + " line:" +lNumline);
+					Log.Err("catch " + e + " in PPgIniFile.readIni while reding values for section "  + lCurrentSection + " line:" +lNumline);
 					e.printStackTrace();
 				}							
 			}
 			lFread.close();						
 
 		} catch( Exception e){
-			System.err.println("catch " + e + " in PPgIniFile.readini " );
+			Log.Err("catch " + e + " in PPgIniFile.readini " );
 			e.printStackTrace();
 			return false;
 		}
@@ -255,7 +262,7 @@ public  class PPgIniFile extends Properties{
 	// ------------------------------
 	public String  get( String pSection, String pKey ) { 
 
-		//					System.out.println( pSection + ":" + pKey + "=" +  get( pSection + SEP + pKey ));
+		//					Log.Dbg( pSection + ":" + pKey + "=" +  get( pSection + SEP + pKey ));
 		String lKey = pSection + SEP + pKey;
 
 		// Si une property est defini dans le system elle est preponderante
@@ -401,7 +408,7 @@ public  class PPgIniFile extends Properties{
 
 		String lStr = get( pSection, pKey );
 
-		//		System.out.println( "getint " + pSection + "." + pKey + " =" + lStr );
+		//		Log.Dbg( "getint " + pSection + "." + pKey + " =" + lStr );
 
 		if( lStr != null && lStr.length() != 0 ) {
 			if( lStr.equals( "true" ) )
@@ -478,7 +485,7 @@ public  class PPgIniFile extends Properties{
 		String lStr =  pSection + SEP + pKey;
 		remove( lStr );
 		put( lStr, pVal );
-		//		System.out.println( "->" + lStr  + "=" + pVal );
+		//		Log.Dbg( "->" + lStr  + "=" + pVal );
 	}
 	// -----------------------------
 	public void remove(  String pSection, String pKey){
@@ -504,14 +511,14 @@ public  class PPgIniFile extends Properties{
 		try {
 			PrintStream lFout = new PrintStream( new FileOutputStream( pFile ) );
 			writeIni( lFout );
-		}	catch(Exception e ) { System.err.println( e );
+		}	catch(Exception e ) { Log.Err( e.toString() );
 		e.printStackTrace();
 		}
 	}
 	// ------------------------------
 	public HashMap<String,String> getSection( String pSection ){
 
-		System.out.println( "getSection : " + pSection );
+		Log.Dbg( "getSection : " + pSection );
 
 		HashMap<String,String> lResult = new HashMap<String,String>();
 
@@ -521,16 +528,16 @@ public  class PPgIniFile extends Properties{
 
 			int lPos = lStr.indexOf( SEP );										
 			String lSection = lStr.substring( 0, lPos );
-			System.out.println( lSection );
+			Log.Dbg( lSection );
 
 			if( lSection.compareTo( pSection ) == 0 ){
 				String lVar     = lStr.substring( lPos + 1 );
 				String lVal     = (String)get(lStr);
-				System.out.println( "Var="+lVar + " Val="+lVal );
+				Log.Dbg( "Var="+lVar + " Val="+lVal );
 				lResult.put( lVar, lVal );
 			}
 		}
-		System.out.println( ">>>>>>>>>>Result:" + lResult.size() );
+		Log.Dbg( ">>>>>>>>>>Result:" + lResult.size() );
 		return lResult;
 	}
 	// ------------------------------
@@ -571,15 +578,15 @@ public  class PPgIniFile extends Properties{
 					pOut.println( lVar + "=" + lVal );				
 				}
 			}		
-		}	catch(Exception e ) { System.err.println( e );
+		}	catch(Exception e ) { Log.Err( e.toString() );
 		e.printStackTrace();
 		}
 	}
 	// ------------------------------
 	public	void debug(){
-		System.out.println( "===================== BEGIN INI ==============================");
+		Log.Dbg( "===================== BEGIN INI ==============================");
 		writeIni( System.out );
-		System.out.println( "===================== END   INI ==============================");
+		Log.Dbg( "===================== END   INI ==============================");
 	}
 	// ------------------------------	
 	// Format :
@@ -597,7 +604,7 @@ public  class PPgIniFile extends Properties{
 
 		String lStr  = pIni.get( pSection, pKey );
 
-		//	System.out.println(  "****** " +pSection + ":" + pKey +"="+lStr +   "  (" + pDefault +")" );
+		//	Log.Dbg(  "****** " +pSection + ":" + pKey +"="+lStr +   "  (" + pDefault +")" );
 
 		if( lStr == null )
 			lStr = pDefault;
@@ -608,28 +615,28 @@ public  class PPgIniFile extends Properties{
 
 		int lPosSize = lStr.lastIndexOf( ':' );
 
-		//		System.out.println( "possize:" + lPosSize );
+		//		Log.Dbg( "possize:" + lPosSize );
 		double lFlipH = 1;
 		double lFlipV = 1;
-		//	System.out.println( "Icon possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+		//	Log.Dbg( "Icon possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 
 		if( lPosSize == -1 ) {						
 			lPosSize = lStr.lastIndexOf( '>' );
-			//		System.out.println( "Icon > possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+			//		Log.Dbg( "Icon > possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			if(lPosSize != -1 ) {
 				lFlipH = -1;
 			}
 		}
 		if( lPosSize == -1 ) {											
 			lPosSize = lStr.lastIndexOf( 'V' );
-			//		System.out.println( "Icon V possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+			//		Log.Dbg( "Icon V possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			if(lPosSize != -1 ) {
 				lFlipV = -1;
-				System.out.println( "V "+ " Flip:" + lFlipH + " " + lFlipV);
+				Log.Dbg( "V "+ " Flip:" + lFlipH + " " + lFlipV);
 			}
 		}
 		if( lPosSize == -1 ) {						
-			//		System.out.println( "Icon X possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
+			//		Log.Dbg( "Icon X possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			lPosSize = lStr.lastIndexOf( 'X' );
 			if(lPosSize != -1 ) {
 				lFlipH = -1;
@@ -637,7 +644,7 @@ public  class PPgIniFile extends Properties{
 			}
 		}
 
-		//	System.out.println( "Icon Flip:" + lFlipH + " " + lFlipV);
+		//	Log.Dbg( "Icon Flip:" + lFlipH + " " + lFlipV);
 
 		int lWidth  = 0;
 		int lHeight = 0;
@@ -666,17 +673,17 @@ public  class PPgIniFile extends Properties{
 				lScale = 1;
 			}				
 
-			//						System.out.println( "ReadIcon Str:" + lStr + " Size:" + lSize  
+			//						Log.Dbg( "ReadIcon Str:" + lStr + " Size:" + lSize  
 			//																+ " lWidth:" + lWidth + " lHeight:" + lHeight + " lScale:" + lScale );
 
 		}
 
 		if( lStr == null || lStr.length() == 0 ){
-			System.err.println( "PPIniFile.ImageIcone return null .size error for " 	+ pSection + ":" + pKey );
+			Log.Err( "PPIniFile.ImageIcone return null .size error for " 	+ pSection + ":" + pKey );
 			return null;
 		}
 
-		System.out.println("Name:" + lStr );
+		Log.Dbg("Name:" + lStr );
 
 		ImageIcon lImageIcon = null;
 
@@ -687,11 +694,11 @@ public  class PPgIniFile extends Properties{
 				lFread = new FileReader(lFile  );
 				lFread = null;
 				lImageIcon  = new ImageIcon( lStr ); 
-				System.out.println(  " icon from file:" +lStr);
+				Log.Dbg(  " icon from file:" +lStr);
 			}
 		}
 		catch( Exception e){
-			System.err.println( "SurvParam.ImageIcone Exception "+ e +" When reading ImageIcone :" 
+			Log.Err( "SurvParam.ImageIcone Exception "+ e +" When reading ImageIcone :" 
 					+ pSection + ":" + pKey +":"+lStr );
 		}
 		finally {
@@ -707,14 +714,14 @@ public  class PPgIniFile extends Properties{
 
 			ClassLoader lLoader =  PPgIniFile.class.getClassLoader();
 			URL lUrl = lLoader.getResource( lStr );
-			//						System.out.println( "Url image:" + lUrl );
+			//						Log.Dbg( "Url image:" + lUrl );
 			if( lUrl == null ){
-				System.err.println(  "SurvParam.ImageIcone : Warning no ressource found in jar for "
+				Log.Err(  "SurvParam.ImageIcone : Warning no ressource found in jar for "
 						+  pSection + ":" + pKey +":"  +lStr );
 				return null;
 			}
 
-			//	System.out.println(  " icon from jar:" +lStr);
+			//	Log.Dbg(  " icon from jar:" +lStr);
 
 			lImageIcon  = new ImageIcon( lUrl ); 						
 		}				
@@ -724,11 +731,11 @@ public  class PPgIniFile extends Properties{
 				lImageIcon = new ImageIcon( lImageIcon.getImage().getScaledInstance( lWidth, lHeight, Image.SCALE_SMOOTH ));								
 			}
 			else if( lFlipV != 1 || lFlipH != 1 ){
-				System.out.println( "FLIP "+ " Flip:" + lFlipH + " " + lFlipV + " Scale:"+ lScale);
+				Log.Dbg( "FLIP "+ " Flip:" + lFlipH + " " + lFlipV + " Scale:"+ lScale);
 				lImageIcon = ImgUtils.CreateFlipScaleImage( lImageIcon, lScale*lFlipH, lScale*lFlipV);
 			}
 			else if( lScale != 1 ){		
-				System.out.println( "SCALE");
+				Log.Dbg( "SCALE");
 				lImageIcon = new ImageIcon( lImageIcon.getImage().getScaledInstance( (int)(lImageIcon.getIconWidth()*lScale), 
 						(int)(lImageIcon.getIconHeight()*lScale),
 						Image.SCALE_SMOOTH ));										
@@ -737,7 +744,7 @@ public  class PPgIniFile extends Properties{
 			if( lFlipH != 1) lImageIcon = ImgUtils.CreateFlipHorImage(lImageIcon  );
 		}
 		if( lImageIcon == null )
-			System.err.println( "PPIniFile.ImageIcone return null for " 	+ pSection + ":" + pKey );
+			Log.Err( "PPIniFile.ImageIcone return null for " 	+ pSection + ":" + pKey );
 
 
 		return lImageIcon;

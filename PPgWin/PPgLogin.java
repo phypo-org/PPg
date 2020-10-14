@@ -40,7 +40,7 @@ implements  ActionListener	{
 
 	public PPgLogin( Frame pOwner  ){
 		super( pOwner,"Login", true );
-		init( -1, -1);
+		init( pOwner, -1, -1);
 	}
 
 	public PPgLogin(  Frame pOwner, String pName, PPgIniFile pFileIni, String pSection, String pKey, int pX, int pY  ){
@@ -52,16 +52,16 @@ implements  ActionListener	{
 			cUser =lTok.nextTokenStringTrim();	
 			cPass =lTok.nextTokenStringTrim();
 		}
-		init( pX, pY);
+		init( pOwner, pX, pY);
 	}
 
 	public PPgLogin(  Frame pOwner,  int pX, int pY  ){
 		super( pOwner, "Login to ", true );
-		init(pX, pY);
+		init( pOwner, pX, pY);
 	}
 	//-----------------------
 
-	void init( int pX, int pY ){
+	void init( Frame pOwner, int pX, int pY ){
 
 		if( pX != -1 && pY != -1 )
 			setLocation( pX, pY );
@@ -99,6 +99,7 @@ implements  ActionListener	{
 		//===============
 
 		getContentPane().add( lSouth, BorderLayout.SOUTH );
+		setLocationRelativeTo(pOwner);
 
 		pack();
 		setVisible(true);
