@@ -34,6 +34,8 @@ public class ExecCommandSystem{
 		try {	
 			Runtime lRt = Runtime.getRuntime();
 			lCmd = init( lCmd );
+			
+			Log.Dbg("ExecCommandSystem.execCmd <<<"+lCmd+">>>");
 			Process lProcess = lRt.exec(lCmd);
 			int lRetCode = lProcess.waitFor();
 			if( lRetCode != 0 ){

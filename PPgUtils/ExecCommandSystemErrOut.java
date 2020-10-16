@@ -2,8 +2,8 @@ package org.phypo.PPg.PPgUtils;
 
 public class ExecCommandSystemErrOut extends ExecCommandSystem {
 	
-	protected StringBuffer                cErrStr = null;
-	protected StringBuffer                cOutStr = null;
+	public StringBuffer                cErrStr = null;
+	public StringBuffer                cOutStr = null;
 
 	
 	@Override

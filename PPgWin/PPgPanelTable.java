@@ -68,8 +68,21 @@ public class PPgPanelTable extends JPanel
     	
     //	cTable.setBackground(bg);
     }
-   
-    //-------------------------------------
+    //-------------------------------------------	
+    public void forceRedraw() {
+    	cTable.fireTableDataChanged();
+    	updateStatusRowCount();
+    }
+    //-------------------------------------------		
+   public void addLineAndRedraw( PPgTableLine pLine ){	
+	cTable.add( pLine );
+	forceRedraw();
+   }
+   //-------------------------------------------		
+   public void addLine( PPgTableLine pLine ){	
+	cTable.add( pLine );
+   }
+   //-------------------------------------
     void filterBase(){
 	String lText = cFilterText.getText();
 	if (lText.length() == 0) {
