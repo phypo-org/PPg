@@ -1,4 +1,4 @@
-all:: SqlConnex.class  SqlLogin.class  SqlOut.class  SqlOutImpl.class SqlServer.class  SqlTerm.class
+all:: SqlConnex.class  SqlLogin.class  SqlOutImpl.class  SqlOut.class  SqlResultsExecData.class  SqlServer.class  SqlTerm.class
 
 
 clean::

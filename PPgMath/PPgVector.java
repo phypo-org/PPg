@@ -98,9 +98,9 @@ public class PPgVector extends Point2D.Double {
     /**
      * Add other vector to this vector.
      */
-    public PPgVector add(PPgVector other) {
-        x += other.x;
-        y += other.y;    
+    public PPgVector add(Double double1) {
+        x += double1.x;
+        y += double1.y;    
 				//        this.cDirection = Math.toDegrees(Math.atan2(y, x));
         this.cDirection = Math.atan2(y, x);
         this.cLength = Math.sqrt(x*x+y*y);
@@ -110,7 +110,7 @@ public class PPgVector extends Point2D.Double {
     /**
      * Add other vector to this vector.
      */
-    public PPgVector add(PPgVector other, double pFactor) {
+    	public PPgVector add(PPgVector other, double pFactor) {
         x += other.x*pFactor;
         y += other.y*pFactor;    
 				//        this.cDirection = Math.toDegrees(Math.atan2(y, x));
@@ -131,7 +131,16 @@ public class PPgVector extends Point2D.Double {
         this.cLength = Math.sqrt(x*x+y*y);
         return this;
     }   
-    
+
+    public PPgVector subtract(Double location) {
+    	// TODO Auto-generated method stub
+        x -= location.x;
+        y -= location.y;    
+		
+        this.cDirection = Math.atan2(y, x);
+        this.cLength = Math.sqrt(x*x+y*y);
+    	return null;
+    } 
 	//----------------------------------
     /**
      * Get the x-component of this vector.
@@ -317,4 +326,5 @@ public class PPgVector extends Point2D.Double {
 				}
     }
 	//----------------------------------
+
 }

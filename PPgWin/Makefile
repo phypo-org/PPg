@@ -1,4 +1,9 @@
-all::	FontChooserComboBox.class       PPgAppli.class               PPgFrameTable.class      PPgJFrame.class        PPgSlider.class      PPgWinUtils.class FontComboBox.class              PPgCanvas.class              PPgGraphicsHelper.class  PPgMenuGrid.class      PPgTable.class       PPHtml.class FrameEditObjectInterface.class  PPgField.class               PPgHelpChild.class       PPgPanelTable.class    PPgTableLine.class   PPTraceTerm.class FrameEditObject.class           PPgFloatField.class          PPgInputField.class      PPgSelectBox.class     PPgTerm.class JFontChooser.class              PPgFrameChild.class          PPgInterfaceAppli.class  PPgSliderDouble.class  PPgTextStream.class PPAbout.class   PPgIntField.class        PPgSliderField.class   PPgTrayIcon.class PPgFrameLog.class Arrow.class
+all:: Arrow.class                     PPAbout.class        PPgFrameLog.class        PPgIntField.class    PPgSliderDouble.class  PPgTextEditorChild.class \
+FontChooserComboBox.class       PPgAppli.class       PPgFrameTable.class      PPgJFrame.class      PPgSliderField.class   PPgTextStream.class \
+FontComboBox.class              PPgCanvas.class      PPgGraphicsHelper.class  PPgLogin.class       PPgSlider.class        PPgTrayIcon.class \
+FrameEditObjectInterface.class  PPgField.class       PPgHelpChild.class       PPgMenuGrid.class    PPgTable.class         PPgWinUtils.class \
+FrameEditObject.class           PPgFloatField.class  PPgInputField.class      PPgPanelTable.class  PPgTableLine.class     PPHtml.class \
+JFontChooser.class              PPgFrameChild.class  PPgInterfaceAppli.class  PPgSelectBox.class   PPgTerm.class          PPTraceTerm.class
 
 clean::
 	rm *.class 
