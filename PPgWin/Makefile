@@ -6,7 +6,7 @@ FrameEditObject.class           PPgFloatField.class  PPgInputField.class      PP
 JFontChooser.class              PPgFrameChild.class  PPgInterfaceAppli.class  PPgSelectBox.class   PPgTerm.class          PPTraceTerm.class
 
 clean::
-	rm *.class 
+	rm  -f *.class 
 
 %.class: %.java
 	javac   -classpath ../../../.. -deprecation -g  $*.java

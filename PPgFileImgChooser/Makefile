@@ -3,7 +3,7 @@ all:: FileChooserDemo2.class PPgImageFilter.class PPgImageUtils.class PPgImageFi
 
 
 clean::
-	rm *.class 
+	rm  -f *.class 
 
 %.class: %.java
 	javac   -classpath ../../../.. -deprecation -g  $*.java

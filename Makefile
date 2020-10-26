@@ -7,30 +7,34 @@ all::
 	cd Sql; 	make ;cd ..;\
 
 
+NAME=PPgLib
+PACK=org/phypo/PPg
+ROOT=../../..
+JAR_PATH=../../../../../Bin
 
 
 jar::
 	cd ../../.. \
-	rm  com/phipo/PPg/PPg.jar;  \
-	jar cf       com/phipo/PPg/PPgLib.jar  com/phipo/PPg/PPgUtils/*.class; \
-	jar uf       com/phipo/PPg/PPgLib.jar  com/phipo/PPg/PPgImg/*.class; \
-	jar uf       com/phipo/PPg/PPgLib.jar  com/phipo/PPg/PPgMath/*.class; \
-	jar uf       com/phipo/PPg/PPgLib.jar  com/phipo/PPg/PPgWin/*.class; \
-	jar uf       com/phipo/PPg/PPgLib.jar  com/phipo/PPg/PPgFileImgChooser/*.class; \
-	jar uf       com/phipo/PPg/PPgLib.jar  com/phipo/PPg/Sql/*.class; \
+	rm  -f ${PACK}/${Name}.jar;  \
+	jar cf       ${PACK}/${NAME}.jar  ${PACK}/PPgUtils/*.class; \
+	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgImg/*.class; \
+	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgMath/*.class; \
+	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgWin/*.class; \
+	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgFileImgChooser/*.class; \
+	jar uf       ${PACK}/${NAME}.jar  ${PACK}/Sql/*.class; \
 
 
 
 install::
-	cp PPgLib.jar  ../../../../..
+	cp -p ${NAME}.jar  ${JAR_PATH}
 
 
 clean::
 	cd PPgUtils; 	make clean;cd ..;\
-	cd PPgImg; 	  make clean;cd ..;\
-	cd PPgMath;   make clean;cd ..;\
-	cd PPgWin;    make clean;cd ..;\
+	cd PPgImg; 	make clean;cd ..;\
+	cd PPgMath;     make clean;cd ..;\
+	cd PPgWin;      make clean;cd ..;\
 	cd PPgFileImgChooser;   make clean;cd ..;\
-	cd Sql;    make clean;cd ..;\
-	rm *.jar *.class
+	cd Sql;         make clean;cd ..;\
+	rm -f *.jar *.class
 

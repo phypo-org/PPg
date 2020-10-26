@@ -2,7 +2,7 @@ all:: ImgUtils.class Bmp.class PPgImgBase.class  PPgImgIcon.class PPgImg.class P
 
 
 clean::
-	rm *.class 
+	rm  -f *.class 
 
 %.class: %.java
 	javac   -classpath ../../../.. -deprecation -g  $*.java
