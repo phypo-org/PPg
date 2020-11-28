@@ -39,10 +39,10 @@ implements ActionListener, ItemListener, InternalFrameListener {
 
 	DateFormat cDateFormat =  DateFormat.getDateTimeInstance();
 	DateFormat getDateFormat() { return cDateFormat;}
+	public static DateFormat GetDateFormat() { return TheAppli.cDateFormat; }
 
 	public static PPgAppli TheAppli;
 	public static PPgAppli GetAppli() { return TheAppli; }
-	public static DateFormat GetDateFormat() { return TheAppli.cDateFormat; }
 
 	public static Color sGlobalForeground = null;
 	public static Color sGlobalBackground = null;

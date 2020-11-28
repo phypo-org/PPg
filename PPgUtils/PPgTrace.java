@@ -1,5 +1,6 @@
 package org.phypo.PPg.PPgUtils;
 
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -21,6 +22,10 @@ public class PPgTrace {
 				PPgLog.UseDbg();
 			}				
 		}
+		
+		public static PrintStream GetOut() { return PPgLog.Out; }
+		public static PrintStream GetErr() { return PPgLog.Err; }
+
 		// Attention ce n'est sans doute pas trés efficace
 		// faire une autre fonction (faire le calcul nous meme ?)
 		

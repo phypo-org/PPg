@@ -262,6 +262,32 @@ public class PPgWinUtils {
 				return lButton;
 		}
 		//----------------------------------------------------------
+		public static JRadioButton MakeRadioButton( String pStr, ActionListener pAction, boolean pSelect, ButtonGroup pGroup, ImageIcon iImg, String pHelp) {
+				
+				//Create and initialize the button.
+				JRadioButton lButton ;
+
+				lButton = new JRadioButton( pStr, pSelect );
+	
+				lButton.setActionCommand(pStr);
+				lButton.addActionListener(pAction);
+
+				if( pGroup != null )
+						pGroup.add( lButton );
+								
+				
+				lButton.setText(pStr);
+
+				if( iImg != null) {                      //image found
+					lButton.setIcon( iImg );
+				}	
+				
+				if( pHelp != null )
+					lButton.setToolTipText( pHelp );
+				
+				return lButton;
+		}
+		//----------------------------------------------------------
 		public static JToggleButton MakeToggleButton( String pStr, ActionListener pAction, boolean pSelect, ButtonGroup pGroup, String pImageName, int pWidth, int pHeight, String pHelp) {
 				
 				ImageIcon lImg = null;

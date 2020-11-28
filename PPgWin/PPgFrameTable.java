@@ -25,6 +25,7 @@ public class PPgFrameTable extends PPgFrameChild
     implements MouseListener, ActionListener{
 		
     PPgTable cTable=null;
+    
     public PPgTable getTable() { return cTable;}
     public JTable getJTable() { return cTable.getJTable();}
 
@@ -188,14 +189,94 @@ public class PPgFrameTable extends PPgFrameChild
     //-------------------------------------------
     //		implements MouseListener
     //-------------------------------------------
-    //-------------------------------------------
-    public void mousePressed( MouseEvent pEv )  { 			
-    }
-    //-------------------------- 
     public void mouseReleased( MouseEvent pEv )    {;}
     public void mouseEntered( MouseEvent pEv )    {;}
     public void mouseExited( MouseEvent pEv )     {;} 
     public void mouseClicked( MouseEvent pEv )     {;}	
+    
+    
+    
+    
+    //-------------------------------------------
+    //public void mousePressed( MouseEvent pEv )  {}
+    //-------------------------- 
+//-------------
+	public void addPopupMenuItems( JPopupMenu lMenu, PPgTableLine lLine, int lPos) {;}
+	public void eventOnLine( PPgTableLine lLine , int lPos) {;}
+
+	final String cStrSelectAll   = "Select All";
+	final String cStrExport2FileCSV = "Export all lines to csv file";
+	final String cStrExportSelect2FileCSV = "Export selected lines to csv file";
+	//-------------
+
+	static String cCurrentPath=null;
+	protected int cLastMenuLine = -1;
+
+	//-------------
+	public void mousePressed( MouseEvent pEv )  { 
+
+		Log.Dbg( "************* FrameTable.mousePressed **********" );
+
+		cLastMenuLine = getMouseLineNumber( pEv );
+
+		if(  SwingUtilities.isLeftMouseButton( pEv ) == true &&  pEv.getClickCount() == 2 ){
+			PPgTableLine lCurrent = getLine( cLastMenuLine );
+			if( lCurrent != null ){
+				eventOnLine( lCurrent , cLastMenuLine);
+			}
+		}
+		else
+			if( SwingUtilities.isRightMouseButton( pEv ) == true 
+			&& pEv.getClickCount() == 1 ) {
+				Log.Dbg("  RightMouseButton ");
+
+				JPopupMenu lPopmenu = new JPopupMenu();
+				
+				PPgTableLine lLine  = null;
+				if( cLastMenuLine != -1 ) {
+					lLine  = getLine( cLastMenuLine );
+				}
+
+				addPopupMenuItems( lPopmenu, lLine, cLastMenuLine );
+
+				if( lPopmenu.getSubElements().length >0 ) {
+					lPopmenu.add( new JSeparator() );	
+				}
+
+				JMenuItem lItem;
+				/*
+				//==================
+				lItem = new JMenuItem( cStrSelectAll );
+				lItem.addActionListener( new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						getTable().selectAll();
+						getTable().fireTableDataChanged();
+					}});
+				lPopmenu.add( lItem );
+				*/
+				if( getJTable().getSelectedRowCount()> 0){
+					lItem= new JMenuItem( cStrExportSelect2FileCSV);
+					lItem.addActionListener( new ActionListener() {
+						public void actionPerformed(ActionEvent e) {												
+								ArrayList<PPgTableLine>  lLines = getTable().getSelectedRowsArray();
+								PPgTable.Export2CSV( PPgFileChooser.GetFileName("export csv", cCurrentPath)	, lLines);							
+						}});											
+				}
+				//==================
+				lItem= new JMenuItem( cStrExport2FileCSV );
+				lItem.addActionListener( new ActionListener() {
+					public void actionPerformed(ActionEvent e) {							
+							ArrayList<PPgTableLine>  lLines = getTable().getList(); 
+							PPgTable.Export2CSV( PPgFileChooser.GetFileName("export csv", cCurrentPath)	, lLines);														
+					}});					
+				lPopmenu.add( lItem );
+				//	==================			
+
+				lPopmenu.show( pEv.getComponent(),
+						pEv.getX(),
+						pEv.getY() );												
+			}			
+	}    
     //-------------------------------------------
     //-------------------------------------------
     //		implements ActionListener

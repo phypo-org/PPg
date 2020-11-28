@@ -4,8 +4,10 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,6 +15,8 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.phypo.PPg.PPgUtils.Log;
+import org.phypo.PPg.PPgUtils.PPgUtils;
 //**********************************************************
 @SuppressWarnings("serial")
 public class PPgTable extends AbstractTableModel {
@@ -22,7 +26,7 @@ public class PPgTable extends AbstractTableModel {
     protected ArrayList<PPgTableLine>   cTableObj    = new ArrayList<PPgTableLine>();
     protected JTable      cTable       = null;
     protected boolean     cIsEditable = true;
-    protected TableRowSorter cRowFilter = null;
+    protected TableRowSorter<PPgTable> cRowFilter = null;
 
     public ArrayList<PPgTableLine> getList()     { return cTableObj; }
     public void setList(ArrayList<PPgTableLine> pList) {  cTableObj = pList; }
@@ -51,7 +55,7 @@ public class PPgTable extends AbstractTableModel {
 	}
 	
 	
-    public TableRowSorter getRowFilter() {  return cRowFilter; }
+    public TableRowSorter<PPgTable> getRowFilter() {  return cRowFilter; }
    
 
     public void setTableEditable( boolean pBool ) { cIsEditable = pBool; }
@@ -67,7 +71,7 @@ public class PPgTable extends AbstractTableModel {
 	    cTableObj = pList;
 
 	cTable = new JTable( this );	
-	cTable.setRowSorter( (cRowFilter = new TableRowSorter( this) ) );
+	cTable.setRowSorter( (cRowFilter = new TableRowSorter<PPgTable>( this) ) );
 
 
 //	cTable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
@@ -90,7 +94,7 @@ public class PPgTable extends AbstractTableModel {
 	return cPrototype.getColumnCount();
     }
     //-------------
-    public Class getColumnClass( int pCol ){				
+    public Class<?> getColumnClass( int pCol ){				
 	return cPrototype.getColumnClass( pCol );
     }
     //-------------
@@ -211,6 +215,43 @@ public class PPgTable extends AbstractTableModel {
 	    return getRow( pEv.getPoint() );		
 	else
 	    return -1;
-    }
+    }	
+    //--------------------------
+   public void selectAll() {
+	   cTable.setRowSelectionInterval( 0, cTable.getRowCount()-1 );
+	   
+   }
+   //--------------------------
+ 	public static 	void Export2CSV( File iFile, ArrayList<PPgTableLine>  lLines  ) {
+		if( iFile == null)
+			return;
+		 Log.Dbg("export2CSV " + lLines.size());
+		 if( lLines.size() > 0 ){		 
+			try {
+				Log.Dbg("export2CSV " + iFile.getName() );
+				PrintStream lFile = new PrintStream( iFile.getCanonicalPath());
+				 for( PPgTableLine  lLine : lLines) {
+					 for( int i=0 ; i< lLine.getColumnCount(); i++) {
+						 lFile.print( '\"');		
+						 Object lObj = lLine.getValueAt( i);
+					
+						 if( lObj.getClass() == String.class )
+							 lFile.print( PPgUtils.DupliqueChar((String)lObj,'"'));
+						 else
+							 lFile.print( PPgUtils.DupliqueChar(lObj.toString(),'"') );
+						 
+						 lFile.print( "\";");
+					 }					 
+					 lFile.print( "\n"); 
+				 }
+				lFile.close();				
+			} catch (FileNotFoundException e) {				
+				return ;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 }
+ 	}   
 }
 //**********************************************************
