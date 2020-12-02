@@ -1,8 +1,15 @@
 package org.phypo.PPg.PPgFX;
 
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 
 //*********************************************************
 
@@ -28,6 +35,23 @@ public class FxHelper {
 		lCol.setCellValueFactory(new PropertyValueFactory<OBJ,TYPE>((String) iVarName));
 		iCol.getColumns().add(lCol);
 		return lCol;
-	}	
+	}
+	//-------------------------------------------
+	//-------------------------------------------
+	//-------------------------------------------
+	public static MenuItem AddMenuItem( Menu iMenu, String iLabel, EventHandler<ActionEvent> iAction ) {
+		MenuItem lItem = new MenuItem( iLabel); 
+		iMenu.getItems().add(lItem); 
+		lItem.setOnAction( iAction );
+		return lItem;
+	}
+	//-------------------------------------------
+	public static MenuItem AddMenuItem( ContextMenu iMenu, String iLabel, EventHandler<ActionEvent> iAction ) {
+		MenuItem lItem = new MenuItem( iLabel); 
+		iMenu.getItems().add(lItem); 
+		lItem.setOnAction( iAction );
+		return lItem;
+	}
+
 }
 //*********************************************************

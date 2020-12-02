@@ -54,7 +54,7 @@ public abstract class AppliFx extends javafx.application.Application{
 
 	//----------------------------------------------------
 	public AppliFx(){
-	
+		sInstance = this;
 	}
 	//----------------------------------------------------
 	public boolean init( String iAppliName, String iVersion, String iSocietyName, String iDate, String iEmail){
