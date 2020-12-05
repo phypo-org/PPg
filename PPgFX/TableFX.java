@@ -163,6 +163,7 @@ public class TableFX<OBJ> extends BorderPane{
 			});
 	}
 	//--------------------------------------------
+	//--------------------------------------------
 	void setMultipleSelection( boolean iFlagMulti ) {
 		if( iFlagMulti)
 			cTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

@@ -233,9 +233,9 @@ public  class PPgIniFile extends Properties{
 								+ " : No section define for :" + lCurrentKey );
 					}
 					else{						
-						Log.Dbg(2, "===== Begin <<<" + lCurrentValeur +">>> =====");
+						Log.Dbg(2, "===== readIni Begin <<<" + lCurrentValeur +">>> =====");
 						String lTmp = resolveVariables(lCurrentValeur, 0);
-						Log.Dbg(1, "===== Finish <<<" + lTmp +">>> =====");
+						Log.Dbg(2, "===== readIni Finish <<<" + lTmp +">>> =====");
 						if( lTmp != null ) {
 							lCurrentValeur=lTmp;
 						}
@@ -488,6 +488,14 @@ public  class PPgIniFile extends Properties{
 		//		Log.Dbg( "->" + lStr  + "=" + pVal );
 	}
 	// -----------------------------
+	public <TYPE> void set(  String pSection, String pKey, TYPE pVal ){
+		set( pSection, pKey, ""+pVal);
+	}	
+	// -----------------------------
+	public void set(  String pSection, String pKey, long pVal ){
+		set( pSection, pKey, ""+pVal);
+	}	
+	// -----------------------------
 	public void remove(  String pSection, String pKey){
 
 		String lStr =  pSection + SEP + pKey;
@@ -596,13 +604,15 @@ public  class PPgIniFile extends Properties{
 	// toto.png>       # flip horizontal BUG
 	// toto.pngV       # flip vertical BUG
 	// toto.pngX       # flip horizontal et vertical BUG
-
 	public static ImageIcon ReadIcon( PPgIniFile pIni, String pSection, String pKey, String pDefault ){
+		return pIni.readIcon( pSection, pKey, pDefault);
+	}
+	public  ImageIcon readIcon( String pSection, String pKey, String pDefault ){
 
 		if( pSection == null || pKey == null )
 			return null;
 
-		String lStr  = pIni.get( pSection, pKey );
+		String lStr  = get( pSection, pKey );
 
 		//	Log.Dbg(  "****** " +pSection + ":" + pKey +"="+lStr +   "  (" + pDefault +")" );
 
