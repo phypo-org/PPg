@@ -1,5 +1,7 @@
 package org.phypo.PPg.PPgFX;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -12,6 +14,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileReader;
@@ -58,6 +61,11 @@ public class FxHelper {
 		lItem.setOnAction( iAction );
 		return lItem;
 	}
+	public static MenuItem AddMenuItem( Menu iMenu, String iLabel) {
+		MenuItem lItem = new MenuItem( iLabel); 
+		iMenu.getItems().add(lItem); 
+		return lItem;
+	}
 	//-------------------------------------------
 	public static MenuItem AddMenuItem( ContextMenu iMenu, String iLabel, EventHandler<ActionEvent> iAction ) {
 		MenuItem lItem = new MenuItem( iLabel); 
@@ -65,9 +73,16 @@ public class FxHelper {
 		lItem.setOnAction( iAction );
 		return lItem;
 	}
+	//-------------------------------------------
 	public static MenuItem AddMenuSeparator( Menu iMenu) {
 		 iMenu.getItems().add(new SeparatorMenuItem());
 		return iMenu;
+	}
+	//-------------------------------------------
+	public static CheckMenuItem AddMenuCheckBox( Menu iMenu, String iLabel ) {
+		CheckMenuItem lItem = new  CheckMenuItem( iLabel );
+		iMenu.getItems().add(lItem);
+		return lItem;
 	}
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
@@ -97,6 +112,10 @@ public class FxHelper {
 		}
 		
 		return lToggle;
+	}
+	//------------------------------------------------------------------
+	public static void SetButtonImage( Button iButton, Image iImg ) {
+		iButton.setGraphic( new ImageView( iImg) );
 	}
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
@@ -200,5 +219,13 @@ public class FxHelper {
 
 		return lImage;
 	}	
+	//--------------------------------------
+	//--------------------------------------
+	//--------------------------------------
+	public static void SetStageIcon( Stage iStage, Image iImage ) {	
+		if( iImage != null && iStage != null) {
+			iStage.getIcons().add( iImage ); 
+		}
+	}
 }
 //*********************************************************

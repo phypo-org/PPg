@@ -1,11 +1,12 @@
 all::
-	cd PPgUtils;	make ;cd ..;\
-	cd PPgImg; 	make ;cd ..;\
+	cd PPgFileImgChooser;	make ;cd ..;\
+	cd PPgFX;  	make ;cd ..;\
+	cd PPgImg;      make ;cd ..;\
 	cd PPgMath;     make ;cd ..;\
-	cd PPgWin;      make ;cd ..;\
-	cd PPgFileImgChooser; make ;cd ..;\
+	cd PPgUtils;    make ;cd ..;\
+	cd PPgWin; 	make ;cd ..;\
 	cd Sql; 	make ;cd ..;\
-	cd PPgFX; 	make ;cd ..;\
+
 
 
 NAME=PPgLib
@@ -31,13 +32,14 @@ install::
 	cp -p ${NAME}.jar  ${JAR_PATH}
 
 
-clean::
-	cd PPgUtils; 	make clean;cd ..;\
+clean:
+	cd PPgFileImgChooser;   make clean;cd ..;\
+	cd PPgWin;      make clean;cd ..;\
+	cd Sql;         make clean;cd ..;\
 	cd PPgImg; 	make clean;cd ..;\
 	cd PPgMath;     make clean;cd ..;\
-	cd PPgWin;      make clean;cd ..;\
-	cd PPgFileImgChooser;   make clean;cd ..;\
-	cd Sql;         make clean;cd ..;\
-	cd PPgFx;         make clean;cd ..;\
-	rm -f *.jar *.class
+	cd PPgUtils; 	make clean;cd ..;\
+	cd PPgFX;       make clean;cd ..;\
+	rm -f *.jar *.class \
 
+.PHONY: clean

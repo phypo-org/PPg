@@ -1,8 +1,6 @@
 package org.phypo.PPg.PPgFX;
 
 import java.text.DateFormat;
-import java.util.Map;
-
 import org.phypo.PPg.PPgUtils.Log;
 import org.phypo.PPg.PPgUtils.OsValidator;
 import org.phypo.PPg.PPgUtils.PPgIniFile;
@@ -19,7 +17,7 @@ public abstract class AppliFx extends javafx.application.Application{
 	static public AppliFx sInstance=null;
 	static public AppliFx Instance() { return sInstance; }
 	
-	static String sAppliName   = "";
+    static String sAppliName   = "";
 	public static final String GetAppliName ()  { return sAppliName; }
 	
 	static String sVersion     = "";

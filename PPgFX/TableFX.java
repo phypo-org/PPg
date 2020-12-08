@@ -1,9 +1,10 @@
 package org.phypo.PPg.PPgFX;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import org.phypo.PPg.PPgUtils.Log;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -247,6 +248,7 @@ public class TableFX<OBJ> extends BorderPane{
 		int lSelectedIndex = cTable.getSelectionModel().getSelectedIndex();
 		if (lSelectedIndex >= 0) {
 			cTable.getItems().remove(lSelectedIndex);	
+			writeSize2Foot("");
 		}
 	}
 	//--------------------------------------------
@@ -256,13 +258,36 @@ public class TableFX<OBJ> extends BorderPane{
 		if (lSelectedIndex >= 0) {
 			OBJ lTmp = cTable.getItems().get( lSelectedIndex );			
 			cTable.getItems().remove(lSelectedIndex);	
+			writeSize2Foot("");
 			return lTmp;
 		}
 		return null;
 	}
 	//--------------------------------------------
+	public void removeAllSelectedLines() {
+	
+	    ArrayList<Integer> list = new ArrayList<>( cTable.getSelectionModel().getSelectedIndices());
+
+	    Comparator<Integer> comparator = Comparator.comparingInt(Integer::intValue);
+	    comparator = comparator.reversed();
+	    list.sort(comparator);
+
+	    for(Integer i : list) {
+	    	cTable.getItems().remove(i.intValue());
+	    }
+		writeSize2Foot("");
+	}	
+	//--------------------------------------------
+	public ArrayList<OBJ>removeAndGetAllSelectedLines() {
+		
+		 ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
+		 removeAllSelectedLines();
+		 return lListObj;
+	}		
+	 //--------------------------------------------
 	public void removeObject( OBJ iObj ) {
 		cTable.getItems().remove(iObj);	
+		writeSize2Foot("");
 	}
 	//--------------------------------------------
 	public void setSelectionMode( SelectionMode value) { 
@@ -279,6 +304,11 @@ public class TableFX<OBJ> extends BorderPane{
 	//--------------------------------------------
 	public void scrollToIndex( int iIndex ) {
 		cTable.scrollTo(iIndex);
+	}
+	//--------------------------------------------
+	public void scrollToItem( OBJ iObj  ) {
+		int lPos = getIndexOf( iObj );
+		cTable.scrollTo(lPos);
 	}
 	//--------------------------------------------
 	public void setSelectIndex( int iIndex ) {
