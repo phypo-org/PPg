@@ -24,7 +24,8 @@ jar::
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgWin/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgFileImgChooser/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/Sql/*.class; \
-	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgFX/*.class; \
+	
+#	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgFX/*.class; \
 
 
 

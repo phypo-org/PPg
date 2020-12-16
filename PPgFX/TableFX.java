@@ -27,6 +27,7 @@ public class TableFX<OBJ> extends BorderPane{
 	protected TableView<OBJ>       cTable = new TableView<OBJ>();
 	protected ObservableList<OBJ>  cList  = FXCollections.observableArrayList();
 	protected Label                cFootLabel = new Label("no row");
+	protected String               cFootLastMsg = "";
 
 	protected TableView<OBJ>      getTableView() { return cTable; }
 	protected ObservableList<OBJ> getContainer() { return cList; }
@@ -44,7 +45,7 @@ public class TableFX<OBJ> extends BorderPane{
 	protected String cStrUnselectAll       = "Unselect All";
 	protected String cStrRemoveSelection   = "Remove selection";	 
 	//--------------------------------------------	
-	public void addSelectMenuItems( ContextMenu iMenu, MouseEvent iEv) {
+	public void addSelectMenuItems( ContextMenu iMenu, MouseEvent iEv, OBJ lItem, int iPosItem ) {
 
 		FxHelper.AddMenuItem( iMenu, cStrSelectAll,  new EventHandler<ActionEvent>() {
 			//=========================
@@ -76,7 +77,7 @@ public class TableFX<OBJ> extends BorderPane{
 	protected String cStrExport2FileCSV       = "Export all lines to csv file";
 	protected String cStrExportSelect2FileCSV = "Export selected lines to csv file";
 
-	public void addCSVMenuItems( ContextMenu iMenu, MouseEvent iEv) {
+	public void addCSVMenuItems( ContextMenu iMenu, MouseEvent iEv, OBJ iObj, int iPosObj ) {
 
 		{
 			MenuItem lItem = new MenuItem( cStrExport2FileCSV );
@@ -117,7 +118,16 @@ public class TableFX<OBJ> extends BorderPane{
 		}
 	}
 	//--------------------------------------------
-	public boolean addPopupMenuItems( ContextMenu iMenu, MouseEvent iEv ) {
+	public void refreshTable() {
+		getTableView().refresh();
+		writeSize2Foot();
+	}
+	//--------------------------------------------
+	public void autoResizeColumns() {
+		TableFxHelper.AutoResizeColumns( getTableView());
+	}
+	//--------------------------------------------
+	public boolean addPopupMenuItems( ContextMenu iMenu, MouseEvent iEv, OBJ lItem, int iPosItem  ) {
 		return true;
 	}
 	//--------------------------------------------
@@ -138,11 +148,11 @@ public class TableFX<OBJ> extends BorderPane{
 			public void handle(MouseEvent iEv) {
 				Log.Dbg("TableFx handle(MouseEvent " + iEv);
 
+				OBJ lItem  = getSelectedItem();
+				int lPosItem = getSelectedIndex();
 
 				if(iEv.getButton().equals(MouseButton.PRIMARY)){
 					if(iEv.getClickCount() == 2){
-						OBJ lItem  = getSelectedItem();
-						int lPosItem = getSelectedIndex();
 						doubleClick( iEv, lItem, lPosItem );				           
 						System.out.println("Double clicked");
 					}
@@ -153,11 +163,11 @@ public class TableFX<OBJ> extends BorderPane{
 					ContextMenu lMenu = new ContextMenu();
 					lMenu.setOnAutoHide(null);
 
-					if( addPopupMenuItems( lMenu, iEv) ){	
+					if( addPopupMenuItems( lMenu, iEv, lItem, lPosItem) ){	
 						lMenu.show(cTable.getScene().getWindow(),iEv.getScreenX(), iEv.getScreenY());
 					}
-					if( (cFlagAutoMenu & MENU_SELECTION) != 0 ) addSelectMenuItems( lMenu, iEv );
-					if( (cFlagAutoMenu & MENU_CSV) != 0 )       addCSVMenuItems( lMenu, iEv );					
+					if( (cFlagAutoMenu & MENU_SELECTION) != 0 ) addSelectMenuItems( lMenu, iEv, lItem,  lPosItem  );
+					if( (cFlagAutoMenu & MENU_CSV) != 0 )       addCSVMenuItems   ( lMenu, iEv, lItem,  lPosItem );					
 				}
 				//=========================
 			}
@@ -165,21 +175,26 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	//--------------------------------------------
 	//--------------------------------------------
-	void setMultipleSelection( boolean iFlagMulti ) {
+	protected void setMultipleSelection( boolean iFlagMulti ) {
 		if( iFlagMulti)
 			cTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		else
 			cTable.getSelectionModel().setSelectionMode( SelectionMode.SINGLE );
 	}
 	//--------------------------------------------
-	public void writeSize2Foot( String iLabel ) {
+	public void writeSize2Foot() {		
 		if( getSize() == 0 )
-			write2Foot( iLabel + "no row");
+			writeFoot( cFootLastMsg + " - no row");
 		else
-			write2Foot( iLabel + getSize() + " rows");
+			writeFoot( cFootLastMsg + " - " + getSize() + " rows");
 	}
 	//--------------------------------------------
-	public void write2Foot( String iLabel ) {
+	public void writeSize2Foot( String iLabel ) {
+		cFootLastMsg = iLabel;
+		writeSize2Foot();
+	}
+	//--------------------------------------------
+	protected void writeFoot( String iLabel ) {
 		cFootLabel.setText( iLabel);
 	}
 	//--------------------------------------------
@@ -284,9 +299,14 @@ public class TableFX<OBJ> extends BorderPane{
 		 removeAllSelectedLines();
 		 return lListObj;
 	}		
-	 //--------------------------------------------
+	//--------------------------------------------
 	public void removeObject( OBJ iObj ) {
 		cTable.getItems().remove(iObj);	
+		writeSize2Foot("");
+	}
+	//--------------------------------------------
+	public void removeIndex( int iPos ) {
+		cTable.getItems().remove(iPos);	
 		writeSize2Foot("");
 	}
 	//--------------------------------------------

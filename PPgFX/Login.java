@@ -6,14 +6,17 @@ import org.phypo.PPg.PPgUtils.PPgIniFile;
 import org.phypo.PPg.PPgUtils.PPgToken;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
@@ -23,37 +26,20 @@ import javafx.util.Pair;
 
 //*******************************************************
 public class Login extends Dialog<Pair<String, String>> {
-	String cUser="";
-	String cPass="";
-
-	public String getUser()     { return cUser;}
-	public String getPassword() { return cPass; }
-
-	boolean cValidation = false;
-
-	public boolean   getValidation() { return cValidation; }
 
 	//-----------------------
 
-	public Login( String iLabel, PPgIniFile iIni, String pSection, String pKey){
-		
-		String  lStr = iIni.get( pSection, pKey );
-		if( lStr != null ){
-			PPgToken lTok = new PPgToken( lStr, "", "," );
-			cUser =lTok.nextTokenStringTrim();	
-			cPass =lTok.nextTokenStringTrim();
-		}
-		
+	public Login( String iLabel, PPgIniFile iIni, Image iIcon,  String pSection, String pKey){
+				
 		setTitle("Login");
-
+		
 		setHeaderText(iLabel);
 
-		// Set the icon (must be included in the project).
-//		setGraphic(new ImageView(this.getClass().getResource("login.png").toString()));
+		FxHelper.SetIcon( this, iIcon );		
 
 		// Set the button types.
-		ButtonType loginButtonType = new ButtonType("Login", ButtonData.OK_DONE);
-		getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+		ButtonType lLoginButtonType = new ButtonType("Login", ButtonData.OK_DONE);
+		getDialogPane().getButtonTypes().addAll(lLoginButtonType, ButtonType.CANCEL);
 
 		// Create the username and password labels and fields.
 		GridPane lGrid = new GridPane();
@@ -62,22 +48,35 @@ public class Login extends Dialog<Pair<String, String>> {
 		lGrid.setPadding(new Insets(20, 150, 10, 10));
 
 		TextField lUserName = new TextField();
-		lUserName.setText( cUser );
 		lUserName.setPromptText("Username");
+
+		
 		PasswordField lPasswordField = new PasswordField();
 		lPasswordField.setPromptText("Password");
-		lPasswordField.setText(cPass);
 
 		lGrid.add(new Label("Username:"), 0, 0);
 		lGrid.add(lUserName, 1, 0);
 		lGrid.add(new Label("Password:"), 0, 1);
 		lGrid.add(lPasswordField, 1, 1);
+				
+		
+		String  lStr = iIni.get( pSection, pKey );
+		if( lStr != null ){
+			PPgToken lTok = new PPgToken( lStr, "", "," );
+			lUserName.setText( lTok.nextTokenStringTrim());	
+			lPasswordField.setText(lTok.nextTokenStringTrim());
+		}
+
 
 		// Enable/Disable login button depending on whether a username was entered.
-		Node loginButton = getDialogPane().lookupButton(loginButtonType);
-		loginButton.setDisable(true);
-
-		// Do some validation (using the Java 8 lambda syntax).
+	
+		Node lLoginButton = getDialogPane().lookupButton(lLoginButtonType);
+		if( lUserName.getText().trim().isEmpty()) {
+			lLoginButton.setDisable(true);
+		}
+		lUserName.textProperty().addListener((observable, oldValue, newValue) -> {
+		    lLoginButton.setDisable(newValue.trim().isEmpty());
+		});
 
 		getDialogPane().setContent(lGrid);
 
@@ -86,16 +85,11 @@ public class Login extends Dialog<Pair<String, String>> {
 
 		// Convert the result to a username-password-pair when the login button is clicked.
 		setResultConverter(dialogButton -> {
-			if (dialogButton == loginButtonType) {
+			if (dialogButton == lLoginButtonType) {
 				return new Pair<>(lUserName.getText(), lPasswordField.getText());
 			}
 			return null;
-		});
-
-		Optional<Pair<String, String>> result = showAndWait();
-
-		result.ifPresent(usernamePassword -> {
-			System.out.println("Username=" + usernamePassword.getKey() + ", Password=" + usernamePassword.getValue());
-		});
+		});	
 	}
+
 }

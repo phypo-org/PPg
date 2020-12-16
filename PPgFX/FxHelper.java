@@ -2,7 +2,9 @@ package org.phypo.PPg.PPgFX;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -84,6 +86,8 @@ public class FxHelper {
 		iMenu.getItems().add(lItem);
 		return lItem;
 	}
+
+	
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
@@ -97,6 +101,7 @@ public class FxHelper {
 	}
 	//-------------------------------------------
 	public static ToggleButton CreateToggle( String iLabel, ToggleGroup iGroup, String iTip, Image iImage ) {
+
 		ToggleButton lToggle   = new ToggleButton( iLabel);
 		
 		if( iGroup != null )
@@ -106,12 +111,33 @@ public class FxHelper {
 			lToggle.setTooltip( new Tooltip( iTip ));
 		
 		if( iImage != null ) {
-			ImageView lImg  = new ImageView( iImage);
-		 //   lImg.setPreserveRatio(true);
 			lToggle.setGraphic( new ImageView( iImage) );
 		}
 		
 		return lToggle;
+	}
+	//-------------------------------------------
+	//-------------------------------------------
+	//-------------------------------------------
+	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl) {
+		return CreateButton( iLabel, iTip, iHdl, null );
+	}	
+	//-------------------------------------------
+	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl, Image iImg ) {
+		
+		Button lButton  = new Button( iLabel);
+				
+		if( iHdl != null )
+			lButton.setOnAction(iHdl);
+		
+		if( iTip != null )
+			lButton.setTooltip( new Tooltip( iTip ));
+		
+		if( iImg != null ) {
+			lButton.setGraphic( new ImageView( iImg ) );
+		}
+		
+		return lButton;
 	}
 	//------------------------------------------------------------------
 	public static void SetButtonImage( Button iButton, Image iImg ) {
@@ -222,9 +248,15 @@ public class FxHelper {
 	//--------------------------------------
 	//--------------------------------------
 	//--------------------------------------
-	public static void SetStageIcon( Stage iStage, Image iImage ) {	
+	public static void SetIcon( Stage iStage, Image iImage ) {	
 		if( iImage != null && iStage != null) {
 			iStage.getIcons().add( iImage ); 
+		}
+	}
+	//--------------------------------------
+	public static void SetIcon( Dialog iStage, Image iImage ) {	
+		if( iImage != null && iStage != null) {
+			iStage.setGraphic(new ImageView( iImage )); 
 		}
 	}
 }
