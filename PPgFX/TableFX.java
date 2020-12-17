@@ -29,8 +29,8 @@ public class TableFX<OBJ> extends BorderPane{
 	protected Label                cFootLabel = new Label("no row");
 	protected String               cFootLastMsg = "";
 
-	protected TableView<OBJ>      getTableView() { return cTable; }
-	protected ObservableList<OBJ> getContainer() { return cList; }
+	public TableView<OBJ>      getTableView() { return cTable; }
+	public ObservableList<OBJ> getContainer() { return cList; }
 
 	static File sDirCSV=null;
 
