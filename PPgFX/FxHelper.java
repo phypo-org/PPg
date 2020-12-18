@@ -1,21 +1,30 @@
 package org.phypo.PPg.PPgFX;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 import org.phypo.PPg.PPgUtils.Log;
 import org.phypo.PPg.PPgUtils.PPgIniFile;
@@ -278,7 +287,58 @@ public class FxHelper {
 	public static void SetIcon( Dialog iStage, Image iImage ) {	
 		if( iImage != null && iStage != null) {
 			iStage.setGraphic(new ImageView( iImage )); 
-		}
+		}		
 	}
+	//--------------------------------------
+	public enum DialogMsgType { INFO(AlertType.INFORMATION), WARN(AlertType.WARNING), ERR(AlertType.ERROR), OK_CANCEL( AlertType.CONFIRMATION)
+		; AlertType cType; 
+		DialogMsgType(AlertType iType ){ cType = iType; } 
+		};
+		
+		
+	public static void MsgAlertWait( DialogMsgType iType, String iTxt ) {
+		//METTRE LE RESULT	
+		new javafx.scene.control.Alert( iType.cType, iTxt ).showAndWait();
+	}
+	public static Alert MsgAlert( DialogMsgType iType, String iTxt ) {
+		//METTRE LE RESULT	
+		return new javafx.scene.control.Alert( iType.cType, iTxt );
+	}
+	//--------------------------------------
+	public static TextArea AddText2Alert( Alert iAlert, String iLabel, String iStr, boolean iIsEditable ) {
+		
+		TextArea lTextArea = new TextArea( iStr );
+	
+		lTextArea.setEditable(iIsEditable);
+		lTextArea.setWrapText(true);
+
+		lTextArea.setMaxWidth(Double.MAX_VALUE);
+		lTextArea.setMaxHeight(Double.MAX_VALUE);
+		GridPane.setVgrow(lTextArea, Priority.ALWAYS);
+		GridPane.setHgrow(lTextArea, Priority.ALWAYS);
+
+		GridPane lContent = new GridPane();
+		lContent.setMaxWidth(Double.MAX_VALUE);
+		if( iLabel != null ) {
+			Label label = new Label( iLabel );
+			lContent.add( label, 0, 0);
+		}
+		lContent.add( lTextArea, 0, 1);
+
+	// Set expandable Exception into the dialog pane.
+		iAlert.getDialogPane().setExpandableContent(lContent);
+		return lTextArea;
+	}	
+	//--------------------------------------
+	public static String DialogEdit( String iTitle, String iLabel, String iStr, boolean iIsEditable ) {
+		
+		Alert lAlert = MsgAlert( (iIsEditable ? DialogMsgType.OK_CANCEL : DialogMsgType.INFO), iLabel );
+		TextArea lText = AddText2Alert( lAlert, iLabel, iStr, iIsEditable  );
+		Optional<ButtonType> lResult = lAlert.showAndWait();
+		if( lResult.get() == ButtonType.OK ) {
+			return lAlert.getContentText();
+		}
+		return null;
+	}	
 }
 //*********************************************************

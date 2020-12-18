@@ -28,6 +28,8 @@ public class TableFX<OBJ> extends BorderPane{
 	protected ObservableList<OBJ>  cList  = FXCollections.observableArrayList();
 	protected Label                cFootLabel = new Label("no row");
 	protected String               cFootLastMsg = "";
+	
+	protected Label                cTitle = null;
 
 	public TableView<OBJ>      getTableView() { return cTable; }
 	public ObservableList<OBJ> getContainer() { return cList; }
@@ -133,13 +135,22 @@ public class TableFX<OBJ> extends BorderPane{
 	//--------------------------------------------
 	public void doubleClick( MouseEvent iEv, OBJ lItem, int iPosItem  ) {	
 	}
+	public TableFX(){
+		this(null);
+	}
 	//--------------------------------------------
-	public TableFX( ){
+	public TableFX( String iTitle ){
+		
+		if( iTitle != null ){
+			setTop( cTitle = new Label(iTitle) );
+		}
+			
 		cTable.setItems(cList);
 		setCenter( cTable );
 		setBottom( cFootLabel);
 		Log.Dbg("TableFX");
 
+		
 		cTable.addEventHandler( MouseEvent.MOUSE_PRESSED,
 
 				new EventHandler<MouseEvent>() {
@@ -175,7 +186,7 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	//--------------------------------------------
 	//--------------------------------------------
-	protected void setMultipleSelection( boolean iFlagMulti ) {
+	public void setMultipleSelection( boolean iFlagMulti ) {
 		if( iFlagMulti)
 			cTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		else
