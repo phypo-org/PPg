@@ -5,12 +5,11 @@ import java.awt.Frame;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
-
 import org.phypo.PPg.PPgUtils.Log;
 import org.phypo.PPg.PPgUtils.PPgUtils;
 
@@ -89,7 +88,7 @@ public class SqlConnex {
 			case MYSQL:
 				Class.forName("com.mysql.jdbc.Driver");
 				pServer.cUrl = new String("jdbc:mysql://" +pServer.cMachine+":"+pServer.cPort+"/"+pServer.cBase);
- 				break;
+				break;
 			case MARIADB:
 				Class.forName("org.mariadb.jdbc.Driver");
 				pServer.cUrl = new String("jdbc:mariadb://"+pServer.cMachine+":"+pServer.cPort+"/"+pServer.cBase);
@@ -106,7 +105,7 @@ public class SqlConnex {
 			}
 
 			Log.Dbg( "URL:" + pServer.cUrl );
-	
+
 			cConnect = DriverManager.getConnection( pServer.cUrl, pServer.cUser,  pServer.cPass );
 		}
 		catch(  Exception sqe){		
@@ -259,7 +258,7 @@ public class SqlConnex {
 					lRowsAffected = cCurrentStatement.getUpdateCount();										
 					if (lRowsAffected >= 0) {			
 						if( cPrintInfo ) {
-						//	cOStream.println( rowsAffected + " rows Affected.");
+							//	cOStream.println( rowsAffected + " rows Affected.");
 						}
 					}
 				}
@@ -300,11 +299,7 @@ public class SqlConnex {
 				return false;
 
 			cCurrentStatement = cConnect.createStatement();
-
-
 			cCurrentHaveResult = cCurrentStatement.execute(pQuery);
-
-
 			//==========================
 			int lNbResult = 0;
 
@@ -325,7 +320,7 @@ public class SqlConnex {
 				else 	{										
 					lRowsAffected = cCurrentStatement.getUpdateCount();	
 					if (lRowsAffected >= 0) {		
-					//cOStream.println(rowsAffected + " rows Affected.");
+						//cOStream.println(rowsAffected + " rows Affected.");
 					}
 				}
 
@@ -354,6 +349,77 @@ public class SqlConnex {
 			cCurrentStatement = null;
 		} 
 		return true;
+	}
+	//-----------------------
+	public PreparedStatement prepareCommand( String pQuery ) {
+		try{
+			return cConnect.prepareStatement( pQuery );
+		}
+		catch (SQLException sqe) {
+			cOStream.println("Unexpected exception : " +															 
+					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
+			sqe.printStackTrace();
+		}
+		return null;
+	}
+	//-----------------------
+	public boolean executeWithNoReturn( PreparedStatement iStatement) {
+		try{
+			iStatement.executeUpdate();
+			return true;
+		}
+		catch (SQLException sqe) {
+			cOStream.println("Unexpected exception : " +															 
+					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
+			sqe.printStackTrace();
+		}
+		return false;
+	}
+	//-----------------------
+	public boolean executeSelect( PreparedStatement iStatement, SqlResultsExecData iExec) {
+		try{
+			//================================
+			int lNbResult = 0;						
+			int rowsAffected = 0;						
+			ResultSetMetaData lResultSetmd = null;
+			int lRowsAffected =0;
+
+			do {
+				if (cCurrentHaveResult) {		   		  
+					ResultSet lResultSet = iStatement.executeQuery();
+					if( lResultSet == null )
+						break;
+					ResultSetMetaData lResultSetMeta = lResultSet.getMetaData();
+
+					int lRowNum = 0;
+					for( lRowNum = 0; lResultSet.next(); lRowNum++) {		    	
+						iExec.oneRow( lNbResult, lRowNum, lResultSetMeta, lResultSet);
+					}		
+					lNbResult++;	
+				}							
+				else 	{										
+					lRowsAffected = iStatement.getUpdateCount();
+				}								
+				cCurrentHaveResult = iStatement.getMoreResults();
+			}	while (cCurrentHaveResult || lRowsAffected != -1);						
+			//================================
+			iStatement.close();
+			iStatement = null;
+		}
+		catch (SQLException sqe) {
+			cOStream.println("Unexpected exception : " +															 
+					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
+			sqe.printStackTrace();
+		}
+		return false;
+	}
+	//-----------------------
+	public boolean executeSelect( String iQuery, SqlResultsExecData iExec) {
+		PreparedStatement lStatement = prepareCommand( iQuery );
+		if( lStatement != null ) {
+			return executeSelect( lStatement, iExec );
+		}
+		return false;
 	}
 	//-----------------------
 	// On attende des resultats
@@ -435,7 +501,7 @@ public class SqlConnex {
 				lRowsAffected = cCurrentStatement.getUpdateCount();										
 				if (lRowsAffected >= 0) {			
 					if( cPrintInfo ) {
-					//	cOStream.println(rowsAffected + " rows Affected.");
+						//	cOStream.println(rowsAffected + " rows Affected.");
 					}
 				}
 			}

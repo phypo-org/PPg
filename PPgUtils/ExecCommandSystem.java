@@ -33,9 +33,11 @@ public class ExecCommandSystem{
 
 		try {	
 			Runtime lRt = Runtime.getRuntime();
+		//	Log.Dbg("CallInit " + lCmd );
 			lCmd = init( lCmd );
-			
-			Log.Dbg("ExecCommandSystem.execCmd <<<"+lCmd+">>>");
+		//	Log.Dbg("->CallInit " + lCmd );
+
+			Log.Dbg3("ExecCommandSystem.execCmd <<<"+lCmd+">>>");
 			Process lProcess = lRt.exec(lCmd);
 			int lRetCode = lProcess.waitFor();
 			if( lRetCode != 0 ){
@@ -47,7 +49,7 @@ public class ExecCommandSystem{
 			BufferedReader lReader = new BufferedReader(new InputStreamReader(lProcess.getInputStream()), 1);
 			String lLine;
 			while ((lLine = lReader.readLine()) != null) {
-				Log.Dbg( 2, "ExecCmdLine out:" + lLine );
+				Log.Dbg3(  "ExecCmdLine out:" + lLine );
 				execOutLine( lLine );
 			}   
 

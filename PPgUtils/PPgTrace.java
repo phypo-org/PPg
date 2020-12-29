@@ -115,28 +115,36 @@ public class PPgTrace {
 			if( sDebug > 0 )
 				PPgLog.Dbg.print( CurrentDatetime()+" @@@ Debug : " + pToTrace );
 		}		
-		//-----------------------------
 		public static void Dbg( String pToTrace ){
 			if( sDebug >0 )
 				PPgLog.Dbg.println( CurrentDatetime()+" @@@ Debug : " + pToTrace );
 		}		
+		//-----------------------------
 		public static void Dbg2Nl( String pToTrace ){
 			if( sDebug > 1 )
 				PPgLog.Dbg.print( CurrentDatetime()+" @@@ Debug : " + pToTrace );
 		}		
-		//-----------------------------
 		public static void Dbg2( String pToTrace ){
 			if( sDebug >1 )
 				PPgLog.Dbg.println( CurrentDatetime()+" @@@ Debug : " + pToTrace );
 		}		
+		//-----------------------------
 		public static void Dbg3Nl( String pToTrace ){
 			if( sDebug > 2 )
 				PPgLog.Dbg.print( CurrentDatetime()+" @@@ Debug : " + pToTrace );
 		}		
-		//-----------------------------
 		public static void Dbg3( String pToTrace ){
 			if( sDebug >2 )
 				PPgLog.Dbg.println( CurrentDatetime()+" @@@ Debug : " + pToTrace );
+		}		
+		//-----------------------------
+		public static void Dbg4( String pToTrace ){
+			if( sDebug >3 )
+				PPgLog.Dbg.println( CurrentDatetime()+" @@@ Debug : " + pToTrace );
+		}		
+		public static void Dbg4Nl( String pToTrace ){
+			if( sDebug >3 )
+				PPgLog.Dbg.print( CurrentDatetime()+" @@@ Debug : " + pToTrace );
 		}		
 		//-----------------------------
 		public static void DbgNl( int pLevel, String pToTrace ){
