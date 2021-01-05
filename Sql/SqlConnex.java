@@ -3,6 +3,7 @@ package org.phypo.PPg.Sql;
 import java.awt.Frame;
 
 import java.io.PrintStream;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -363,7 +364,19 @@ public class SqlConnex {
 		return null;
 	}
 	//-----------------------
-	public boolean executeWithNoReturn( PreparedStatement iStatement) {
+	public CallableStatement prepareCallProc( String pQuery ) {
+		try{
+			return cConnect.prepareCall( pQuery );
+		}
+		catch (SQLException sqe) {
+			cOStream.println("Unexpected exception : " +															 
+					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
+			sqe.printStackTrace();
+		}
+		return null;
+	}
+	//-----------------------
+	public boolean executeWithNoReturn ( PreparedStatement iStatement) {
 		try{
 			iStatement.executeUpdate();
 			return true;
@@ -373,20 +386,32 @@ public class SqlConnex {
 					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
 			sqe.printStackTrace();
 		}
+		try {
+			iStatement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		iStatement = null;
 		return false;
 	}
 	//-----------------------
 	public boolean executeSelect( PreparedStatement iStatement, SqlResultsExecData iExec) {
+		boolean lResult = false;
 		try{
 			//================================
 			int lNbResult = 0;						
 			int rowsAffected = 0;						
 			ResultSetMetaData lResultSetmd = null;
 			int lRowsAffected =0;
-
+			
+			ResultSet lResultSet = iStatement.executeQuery();
+			
+			if( lResultSet != null ) {
+				cCurrentHaveResult = true;
+			}
 			do {
 				if (cCurrentHaveResult) {		   		  
-					ResultSet lResultSet = iStatement.executeQuery();
 					if( lResultSet == null )
 						break;
 					ResultSetMetaData lResultSetMeta = lResultSet.getMetaData();
@@ -403,22 +428,34 @@ public class SqlConnex {
 				cCurrentHaveResult = iStatement.getMoreResults();
 			}	while (cCurrentHaveResult || lRowsAffected != -1);						
 			//================================
-			iStatement.close();
-			iStatement = null;
-		}
+			lResult = true;
+			}
 		catch (SQLException sqe) {
 			cOStream.println("Unexpected exception : " +															 
 					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
 			sqe.printStackTrace();
 		}
-		return false;
+
+		try {
+			iStatement.close();
+		}catch (SQLException sqe) {
+			cOStream.println("Unexpected exception : " +															 
+					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
+			sqe.printStackTrace();
+			return false;
+		}				
+		iStatement = null;		
+
+		return lResult;
 	}
 	//-----------------------
 	public boolean executeSelect( String iQuery, SqlResultsExecData iExec) {
 		PreparedStatement lStatement = prepareCommand( iQuery );
+		
 		if( lStatement != null ) {
 			return executeSelect( lStatement, iExec );
 		}
+		Log.Err( "SqlConnex.executeSelect - prepareCommand failed <<<" + iQuery + ">>>");
 		return false;
 	}
 	//-----------------------
