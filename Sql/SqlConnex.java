@@ -396,13 +396,11 @@ public class SqlConnex {
 		return false;
 	}
 	//-----------------------
-	public boolean executeSelect( PreparedStatement iStatement, SqlResultsExecData iExec) {
+	public boolean executeQuery( PreparedStatement iStatement, SqlResultsExecData iExec) {
 		boolean lResult = false;
 		try{
 			//================================
 			int lNbResult = 0;						
-			int rowsAffected = 0;						
-			ResultSetMetaData lResultSetmd = null;
 			int lRowsAffected =0;
 			
 			ResultSet lResultSet = iStatement.executeQuery();
@@ -449,11 +447,11 @@ public class SqlConnex {
 		return lResult;
 	}
 	//-----------------------
-	public boolean executeSelect( String iQuery, SqlResultsExecData iExec) {
+	public boolean executeQuery( String iQuery, SqlResultsExecData iExec) {
 		PreparedStatement lStatement = prepareCommand( iQuery );
 		
 		if( lStatement != null ) {
-			return executeSelect( lStatement, iExec );
+			return executeQuery( lStatement, iExec );
 		}
 		Log.Err( "SqlConnex.executeSelect - prepareCommand failed <<<" + iQuery + ">>>");
 		return false;

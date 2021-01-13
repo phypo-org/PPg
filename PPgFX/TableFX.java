@@ -8,6 +8,8 @@ import org.phypo.PPg.PPgUtils.Log;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
@@ -16,6 +18,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -39,7 +42,55 @@ public class TableFX<OBJ> extends BorderPane{
 	long cFlagAutoMenu = 0;
 	public static final long MENU_SELECTION = 1;
 	public static final long MENU_CSV=2;
+	
+	
+	// Only use with second constructor
+	private FilteredList<OBJ>     cFilteredList = null;
+	private SortedList<OBJ>       cSortedList   = null;
+	
+	public FilteredList<OBJ> getFilteredList() { return cFilteredList; }
+	//--------------------------------------------
+	
+	public TableFX( String iTitle ){
+		
+		if( iTitle != null ){
+			setTop( cTitle = new Label(iTitle) );
+		}
+		
+		cTable.setItems(cList);
+		setCenter( cTable );
+		setBottom( cFootLabel);
+		Log.Dbg("TableFX");
 
+		setMouveEventHandler();
+	}	
+	//--------------------------------------------
+	public TableFX( String iTitle, boolean iFilter ) {
+		
+	
+		if( iTitle != null ){
+			setTop( cTitle = new Label(iTitle) );
+		}
+			
+		setCenter( cTable );
+		setBottom( cFootLabel);
+//		Log.Dbg("TableFX");
+
+		setMouveEventHandler();
+		
+		
+		if( iFilter ) {			
+			cFilteredList = new FilteredList<>( cList, p -> true);
+			cSortedList   = new SortedList<>(cFilteredList);
+			cSortedList.comparatorProperty().bind(cTable.comparatorProperty());
+			cTable.setItems( cSortedList );		
+		}
+		else {
+			cTable.setItems(cList);
+		}
+
+	}
+	//--------------------------------------------
 	public void addAutoMenu( long iFlag ) { cFlagAutoMenu |= iFlag; }
 
 	//--------------------------------------------	
@@ -139,18 +190,7 @@ public class TableFX<OBJ> extends BorderPane{
 		this(null);
 	}
 	//--------------------------------------------
-	public TableFX( String iTitle ){
-		
-		if( iTitle != null ){
-			setTop( cTitle = new Label(iTitle) );
-		}
-			
-		cTable.setItems(cList);
-		setCenter( cTable );
-		setBottom( cFootLabel);
-		Log.Dbg("TableFX");
-
-		
+	public void	setMouveEventHandler() {
 		cTable.addEventHandler( MouseEvent.MOUSE_PRESSED,
 
 				new EventHandler<MouseEvent>() {

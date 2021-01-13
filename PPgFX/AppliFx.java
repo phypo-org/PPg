@@ -112,5 +112,6 @@ public abstract class AppliFx extends javafx.application.Application{
 
 		return true;
 	}
+
 	
 }

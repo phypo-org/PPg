@@ -1,4 +1,8 @@
-all:: SqlConnex.class  SqlLogin.class  SqlOutImpl.class  SqlOut.class  SqlResultsExecData.class  SqlServer.class  SqlTerm.class
+JAVA_FILES=$(wildcard *.java)
+JAVA_CLASS=$(notdir  $(patsubst %.java, %.class,  $(JAVA_FILES) ) )
+
+
+all:: ${JAVA_CLASS}
 
 
 clean::
