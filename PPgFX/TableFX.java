@@ -18,7 +18,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -263,7 +262,15 @@ public class TableFX<OBJ> extends BorderPane{
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
-	public void clearLines()        { cTable.getItems().clear();}
+//	public void clearLines()        { }
+	public void clearLines()        { 
+	//	if( cFilteredList	== null )
+	//		cTable.getItems().clear();
+	//	else {
+			cList.clear();
+			//cFilteredList.getSource().remove(1,cList.size());
+	//	}
+	}
 	public int  getSize()           { return cList.size(); }
 	//--------------------------------------------
 	public OBJ addLine( OBJ iObj ) {

@@ -335,7 +335,7 @@ public class FxHelper {
 		Alert lAlert = MsgAlert( (iIsEditable ? DialogMsgType.OK_CANCEL : DialogMsgType.INFO), iLabel );
 		TextArea lText = AddText2Alert( lAlert, iLabel, iStr, iIsEditable  );
 		Optional<ButtonType> lResult = lAlert.showAndWait();
-		if( lResult != null &&  lResult.get() == ButtonType.OK ) {
+		if( lResult != null && lResult.isPresent() && lResult.get() == ButtonType.OK ) {
 			return lAlert.getContentText();
 		}
 		return null;

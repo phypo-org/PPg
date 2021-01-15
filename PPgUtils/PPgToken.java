@@ -4,6 +4,8 @@ package org.phypo.PPg.PPgUtils;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -152,6 +154,15 @@ public class PPgToken {
 		StringBuilder lTmp =  nextToken(c_toeat, c_forend );
 		if( lTmp == null) return "";
 		return lTmp.toString().trim();
+	}
+	//------------
+	public List<String> getTrimStrings() {
+		List<String> lList = new ArrayList<>();
+		String lStr;
+		while( (lStr = nextTokenStringTrim()).length() > 0) {
+			lList.add(lStr);
+		}
+		return lList;
 	}
 	//------------
 	public	StringBuilder getParagraph( String p_toeat, char p_begin, char p_end, boolean p_depsep ){

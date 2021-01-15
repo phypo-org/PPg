@@ -17,7 +17,7 @@ public abstract class AppliFx extends javafx.application.Application{
 	static public AppliFx sInstance=null;
 	static public AppliFx Instance() { return sInstance; }
 	
-    static String sAppliName   = "";
+    protected static String sAppliName   = "";
 	public static final String GetAppliName ()  { return sAppliName; }
 	
 	static String sVersion     = "";
