@@ -326,7 +326,7 @@ public class FxHelper {
 		lContent.add( lTextArea, 0, 1);
 
 	// Set expandable Exception into the dialog pane.
-		iAlert.getDialogPane().setExpandableContent(lContent);
+		iAlert.getDialogPane().setContent(lContent);
 		return lTextArea;
 	}	
 	//--------------------------------------

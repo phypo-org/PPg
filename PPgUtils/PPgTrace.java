@@ -22,6 +22,13 @@ public class PPgTrace {
 				PPgLog.UseDbg();
 			}				
 		}
+		public static int Debug() {
+			return sDebug;	
+		}
+		public static int Verbose() {
+			return sVerbose;	
+		}
+		
 		
 		public static PrintStream GetOut() { return PPgLog.Out; }
 		public static PrintStream GetErr() { return PPgLog.Err; }

@@ -60,7 +60,7 @@ public class PPgParam {
 		if( lVar != null ){
 
 			try{
-				return new Integer( lVar );
+				return Integer.decode( lVar ) ;
 			}catch(NumberFormatException ex){
 				System.err.println( "bad format commande:"+p_prefix);
 				return pDefault;
