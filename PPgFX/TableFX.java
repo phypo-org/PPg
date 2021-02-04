@@ -18,6 +18,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -25,7 +27,43 @@ import javafx.stage.FileChooser;
 
 //***********************************
 public class TableFX<OBJ> extends BorderPane{
+	
+	ToolBar cToolbar = null ;	
+	//-------------------------------------
+	public ToolBar getToolbar(){
+		if( cToolbar == null ) {
+			cToolbar = new ToolBar();
+			if( cTitle!= null ){
+				cToolbar.getItems().add( cTitle );
+			}
 
+			setTop( cToolbar );
+		}
+		return cToolbar;	
+	}
+	//-------------------------------------
+	public TextField addFilterToolbar( String iPromptText ) {
+		TextField lFilterField = new TextField();
+		if( iPromptText!=null && iPromptText.length() > 0 ) {
+			lFilterField.setPromptText(iPromptText );
+		}
+		ToolBar lTb = getToolbar();
+		lTb.getItems().add( lFilterField );
+		return lFilterField;
+	}
+	//-------------------------------------
+	public TextField addFilterToolbar() {
+		return addFilterToolbar( null);
+	}
+	//-------------------------------------
+	public Label addLabelToolbar( String iStr ) {
+		Label lLabel = new Label(iStr);
+		ToolBar lTb = getToolbar();
+		lTb.getItems().add( lLabel );
+		return lLabel;
+	}
+	//-------------------------------------
+	
 	protected TableView<OBJ>       cTable = new TableView<OBJ>();
 	protected ObservableList<OBJ>  cList  = FXCollections.observableArrayList();
 	protected Label                cFootLabel = new Label("no row");
@@ -65,8 +103,7 @@ public class TableFX<OBJ> extends BorderPane{
 	}	
 	//--------------------------------------------
 	public TableFX( String iTitle, boolean iFilter ) {
-		
-	
+			
 		if( iTitle != null ){
 			setTop( cTitle = new Label(iTitle) );
 		}
@@ -233,10 +270,16 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	//--------------------------------------------
 	public void writeSize2Foot() {		
-		if( getSize() == 0 )
+		if( totalSize() == 0 ) {
 			writeFoot( cFootLastMsg + " - no row");
-		else
-			writeFoot( cFootLastMsg + " - " + getSize() + " rows");
+		}
+		else {
+			if( totalSize() != realSize() ) {
+				writeFoot( cFootLastMsg + " - " + realSize() +'/'+ totalSize() + " rows");
+			}
+			else
+				writeFoot( cFootLastMsg + " - " + totalSize() + " rows");
+		}
 	}
 	//--------------------------------------------
 	public void writeSize2Foot( String iLabel ) {
@@ -271,7 +314,14 @@ public class TableFX<OBJ> extends BorderPane{
 			//cFilteredList.getSource().remove(1,cList.size());
 	//	}
 	}
-	public int  getSize()           { return cList.size(); }
+	public int  totalSize()           { return cList.size(); }
+	//--------------------------------------------
+	public int realSize() { 
+		if( cSortedList != null ) {
+			return cSortedList.size() ;		
+		} 
+		return totalSize(); 
+	}
 	//--------------------------------------------
 	public OBJ addLine( OBJ iObj ) {
 		cList.add( iObj);
@@ -306,8 +356,6 @@ public class TableFX<OBJ> extends BorderPane{
 		 return null;
 	}
 	//--------------------------------------------
-	public int size() { return cTable.getItems().size(); }
-	//--------------------------------------------
 	public int getIndexOf( OBJ iObj) {
 		return  cTable.getItems().indexOf(iObj);
 	}
@@ -315,6 +363,8 @@ public class TableFX<OBJ> extends BorderPane{
 	public void clearSelection() {
 		cTable.getSelectionModel().clearSelection();
 	}
+	//--------------------------------------------
+	
 	//--------------------------------------------
 	public void removeSelectedLine() {
 		//	cTablesetEditable(true)		
@@ -350,6 +400,12 @@ public class TableFX<OBJ> extends BorderPane{
 	    }
 		writeSize2Foot("");
 	}	
+	//--------------------------------------------
+	public void removeSelectedLinesByObject() {
+		
+		 ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
+		 cList.removeAll( lListObj );
+	}		
 	//--------------------------------------------
 	public ArrayList<OBJ>removeAndGetAllSelectedLines() {
 		

@@ -28,9 +28,9 @@ public class PPgTable extends AbstractTableModel {
     protected boolean     cIsEditable = true;
     protected TableRowSorter<PPgTable> cRowFilter = null;
 
-    public ArrayList<PPgTableLine> getList()     { return cTableObj; }
+    public ArrayList<PPgTableLine> getList()           { return cTableObj; }
     public void setList(ArrayList<PPgTableLine> pList) {  cTableObj = pList; }
-    public JTable getJTable() { return cTable; }
+    public JTable getJTable()                          { return cTable; }
     
     public int[] getSelectedRowsRaw() {
     	return  getJTable().getSelectedRows();
@@ -72,7 +72,7 @@ public class PPgTable extends AbstractTableModel {
 
 	cTable = new JTable( this );	
 	cTable.setRowSorter( (cRowFilter = new TableRowSorter<PPgTable>( this) ) );
-
+	
 
 //	cTable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
     }			

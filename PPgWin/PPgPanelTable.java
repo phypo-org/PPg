@@ -169,8 +169,7 @@ public class PPgPanelTable extends JPanel
 	    cStatus.setText( "row count : " + cTable.getFilterRowCount()
 			     + "/" +cTable.getRowCount());
 	}
-	else {
-	
+	else {	
 	    cStatus.setText( "row count : "+cTable.getRowCount());
 	}
     }
