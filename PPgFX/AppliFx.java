@@ -8,12 +8,13 @@ import org.phypo.PPg.PPgUtils.PPgParam;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 
 
 //*********************************************************
 //public abstract class AppliFx<TYPE extends AppliFx> extends javafx.application.Application{
 public abstract class AppliFx extends javafx.application.Application{
-
+	
 	static public AppliFx sInstance=null;
 	static public AppliFx Instance() { return sInstance; }
 	
@@ -38,7 +39,9 @@ public abstract class AppliFx extends javafx.application.Application{
 	static String sOsSystem="";
 	public static final String GetOs()          { return sOsSystem; }
 	
-	
+	//---------------------
+	public abstract Stage getPrimStage();
+
 	//---------------------
 	static String     sStrIniFile ="Config.ini"; 
 	protected static PPgIniFile sIniFile = null;	

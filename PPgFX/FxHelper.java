@@ -20,6 +20,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
@@ -80,9 +81,14 @@ public class FxHelper {
 		return lItem;
 	}
 	//-------------------------------------------
-	public static MenuItem AddMenuSeparator( Menu iMenu) {
+	public static Menu AddMenuSeparator( Menu iMenu) {
 		 iMenu.getItems().add(new SeparatorMenuItem());
 		return iMenu;
+	}
+	//-------------------------------------------
+	public static ContextMenu AddMenuSeparator( ContextMenu iMenu) {
+		 iMenu.getItems().add(new SeparatorMenuItem());
+		 return iMenu;
 	}
 	//-------------------------------------------
 	public static CheckMenuItem AddMenuCheckBox( Menu iMenu, String iLabel ) {
@@ -157,6 +163,16 @@ public class FxHelper {
 	//------------------------------------------------------------------
 	public static void SetButtonImage( Button iButton, Image iImg ) {
 		iButton.setGraphic( new ImageView( iImg) );
+	}
+	//------------------------------------------------------------------
+	public static FlowPane CreateFlowPane() {
+		
+		FlowPane lFlow = new FlowPane();
+		lFlow.setVgap(8);
+		lFlow.setHgap(8);
+		lFlow.setPrefWrapLength(300); // preferred width = 300
+
+		return lFlow;
 	}
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
@@ -340,5 +356,6 @@ public class FxHelper {
 		}
 		return null;
 	}	
+	//--------------------------------------
 }
 //*********************************************************

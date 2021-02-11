@@ -26,7 +26,8 @@ public class DialogEdit  extends  Dialog<Pair<Boolean, String>>{
 
 		setTitle(iTitle);
 		
-		setHeaderText( iHeader );
+		if( iHeader != null)
+			setHeaderText( iHeader );
 
 		if( iPermitEdit == false ) {
 			getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
