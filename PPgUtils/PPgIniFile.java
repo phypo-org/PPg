@@ -430,6 +430,17 @@ public  class PPgIniFile extends Properties{
 		return pDefaultValue;
 	}
 	// ------------------------------
+	public long  getlong( String pSection, String pKey, long pDefaultValue ) { 
+
+		String lStr = get( pSection, pKey );
+
+
+		if( lStr != null && lStr.length() != 0 ) 
+			return Long.parseLong(lStr ); 
+
+		return pDefaultValue;
+	}
+	// ------------------------------
 	public double  getdouble( String pSection, String pKey, double pDefaultValue ) { 
 		String lStr = get( pSection, pKey );
 

@@ -154,6 +154,15 @@ public class PPgTrace {
 				PPgLog.Dbg.print( CurrentDatetime()+" @@@ Debug : " + pToTrace );
 		}		
 		//-----------------------------
+		public static void Dbg5( String pToTrace ){
+			if( sDebug >4 )
+				PPgLog.Dbg.println( CurrentDatetime()+" @@@ Debug : " + pToTrace );
+		}		
+		public static void Dbg5Nl( String pToTrace ){
+			if( sDebug >4 )
+				PPgLog.Dbg.print( CurrentDatetime()+" @@@ Debug : " + pToTrace );
+		}		
+		//-----------------------------
 		public static void DbgNl( int pLevel, String pToTrace ){
 			if( sDebug >= pLevel )
 				PPgLog.Dbg.print( CurrentDatetime()+" @@@ Debug : " + pToTrace );
