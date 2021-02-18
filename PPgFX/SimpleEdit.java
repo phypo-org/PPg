@@ -14,11 +14,12 @@ public class SimpleEdit extends PPgDialog  {
 	protected SimpleEdit( Window iOwner, String iTitle, String iStrText, String iFoot, boolean iIsEditable, boolean iModal , boolean iFlagClose) {
 		super( iOwner, iTitle, iModal, iFlagClose   );
 	
-		Log.Dbg( "SimpleEdit ");
+		Log.Dbg( "SimpleEdit size : "+iStrText.length());
 	
 		TextArea lText = new TextArea( iStrText);
 		getPrimPane().setCenter(lText);
 		lText.setEditable(iIsEditable);
+		Log.Dbg( "SimpleEdit TextArea");
 		
 		if( iFoot != null )
 			setFootText( iFoot );
@@ -29,6 +30,7 @@ public class SimpleEdit extends PPgDialog  {
 				close();
 			}));
 		}
+		Log.Dbg( "SimpleEdit medium");
 		this.setWidth(1024);
 		this.setHeight(800);
 		

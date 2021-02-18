@@ -1,4 +1,9 @@
-all:: ExecCommandSystemErrOut.class  ExecCommandSystem.class OsValidator.class PPgRef.class PPgUtils.class PPgToken.class PPgIniFile.class PPgParam.class PPgXml.class PPgInterfaceXmlNodeHandler.class PPgXmlTag.class PPgLog.class PPgTrace.class PPgPair.class PPgObjectDestroy.class PPgDualOutputStream.class  PPgTrace.class SimpleNotifier.class SimpleNotifierSubject.class SimpleNotifierObserver.class
+JAVA_FILES=$(wildcard *.java)
+JAVA_CLASS=$(notdir  $(patsubst %.java, %.class,  $(JAVA_FILES) ) )
+
+
+all:: ${JAVA_CLASS}
+
 
 clean::
 	rm  -f *.class 

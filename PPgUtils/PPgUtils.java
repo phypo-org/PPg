@@ -115,20 +115,6 @@ public class PPgUtils{
 
 		return iBuilder.toString();
 	}	
-	//--------------------------------------------
-	public static long CopyInputStreamToFile(InputStream iInputStream, File iFile, int iBufferSize)  throws IOException {
 
-        long lTotalSize=0;
-               try ( FileOutputStream outputStream = new FileOutputStream( iFile, false)) {
-            int lSz;
-            byte[] bytes = new byte[iBufferSize];
-            InputStream inputStream;
-            while ((lSz = iInputStream.read(bytes)) != -1) {
-            	outputStream.write(bytes, 0, lSz);
-            	lTotalSize+=lSz;
-            }
-        }
-        return lTotalSize;
-	}
 }
 //*************************************************

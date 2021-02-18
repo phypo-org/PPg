@@ -30,9 +30,13 @@ public  class PPgIniFile extends Properties{
 	
 	boolean isVoid( ) { return this.size()> 0; }
 
-	static final String SEP = new String( "." );
+	protected String cSeparator = new String( "." );
 	String cSystemPrefix="";
-
+	// ------------------------------
+	public void setSeparator(String icSeparator) {
+		cSeparator = icSeparator;
+	}
+	// ------------------------------
 	static public PPgIniFile GetIni( String pFilename  ) {
 		PPgIniFile lTmp = new PPgIniFile();
 		if( lTmp.readIni( pFilename ) )	
@@ -62,7 +66,7 @@ public  class PPgIniFile extends Properties{
 	public boolean readIni( String pPath, String pFileName ){	
 
 		if( pPath != null && pPath.length() > 0  )
-			pFileName = pPath + File.pathSeparatorChar + pFileName;
+			pFileName = pPath + File.pathSeparator + pFileName;
 
 		return readIni( pFileName );				
 	}
@@ -240,7 +244,7 @@ public  class PPgIniFile extends Properties{
 							lCurrentValeur=lTmp;
 						}
 
-						String lStr =  lCurrentSection + SEP +lCurrentKey ;
+						String lStr =  lCurrentSection + cSeparator +lCurrentKey ;
 						remove( lStr );
 						put( lStr, lCurrentValeur );
 						//														Log.Dbg( "->" + lStr  + "=" + lCurrentValeur );
@@ -262,13 +266,13 @@ public  class PPgIniFile extends Properties{
 	// ------------------------------
 	public String  get( String pSection, String pKey ) { 
 
-		//					Log.Dbg( pSection + ":" + pKey + "=" +  get( pSection + SEP + pKey ));
-		String lKey = pSection + SEP + pKey;
+		//					Log.Dbg( pSection + ":" + pKey + "=" +  get( pSection + cSeparator + pKey ));
+		String lKey = pSection + cSeparator + pKey;
 
 		// Si une property est defini dans le system elle est preponderante
 		String lSysStr;
 		if( cSystemPrefix != null )
-			lSysStr = System.getProperty( cSystemPrefix+SEP+lKey );
+			lSysStr = System.getProperty( cSystemPrefix+cSeparator+lKey );
 		else
 			lSysStr = System.getProperty( lKey );
 
@@ -278,13 +282,13 @@ public  class PPgIniFile extends Properties{
 		return (String) get( lKey ); 
 	}
 	// ------------------------------
-	public  Collection<String> getCollection( String pSection, String pKey,  Collection<String> lCollect, String pToeat, String pSep  ) { 
+	public  Collection<String> getCollection( String pSection, String pKey,  Collection<String> lCollect, String pToeat, String pcSeparator  ) { 
 
 		String lStr = get( pSection, pKey );
 		if( lStr == null )
 			return lCollect;
 
-		return PPgUtils.Split( lStr, lCollect, pToeat, pSep );
+		return PPgUtils.Split( lStr, lCollect, pToeat, pcSeparator );
 	}
 	// ------------------------------
 	public boolean test( String pSection, String pKey, String pVal) { 
@@ -303,6 +307,9 @@ public  class PPgIniFile extends Properties{
 			return pDefault;
 
 		return lStr;
+	}
+	public boolean exist( String pSection, String pKey ) {
+		return get( pSection, pKey, null) != null;
 	}
 	// ------------------------------
 	public ArrayList<String>  getVectorString( String pSection, String pKey, String pDefault ) { 
@@ -459,12 +466,12 @@ public  class PPgIniFile extends Properties{
 		return pDefaultValue;
 	}
 	// -----------------------------
-	public static Rectangle GetRectangle( String pData, String pSep){
+	public static Rectangle GetRectangle( String pData, String pcSeparator){
 		if( pData == null ){
 			return null;
 		}
 
-		StringTokenizer lTok = new StringTokenizer( pData, pSep );
+		StringTokenizer lTok = new StringTokenizer( pData, pcSeparator );
 
 		String lX = lTok.nextToken().trim();
 		String lY = lTok.nextToken().trim();
@@ -493,7 +500,7 @@ public  class PPgIniFile extends Properties{
 	// -----------------------------
 	public void set(  String pSection, String pKey, String pVal ){
 
-		String lStr =  pSection + SEP + pKey;
+		String lStr =  pSection + cSeparator + pKey;
 		remove( lStr );
 		put( lStr, pVal );
 		//		Log.Dbg( "->" + lStr  + "=" + pVal );
@@ -502,6 +509,13 @@ public  class PPgIniFile extends Properties{
 	public <TYPE> void set(  String pSection, String pKey, TYPE pVal ){
 		set( pSection, pKey, ""+pVal);
 	}	
+	// ------------------------------
+	public void setboolean( String pSection, String pKey, boolean iVal) {
+		if( iVal )
+			set( pSection, pKey, true);
+		else
+			set( pSection, pKey, false);
+	}
 	// -----------------------------
 	public void set(  String pSection, String pKey, long pVal ){
 		set( pSection, pKey, ""+pVal);
@@ -509,7 +523,7 @@ public  class PPgIniFile extends Properties{
 	// -----------------------------
 	public void remove(  String pSection, String pKey){
 
-		String lStr =  pSection + SEP + pKey;
+		String lStr =  pSection + cSeparator + pKey;
 		remove( lStr );
 	}		
 	// ------------------------------
@@ -545,12 +559,12 @@ public  class PPgIniFile extends Properties{
 		while( lIter.hasNext() ){
 			String lStr = (String) lIter.next();
 
-			int lPos = lStr.indexOf( SEP );										
+			int lPos = lStr.indexOf( cSeparator );										
 			String lSection = lStr.substring( 0, lPos );
 			Log.Dbg( lSection );
 
 			if( lSection.compareTo( pSection ) == 0 ){
-				String lVar     = lStr.substring( lPos + 1 );
+				String lVar     = lStr.substring( lPos + cSeparator.length() );
 				String lVal     = (String)get(lStr);
 				Log.Dbg( "Var="+lVar + " Val="+lVal );
 				lResult.put( lVar, lVal );
@@ -558,6 +572,10 @@ public  class PPgIniFile extends Properties{
 		}
 		Log.Dbg( ">>>>>>>>>>Result:" + lResult.size() );
 		return lResult;
+	}
+	// ------------------------------
+	public void writeIni( OutputStream pOut  ){
+		writeIni( new PrintStream( pOut));
 	}
 	// ------------------------------
 	public void writeIni( PrintStream pOut  ){
@@ -574,14 +592,14 @@ public  class PPgIniFile extends Properties{
 
 			while( lIter.hasNext() ){
 				String lStr = (String) lIter.next();
-				int lPos = lStr.lastIndexOf( SEP );
+				int lPos = lStr.lastIndexOf( cSeparator );
 
 				String lSection = lStr.substring( 0, lPos );
-				String lVar     = lStr.substring( lPos + 1 );
+				String lVar     = lStr.substring( lPos + cSeparator.length() );
 				String lVal     = (String)get(lStr);
 
 				//				pOut.println( lStr + "+" + lVal );
-				//			String lSys  = System.getProperty( lSection+SEP+lVar );
+				//			String lSys  = System.getProperty( lSection+cSeparator+lVar );
 
 				if( lSection != null && lVar != null && lVal != null ){
 
