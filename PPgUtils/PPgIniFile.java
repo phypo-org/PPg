@@ -76,7 +76,9 @@ public  class PPgIniFile extends Properties{
 		try {
 			if( lFile != null ) {
 				FileReader lFread = new FileReader(lFile  );
-				return readIni(lFread);	
+				boolean lRet = readIni(lFread);	
+				lFread.close();
+				return lRet;
 			}
 		}
 		catch( Exception e){
@@ -542,8 +544,10 @@ public  class PPgIniFile extends Properties{
 	public void writeIni( File pFile  ){
 
 		try {
-			PrintStream lFout = new PrintStream( new FileOutputStream( pFile ) );
+			FileOutputStream lOS = new FileOutputStream( pFile );
+			PrintStream lFout = new PrintStream( lOS );
 			writeIni( lFout );
+			lOS.close();
 		}	catch(Exception e ) { Log.Err( e.toString() );
 		e.printStackTrace();
 		}

@@ -1,9 +1,11 @@
 package org.phypo.PPg.PPgFX;
 
 
+
 import org.phypo.PPg.PPgUtils.Log;
 
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Font;
 import javafx.stage.Window;
 
 
@@ -19,6 +21,8 @@ public class SimpleEdit extends PPgDialog  {
 		TextArea lText = new TextArea( iStrText);
 		getPrimPane().setCenter(lText);
 		lText.setEditable(iIsEditable);
+		lText.setFont( Font.font ("monospaced", 12));
+
 		Log.Dbg( "SimpleEdit TextArea");
 		
 		if( iFoot != null )
