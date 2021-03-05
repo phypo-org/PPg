@@ -9,6 +9,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
@@ -20,6 +21,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -31,7 +33,9 @@ import org.phypo.PPg.PPgUtils.Log;
 import org.phypo.PPg.PPgUtils.PPgIniFile;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 
 
 //*********************************************************
@@ -62,15 +66,27 @@ public class FxHelper {
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
-	public static MenuItem AddMenuItem( Menu iMenu, String iLabel, EventHandler<ActionEvent> iAction ) {
+	// https://stackoverflow.com/questions/10315774/javafx-2-0-activating-a-menu-like-a-menuitem
+	
+	// Create a menu like a menuitem in the menubar
+	public static Menu AddMenuBarItem( MenuBar iMenubar, String iLabel, EventHandler<MouseEvent> iAction ) {
+		Label menuLabel = new Label(iLabel);
+		menuLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+		    public void handle(MouseEvent event) {
+				iAction.handle(event);
+		};});
+
+		Menu lMenu = new Menu();
+		lMenu.setGraphic(menuLabel);	
+		iMenubar.getMenus().add( lMenu);		
+		return lMenu;
+	}
+	//-------------------------------------------
+	public static MenuItem AddMenuItem( Menu iMenu, String iLabel, EventHandler<ActionEvent> iAction) {
 		MenuItem lItem = new MenuItem( iLabel); 
 		iMenu.getItems().add(lItem); 
 		lItem.setOnAction( iAction );
-		return lItem;
-	}
-	public static MenuItem AddMenuItem( Menu iMenu, String iLabel) {
-		MenuItem lItem = new MenuItem( iLabel); 
-		iMenu.getItems().add(lItem); 
 		return lItem;
 	}
 	//-------------------------------------------

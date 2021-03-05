@@ -1,10 +1,12 @@
 package org.phypo.PPg.PPgUtils;
 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 
@@ -115,6 +117,24 @@ public class PPgUtils{
 
 		return iBuilder.toString();
 	}	
+	//-------------------------------
+	// lit le stream et met le resultat dans le StringBuilder
+	public static boolean Read( String iTag, InputStreamReader iInput, BufferedReader iReader, StringBuilder iBuild ) throws IOException {		
+
+		boolean lFlagRead = false;
+
+		while( iInput.ready()) {
+			iBuild.append( iTag );
+			iBuild.append( iReader.readLine() );
+			iBuild.append( '\n' );
+			lFlagRead = true;
+		}
+//////		Log.Dbg3(" PPgUtils.Read ->" + iBuild.toString());
+		if( lFlagRead) {			
+			return true;
+		} 
+		return false;
+	}
 
 }
 //*************************************************

@@ -17,8 +17,6 @@ public class PPgDialog extends Stage {
 	public boolean isOk( ) { return cOk; }
 	protected void setOk( ) { cOk = true;}
 
-	private Scene      cPrimScene;
-	
 	private BorderPane cPrimPane;
 	private BorderPane cFootPane;
 	
@@ -54,7 +52,7 @@ public class PPgDialog extends Stage {
 			setOnCloseRequest(e->e.consume());
 		}
 	
-		setScene( (cPrimScene = new Scene( (cPrimPane = new BorderPane()))));  
+		setScene( (new Scene( (cPrimPane = new BorderPane()))));  
 		
 		cPrimPane.setBottom( (cFootPane = new BorderPane()) );	
 		cFootPane.setBottom( (cFootText = new Label( "" )));		

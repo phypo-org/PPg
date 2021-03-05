@@ -8,6 +8,7 @@ import java.util.Date;
 public class PPgTrace {
 	public enum Type{ Void, Unknown, Debug,Verbose,Info,Busy,Warn,Error,Critic,Fatal};
 
+		
 		private static int sVerbose=0;
 		private static int sDebug=0;
 		
@@ -28,7 +29,10 @@ public class PPgTrace {
 		public static int Verbose() {
 			return sVerbose;	
 		}
-		
+		public static boolean UseFile(String iFilename) {
+			return PPgLog.UseFile(iFilename);	
+		}
+	
 		
 		public static PrintStream GetOut() { return PPgLog.Out; }
 		public static PrintStream GetErr() { return PPgLog.Err; }

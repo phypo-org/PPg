@@ -4,14 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.function.Predicate;
+
 import org.phypo.PPg.PPgUtils.Log;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -42,25 +47,35 @@ public class TableFX<OBJ> extends BorderPane{
 		return cToolbar;	
 	}
 	//-------------------------------------
-	public TextField addFilterToolbar( String iPromptText ) {
+	public TextField addTextFilterToolbar( String iPromptText ) {
 		TextField lFilterField = new TextField();
 		if( iPromptText!=null && iPromptText.length() > 0 ) {
 			lFilterField.setPromptText(iPromptText );
 		}
-		ToolBar lTb = getToolbar();
-		lTb.getItems().add( lFilterField );
+		getToolbar().getItems().add( lFilterField );
 		return lFilterField;
 	}
 	//-------------------------------------
-	public TextField addFilterToolbar() {
-		return addFilterToolbar( null);
+	public TextField addTextFilterToolbar() {
+		return addTextFilterToolbar( null);
 	}
 	//-------------------------------------
 	public Label addLabelToolbar( String iStr ) {
 		Label lLabel = new Label(iStr);
-		ToolBar lTb = getToolbar();
-		lTb.getItems().add( lLabel );
+		getToolbar().getItems().add( lLabel );
 		return lLabel;
+	}
+	//-------------------------------------
+	public ComboBox<String> addComboTextFilterToolbar(){
+		ComboBox<String> lFilter = new ComboBox<String>();
+		getToolbar().getItems().add(lFilter);
+		return lFilter;
+	}
+	//-------------------------------------
+	public ComboBox<Long> addComboLongFilterToolbar(){
+		ComboBox<Long> lFilter = new ComboBox<Long>();
+		getToolbar().getItems().add(lFilter);
+		return lFilter;
 	}
 	//-------------------------------------
 	
@@ -85,7 +100,11 @@ public class TableFX<OBJ> extends BorderPane{
 	private FilteredList<OBJ>     cFilteredList = null;
 	private SortedList<OBJ>       cSortedList   = null;
 	
-	public FilteredList<OBJ> getFilteredList() { return cFilteredList; }
+	//public FilteredList<OBJ> getFilteredList() { return cFilteredList; }
+	public void setFilter( Predicate<OBJ> iPred ) { 
+		cFilteredList.setPredicate( iPred );
+		writeSize2Foot();
+	}
 	//--------------------------------------------
 	
 	public TableFX( String iTitle ){
@@ -98,8 +117,10 @@ public class TableFX<OBJ> extends BorderPane{
 		setCenter( cTable );
 		setBottom( cFootLabel);
 		Log.Dbg("TableFX");
-
+		
 		setMouveEventHandler();
+		
+		setListenerSelectWriteFoot();
 	}	
 	//--------------------------------------------
 	public TableFX( String iTitle, boolean iFilter ) {
@@ -123,8 +144,16 @@ public class TableFX<OBJ> extends BorderPane{
 		}
 		else {
 			cTable.setItems(cList);
-		}
-
+		}		
+		setListenerSelectWriteFoot();
+	}
+	//--------------------------------------------
+	protected void setListenerSelectWriteFoot() {
+			cTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends OBJ> c) -> {
+		
+				// Platform.runLater( () -> { 
+			writeSize2Foot(); 	
+		});
 	}
 	//--------------------------------------------
 	public void addAutoMenu( long iFlag ) { cFlagAutoMenu |= iFlag; }
@@ -267,18 +296,29 @@ public class TableFX<OBJ> extends BorderPane{
 			cTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		else
 			cTable.getSelectionModel().setSelectionMode( SelectionMode.SINGLE );
+	
 	}
 	//--------------------------------------------
 	public void writeSize2Foot() {		
 		if( totalSize() == 0 ) {
-			writeFoot( cFootLastMsg + " - no row");
+			writeFoot( cFootLastMsg + " no row");
 		}
 		else {
+		       //  Log.Info("*** TableFx.setListenerSelectWriteFoot - Selected items: "+);
+			
+			String lStrSelect = "";
+			
+			int lNbSelect = cTable.getSelectionModel().getSelectedItems().size();
+			if( lNbSelect > 0 ) {
+				lStrSelect = "["+lNbSelect +']';	
+			}
+				
+					
 			if( totalSize() != realSize() ) {
-				writeFoot( cFootLastMsg + " - " + realSize() +'/'+ totalSize() + " rows");
+				writeFoot( cFootLastMsg + realSize() +'/'+ totalSize() + lStrSelect +" rows");
 			}
 			else
-				writeFoot( cFootLastMsg + " - " + totalSize() + " rows");
+				writeFoot( cFootLastMsg + totalSize() + lStrSelect +" rows");
 		}
 	}
 	//--------------------------------------------
@@ -288,7 +328,7 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	//--------------------------------------------
 	protected void writeFoot( String iLabel ) {
-		cFootLabel.setText( iLabel);
+		Platform.runLater( () -> {cFootLabel.setText( iLabel);});				
 	}
 	//--------------------------------------------
 	public <TYPE>  TableColumn<OBJ, TYPE> addColumn(  String iLabel, String iVarName ){
