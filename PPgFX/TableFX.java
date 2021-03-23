@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.phypo.PPg.PPgUtils.Log;
@@ -99,6 +100,8 @@ public class TableFX<OBJ> extends BorderPane{
 	// Only use with second constructor
 	private FilteredList<OBJ>     cFilteredList = null;
 	private SortedList<OBJ>       cSortedList   = null;
+	
+	
 	
 	//public FilteredList<OBJ> getFilteredList() { return cFilteredList; }
 	public void setFilter( Predicate<OBJ> iPred ) { 
@@ -250,6 +253,7 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	//--------------------------------------------
 	public void doubleClick( MouseEvent iEv, OBJ lItem, int iPosItem  ) {	
+		System.out.println("Double clicked");
 	}
 	public TableFX(){
 		this(null);
@@ -269,8 +273,9 @@ public class TableFX<OBJ> extends BorderPane{
 
 				if(iEv.getButton().equals(MouseButton.PRIMARY)){
 					if(iEv.getClickCount() == 2){
+						System.out.println("Double clicked before");
 						doubleClick( iEv, lItem, lPosItem );				           
-						System.out.println("Double clicked");
+						System.out.println("Double clicked after");
 					}
 				}
 				else if( iEv.getButton().equals(MouseButton.SECONDARY)) { 
@@ -314,8 +319,8 @@ public class TableFX<OBJ> extends BorderPane{
 			}
 				
 					
-			if( totalSize() != realSize() ) {
-				writeFoot( cFootLastMsg + realSize() +'/'+ totalSize() + lStrSelect +" rows");
+			if( totalSize() != filterSize() ) {
+				writeFoot( cFootLastMsg + filterSize() +'/'+ totalSize() + lStrSelect +" rows");
 			}
 			else
 				writeFoot( cFootLastMsg + totalSize() + lStrSelect +" rows");
@@ -345,6 +350,13 @@ public class TableFX<OBJ> extends BorderPane{
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
 	//---------------------------------------------------------------
+	protected List<OBJ> getVisibleList(){
+		if( cSortedList != null ) {
+			return cSortedList;
+		}
+		return cList;		
+	}
+	//---------------------------------------------------------------
 //	public void clearLines()        { }
 	public void clearLines()        { 
 	//	if( cFilteredList	== null )
@@ -356,7 +368,7 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	public int  totalSize()           { return cList.size(); }
 	//--------------------------------------------
-	public int realSize() { 
+	public int filterSize() { 
 		if( cSortedList != null ) {
 			return cSortedList.size() ;		
 		} 

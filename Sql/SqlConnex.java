@@ -170,7 +170,6 @@ public class SqlConnex {
 		catch(  Exception sqe){		
 			cOStream.println(sqe);
 		}
-
 		cServerCurrent = null;
 		cConnect = null;
 	}
@@ -471,8 +470,6 @@ public class SqlConnex {
 
 			//================================
 			int lNbResult = 0;						
-			int rowsAffected = 0;						
-			ResultSetMetaData lResultSetmd = null;
 			int lRowsAffected =0;
 
 			do {
@@ -565,8 +562,15 @@ public class SqlConnex {
 		}
 		catch (SQLException sqe) {
 			cOStream.println("Unexpected exception : " +															 
-					sqe.toString() + ", sqlstate = " + sqe.getSQLState());						
+					sqe.toString() + ", sqlstate = " + sqe.getSQLState());		
+			
 			sqe.printStackTrace();
+			return false;
+		}
+		catch (Exception e) {
+			cOStream.println("Unexpected exception : " +															 
+					e.toString() );						
+			e.printStackTrace();
 			return false;
 		}
 		finally {
