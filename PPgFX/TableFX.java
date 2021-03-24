@@ -248,6 +248,10 @@ public class TableFX<OBJ> extends BorderPane{
 		TableFxHelper.AutoResizeColumns( getTableView());
 	}
 	//--------------------------------------------
+	public  void setSortable( Boolean iFlagSort ) {
+		TableFxHelper.SetSortable( getTableView(), iFlagSort );
+	}
+	//--------------------------------------------
 	public boolean addPopupMenuItems( ContextMenu iMenu, MouseEvent iEv, OBJ lItem, int iPosItem  ) {
 		return true;
 	}

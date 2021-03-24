@@ -61,8 +61,9 @@ public class PPgDialog extends Stage {
 	}
 	//---------------------------------------------------------
 	//---------------------------------------------------------
-	protected void addToBottomRight( Button iButton) {
+	protected Button addToBottomRight( Button iButton) {
 		cFlowButtonRight.getChildren().add(iButton); 
+		return iButton;
 	}
 	
 	//*********************************************

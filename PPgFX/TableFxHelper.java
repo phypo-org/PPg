@@ -263,7 +263,14 @@ public class TableFxHelper {
 	        column.setPrefWidth( max + 10.0d );
 	    } );
 	}
-
+	//--------------------------------------
+	public static void SetSortable( TableView<?> table, Boolean iFlagSort )
+	{
+	    table.getColumns().stream().forEach( (iColumn) ->
+	    {
+	        iColumn.setSortable(false);	
+	    } );
+	}
 }
 //********************************************
 

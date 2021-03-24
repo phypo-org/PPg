@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -31,7 +32,6 @@ public class PPgFile {
 	}
 	//--------------------------------------------
 	public static boolean writeFile( byte [] iBytes, File iFile ){
-
 
 		FileOutputStream lOutputStream = null;
 		try {
@@ -148,5 +148,51 @@ public class PPgFile {
 		lIIS.transferTo(lBAOS);
 		return lIIS.readAllBytes();
 	}
+	//==============================
+	static public String GetFileExtension( File iFile ) {
+		if( iFile == null ) return null;
+		return GetFileExtension( iFile.getName());
+	}
+	//==============================
+	static public String RemoveFileExtension(String iFile ) {
+		if( iFile == null ) return null;
+
+		int lIndex = iFile.lastIndexOf('.');
+		if( lIndex <= 0 ) return iFile;	
+
+		return iFile.substring( 0, lIndex );
+	}
+	//==============================
+	static public String GetFileExtension( String iName ) {	
+		if( iName == null ) return null;
+
+		int lIndex = iName.lastIndexOf('.');
+		if( lIndex <= 0 ) return null;		
+		String lExtension = iName.substring( lIndex + 1);
+		if( lExtension == null | lExtension.length() == 0)
+			return null;
+		return lExtension.toLowerCase();
+	}
+	//-----------------------------------------------
+	static public boolean Write( String iFilename, String iTxt) {
+		if( iFilename == null || iFilename.length() == 0)
+			return false;
+
+		File lFile= new File( iFilename );
+		return Write( lFile, iTxt );	
+	}
+	//-----------------------------	
+	static public boolean Write( File iFile, String iTxt) {
+		try {
+			PrintStream lFout = new PrintStream( new FileOutputStream( iFile ) );
+			lFout.print(iTxt);
+			lFout.close();			
+			return true;
+		}	catch(Exception e ) { Log.Err( e.toString() );
+		e.printStackTrace();
+		}
+		return false;
+	}
 }
+
 //****************************
