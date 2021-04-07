@@ -83,7 +83,7 @@ public abstract class AppliFx extends javafx.application.Application{
 		return true;
 	}	
 	//----------------------------------------------------
-	public static String GetStringInfosApplication(char iSep) {
+	public static String GetStringInfosApplication(String iSep) {
 		return sAppliName      + iSep 
 				+ sVersion     + iSep 
 				+ sDate + iSep
@@ -93,7 +93,17 @@ public abstract class AppliFx extends javafx.application.Application{
 				+ sJavaVersions + iSep;
 		}
 	//----------------------------------------------------
-	public static String GetStringInfosApplicationFormat(char iSep) {
+	public static String GetStringInfosApplication(String iSep, String iSep2) {
+		return sAppliName      + iSep 
+				+ sVersion     + iSep
+				+ sDate + iSep2
+				+ sSocietyName + iSep
+				+ sEmail + iSep2
+				+ sOsSystem + iSep
+				+ sJavaVersions + iSep;
+		}
+	//----------------------------------------------------
+	public static String GetStringInfosApplicationFormat(String iSep) {
 		return  "Application:" + sAppliName      + iSep 
 				+"Version:" + sVersion     + iSep 
 				+"Date:" + sDate + iSep

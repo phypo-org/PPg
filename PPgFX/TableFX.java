@@ -15,130 +15,52 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
 
 //***********************************
-public class TableFX<OBJ> extends BorderPane{
-	
-	ToolBar cToolbar = null ;	
-	//-------------------------------------
-	public ToolBar getToolbar(){
-		if( cToolbar == null ) {
-			cToolbar = new ToolBar();
-			if( cTitle!= null ){
-				cToolbar.getItems().add( cTitle );
-			}
+public class TableFX<KEY, OBJ extends TreeFXObjInterface<KEY>>  extends DataViewFx <KEY, OBJ > {
 
-			setTop( cToolbar );
-		}
-		return cToolbar;	
-	}
-	//-------------------------------------
-	public TextField addTextFilterToolbar( String iPromptText ) {
-		TextField lFilterField = new TextField();
-		if( iPromptText!=null && iPromptText.length() > 0 ) {
-			lFilterField.setPromptText(iPromptText );
-		}
-		getToolbar().getItems().add( lFilterField );
-		return lFilterField;
-	}
-	//-------------------------------------
-	public TextField addTextFilterToolbar() {
-		return addTextFilterToolbar( null);
-	}
-	//-------------------------------------
-	public Label addLabelToolbar( String iStr ) {
-		Label lLabel = new Label(iStr);
-		getToolbar().getItems().add( lLabel );
-		return lLabel;
-	}
-	//-------------------------------------
-	public ComboBox<String> addComboTextFilterToolbar(){
-		ComboBox<String> lFilter = new ComboBox<String>();
-		getToolbar().getItems().add(lFilter);
-		return lFilter;
-	}
-	//-------------------------------------
-	public ComboBox<Long> addComboLongFilterToolbar(){
-		ComboBox<Long> lFilter = new ComboBox<Long>();
-		getToolbar().getItems().add(lFilter);
-		return lFilter;
-	}
-	//-------------------------------------
-	
 	protected TableView<OBJ>       cTable = new TableView<OBJ>();
 	protected ObservableList<OBJ>  cList  = FXCollections.observableArrayList();
-	protected Label                cFootLabel = new Label("no row");
-	protected String               cFootLastMsg = "";
-	
-	protected Label                cTitle = null;
 
 	public TableView<OBJ>      getTableView() { return cTable; }
 	public ObservableList<OBJ> getContainer() { return cList; }
 
-	static File sDirCSV=null;
 
-	long cFlagAutoMenu = 0;
-	public static final long MENU_SELECTION = 1;
-	public static final long MENU_CSV=2;
-	
-	
 	// Only use with second constructor
 	private FilteredList<OBJ>     cFilteredList = null;
 	private SortedList<OBJ>       cSortedList   = null;
-	
-	
-	
-	//public FilteredList<OBJ> getFilteredList() { return cFilteredList; }
+
+	@Override
 	public void setFilter( Predicate<OBJ> iPred ) { 
 		cFilteredList.setPredicate( iPred );
 		writeSize2Foot();
 	}
 	//--------------------------------------------
-	
+	public TableFX(){
+		this(null);
+	}
+	//--------------------------------------------
 	public TableFX( String iTitle ){
-		
-		if( iTitle != null ){
-			setTop( cTitle = new Label(iTitle) );
-		}
-		
-		cTable.setItems(cList);
-		setCenter( cTable );
-		setBottom( cFootLabel);
-		Log.Dbg("TableFX");
-		
-		setMouveEventHandler();
-		
-		setListenerSelectWriteFoot();
+		this( iTitle, false );
 	}	
 	//--------------------------------------------
 	public TableFX( String iTitle, boolean iFilter ) {
-			
-		if( iTitle != null ){
-			setTop( cTitle = new Label(iTitle) );
-		}
-			
-		setCenter( cTable );
-		setBottom( cFootLabel);
-//		Log.Dbg("TableFX");
+		super( iTitle );
+
+		cPrimPane.setCenter( cTable );
+		//		Log.Dbg("TableFX");
 
 		setMouveEventHandler();
-		
-		
+
+
 		if( iFilter ) {			
 			cFilteredList = new FilteredList<>( cList, p -> true);
 			cSortedList   = new SortedList<>(cFilteredList);
@@ -152,94 +74,15 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	//--------------------------------------------
 	protected void setListenerSelectWriteFoot() {
-			cTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends OBJ> c) -> {
-		
-				// Platform.runLater( () -> { 
+		cTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends OBJ> c) -> {
+
+			// Platform.runLater( () -> { 
 			writeSize2Foot(); 	
 		});
 	}
 	//--------------------------------------------
-	public void addAutoMenu( long iFlag ) { cFlagAutoMenu |= iFlag; }
-
-	//--------------------------------------------	
-	protected String cStrSelectAll         = "Select All";
-	protected String cStrUnselectAll       = "Unselect All";
-	protected String cStrRemoveSelection   = "Remove selection";	 
-	//--------------------------------------------	
-	public void addSelectMenuItems( ContextMenu iMenu, MouseEvent iEv, OBJ lItem, int iPosItem ) {
-
-		FxHelper.AddMenuItem( iMenu, cStrSelectAll,  new EventHandler<ActionEvent>() {
-			//=========================
-			public void handle( ActionEvent iEv) {
-				selectAll();
-			}		    
-			//=========================
-		});
-		FxHelper.AddMenuItem( iMenu, cStrUnselectAll,  new EventHandler<ActionEvent>() {
-			//=========================
-			public void handle( ActionEvent iEv) {
-				clearSelection();
-			}		    
-			//=========================
-		});
-		/*
-		FxHelper.AddMenuItem( iMenu, cStrRemoveSelection,  new EventHandler<ActionEvent>() {
-			//=========================
-			public void handle( ActionEvent iEv) {
-
-			}		    
-			//=========================
-		});
-		 */
-	}
-	//--------------------------------------------	
-	//Ajouter copy to Clipbaord
-	//--------------------------------------------	
-	protected String cStrExport2FileCSV       = "Export all lines to csv file";
-	protected String cStrExportSelect2FileCSV = "Export selected lines to csv file";
-
-	public void addCSVMenuItems( ContextMenu iMenu, MouseEvent iEv, OBJ iObj, int iPosObj ) {
-
-		{
-			MenuItem lItem = new MenuItem( cStrExport2FileCSV );
-			iMenu.getItems().add( lItem );
-
-			lItem.setOnAction( new EventHandler<ActionEvent>() {
-				//=========================
-				public void handle( ActionEvent iEv) {
-					final FileChooser lFileChooser = new FileChooser();
-					lFileChooser.setInitialDirectory(sDirCSV);
-					lFileChooser.setTitle( cStrExport2FileCSV );
-					File lFile = lFileChooser.showSaveDialog(iMenu);
-					sDirCSV = lFileChooser.getInitialDirectory();		        
-					//ObservableList<OBJ> getSelectedItems
-					//Export2CSV( "export csv", , sDirCSV, cList);															
-				}		    
-				//=========================
-			});
-		}	
-
-		{
-			MenuItem lItem = new MenuItem( cStrExportSelect2FileCSV);
-			iMenu.getItems().add( lItem );
-
-			lItem.setOnAction( new EventHandler<ActionEvent>() {
-				//=========================
-				public void handle( ActionEvent iEv) {
-					final FileChooser lFileChooser = new FileChooser();
-					lFileChooser.setInitialDirectory(sDirCSV);
-					lFileChooser.setTitle( cStrExportSelect2FileCSV);
-					File lFile = lFileChooser.showSaveDialog(iMenu);
-					sDirCSV = lFileChooser.getInitialDirectory();		        
-					//ObservableList<OBJ> getSelectedItems
-					//	Export2CSV( "export csv", PPgFileChooser.GetFileName(, cCurrentPath, cList);															
-				}		    
-				//=========================
-			});
-		}
-	}
-	//--------------------------------------------
-	public void refreshTable() {
+	@Override
+	public void refreshView() {
 		getTableView().refresh();
 		writeSize2Foot();
 	}
@@ -252,17 +95,7 @@ public class TableFX<OBJ> extends BorderPane{
 		TableFxHelper.SetSortable( getTableView(), iFlagSort );
 	}
 	//--------------------------------------------
-	public boolean addPopupMenuItems( ContextMenu iMenu, MouseEvent iEv, OBJ lItem, int iPosItem  ) {
-		return true;
-	}
-	//--------------------------------------------
-	public void doubleClick( MouseEvent iEv, OBJ lItem, int iPosItem  ) {	
-		System.out.println("Double clicked");
-	}
-	public TableFX(){
-		this(null);
-	}
-	//--------------------------------------------
+	@Override 
 	public void	setMouveEventHandler() {
 		cTable.addEventHandler( MouseEvent.MOUSE_PRESSED,
 
@@ -281,6 +114,9 @@ public class TableFX<OBJ> extends BorderPane{
 						doubleClick( iEv, lItem, lPosItem );				           
 						System.out.println("Double clicked after");
 					}
+					else {
+						simpleClick( iEv, lItem, lPosItem );				           
+					}
 				}
 				else if( iEv.getButton().equals(MouseButton.SECONDARY)) { 
 					Log.Dbg("TableFx handle secondary");
@@ -296,7 +132,7 @@ public class TableFX<OBJ> extends BorderPane{
 				}
 				//=========================
 			}
-			});
+		});
 	}
 	//--------------------------------------------
 	//--------------------------------------------
@@ -305,39 +141,31 @@ public class TableFX<OBJ> extends BorderPane{
 			cTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		else
 			cTable.getSelectionModel().setSelectionMode( SelectionMode.SINGLE );
-	
+
 	}
 	//--------------------------------------------
+	@Override
 	public void writeSize2Foot() {		
 		if( totalSize() == 0 ) {
 			writeFoot( cFootLastMsg + " no row");
 		}
 		else {
-		       //  Log.Info("*** TableFx.setListenerSelectWriteFoot - Selected items: "+);
-			
+			//  Log.Info("*** TableFx.setListenerSelectWriteFoot - Selected items: "+);
+
 			String lStrSelect = "";
-			
+
 			int lNbSelect = cTable.getSelectionModel().getSelectedItems().size();
 			if( lNbSelect > 0 ) {
 				lStrSelect = "["+lNbSelect +']';	
 			}
-				
-					
+
+
 			if( totalSize() != filterSize() ) {
 				writeFoot( cFootLastMsg + filterSize() +'/'+ totalSize() + lStrSelect +" rows");
 			}
 			else
 				writeFoot( cFootLastMsg + totalSize() + lStrSelect +" rows");
 		}
-	}
-	//--------------------------------------------
-	public void writeSize2Foot( String iLabel ) {
-		cFootLastMsg = iLabel;
-		writeSize2Foot();
-	}
-	//--------------------------------------------
-	protected void writeFoot( String iLabel ) {
-		Platform.runLater( () -> {cFootLabel.setText( iLabel);});				
 	}
 	//--------------------------------------------
 	public <TYPE>  TableColumn<OBJ, TYPE> addColumn(  String iLabel, String iVarName ){
@@ -361,14 +189,15 @@ public class TableFX<OBJ> extends BorderPane{
 		return cList;		
 	}
 	//---------------------------------------------------------------
-//	public void clearLines()        { }
+	@Override
 	public void clearLines()        { 
-	//	if( cFilteredList	== null )
-	//		cTable.getItems().clear();
-	//	else {
-			cList.clear();
-			//cFilteredList.getSource().remove(1,cList.size());
-	//	}
+		//	if( cFilteredList	== null )
+		//		cTable.getItems().clear();
+		//	else {
+		Log.Dbg( "TableFx.clearLines" );
+		cList.clear();
+		//cFilteredList.getSource().remove(1,cList.size());
+		//	}
 	}
 	public int  totalSize()           { return cList.size(); }
 	//--------------------------------------------
@@ -384,15 +213,31 @@ public class TableFX<OBJ> extends BorderPane{
 		return iObj;
 	}
 	//--------------------------------------------
+	public OBJ addLine2Pos( int iPos, OBJ iObj ) {
+		cList.add( iPos, iObj );
+		return iObj;
+	}
+	//--------------------------------------------
+	public void addLines2Pos( int iPos, Collection<OBJ> iCollect ) {
+		cList.addAll( iPos, iCollect);
+		writeSize2Foot("");
+	}
+	//--------------------------------------------
 	public void addLines( Collection<OBJ> iCollect ) {
-		for( OBJ lObj :  iCollect ) {
-			addLine( lObj); 
-		}	
+
+		cList.addAll( iCollect);
+		//for( OBJ lObj :  iCollect ) {
+		//			addLine( lObj); 
+		//	}	
 		writeSize2Foot("");
 	}
 	//--------------------------------------------
 	public OBJ getSelectedItem() {
 		return cTable.getSelectionModel().getSelectedItem();
+	}
+	//--------------------------------------------
+	public ObservableList<TablePosition> getSelectedCell() {
+		return cTable.getSelectionModel().getSelectedCells();
 	}
 	//--------------------------------------------
 	public int getSelectedIndex() {
@@ -402,27 +247,28 @@ public class TableFX<OBJ> extends BorderPane{
 	public OBJ getItem( int iItemPos ) {
 
 		ObservableList<OBJ> lList = cTable.getItems();
-		 
-		 try {
-			 return lList.get(iItemPos);
-		 } catch( IndexOutOfBoundsException ex)
-		 {
-		 
-		 }
-		 return null;
+
+		try {
+			return lList.get(iItemPos);
+		} catch( IndexOutOfBoundsException ex)
+		{
+
+		}
+		return null;
 	}
 	//--------------------------------------------
 	public int getIndexOf( OBJ iObj) {
 		return  cTable.getItems().indexOf(iObj);
 	}
 	//--------------------------------------------
+	@Override
 	public void clearSelection() {
 		cTable.getSelectionModel().clearSelection();
 	}
 	//--------------------------------------------
-	
+
 	//--------------------------------------------
-	public void removeSelectedLine() {
+	/*public void removeSelectedLine() {
 		//	cTablesetEditable(true)		
 		int lSelectedIndex = cTable.getSelectionModel().getSelectedIndex();
 		if (lSelectedIndex >= 0) {
@@ -430,7 +276,9 @@ public class TableFX<OBJ> extends BorderPane{
 			writeSize2Foot("");
 		}
 	}
+	 */
 	//--------------------------------------------
+	/*
 	public OBJ removeSelectedLineObject() {
 		//	cTablesetEditable(true)		
 		int lSelectedIndex = cTable.getSelectionModel().getSelectedIndex();
@@ -442,33 +290,39 @@ public class TableFX<OBJ> extends BorderPane{
 		}
 		return null;
 	}
+	 */
 	//--------------------------------------------
+
 	public void removeAllSelectedLines() {
-	
-	    ArrayList<Integer> list = new ArrayList<>( cTable.getSelectionModel().getSelectedIndices());
 
-	    Comparator<Integer> comparator = Comparator.comparingInt(Integer::intValue);
-	    comparator = comparator.reversed();
-	    list.sort(comparator);
+		ArrayList<Integer> list = new ArrayList<>( cTable.getSelectionModel().getSelectedIndices());
 
-	    for(Integer i : list) {
-	    	cTable.getItems().remove(i.intValue());
-	    }
+		Comparator<Integer> comparator = Comparator.comparingInt(Integer::intValue);
+		comparator = comparator.reversed();
+		list.sort(comparator);
+
+		for(Integer i : list) {
+			cTable.getItems().remove(i.intValue()); //    UnsupportedOperationException !!!!!!!!!
+		}
 		writeSize2Foot("");
 	}	
+
 	//--------------------------------------------
-	public void removeSelectedLinesByObject() {
-		
-		 ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
-		 cList.removeAll( lListObj );
+	public ArrayList<OBJ>  removeSelectedLinesByObject() {
+
+		ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
+		cList.removeAll( lListObj );
+		return lListObj;
 	}		
 	//--------------------------------------------
+
 	public ArrayList<OBJ>removeAndGetAllSelectedLines() {
-		
-		 ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
-		 removeAllSelectedLines();
-		 return lListObj;
+
+		ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
+		removeAllSelectedLines();
+		return lListObj;
 	}		
+
 	//--------------------------------------------
 	public void removeObject( OBJ iObj ) {
 		cTable.getItems().remove(iObj);	
@@ -487,7 +341,7 @@ public class TableFX<OBJ> extends BorderPane{
 	}
 	//--------------------------------------------
 	public void setSelectItem( OBJ iObj  ) {
-		
+
 		int lPos = getIndexOf( iObj );
 		setSelectIndex( lPos );	
 	}
@@ -503,19 +357,20 @@ public class TableFX<OBJ> extends BorderPane{
 	//--------------------------------------------
 	public void setSelectIndex( int iIndex ) {
 		if( iIndex > 0 ) {
-		Platform.runLater(() ->
-		  {
-		      cTable.requestFocus();
-		      cTable.getSelectionModel().select(iIndex);
-		      cTable.scrollTo(iIndex);
-		  });
+			Platform.runLater(() ->
+			{
+				cTable.requestFocus();
+				cTable.getSelectionModel().select(iIndex);
+				cTable.scrollTo(iIndex);
+			});
 		}
 	}
 	//--------------------------------------------
 	public void clearAndSelect(int iIndex) {
 		cTable.getSelectionModel().clearAndSelect( iIndex);
 	}
- 	//--------------------------------------------
+	//--------------------------------------------
+	@Override
 	public void selectAll() { 
 		cTable.getSelectionModel().selectAll();		
 		// SelectionMode.MULTIPLE);
@@ -528,6 +383,35 @@ public class TableFX<OBJ> extends BorderPane{
 	public ObservableList<Integer> getSelectedIndexs(){
 		return cTable.getSelectionModel().getSelectedIndices();
 	}
+	//--------------------------------------------
+	public void select( List<OBJ>  iList ) {
 
+		for( OBJ lObj :  iList ) 
+			cTable.getSelectionModel().select( lObj );
+	}
+	//--------------------------------------------
+	public void selectPos( int iPos ) {
+		cTable.getSelectionModel().select( iPos );
+	}
+	//--------------------------------------------
+	public void selectPos( List<Integer>  iList ) {
+
+		for( Integer lIndice :  iList ) 
+			cTable.getSelectionModel().select( lIndice );
+	}
+	//--------------------------------------------
+	public String export2CSV( File iFile, String iType, boolean iFlagSelection) {
+
+		Log.Dbg( "   TableFx export2CSV" );
+		
+		List<OBJ> lList = null;
+		if( iFlagSelection ) {
+			lList = getSelectedItems();
+		} else
+		{
+			lList = getContainer();
+		}
+		return  writeFile( iType, iFile, lList);			
+	}
 }
 //***********************************

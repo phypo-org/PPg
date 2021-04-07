@@ -33,6 +33,42 @@ public class PPgUtils{
 		return pBuffer.toString();
 	}
 	//--------------------------------------------
+	public static String DupQuote( String iStr ) {
+		return PPgUtils.DupliqueChar(iStr,'\'');
+	}
+	//--------------------------------------------
+	public static String DupDoubleQuote( String iStr ) {
+		return PPgUtils.DupliqueChar(iStr,'"');
+	}
+	//--------------------------------------------
+	public static String QuoteWith( String pSrc, char pChar ){
+
+		int lLength = pSrc.length();
+		StringBuilder pBuffer = new StringBuilder( lLength + 8 );
+		
+		pBuffer.append(pChar);
+		for( int i=0 ; i < lLength; i++ ) {
+
+			char c = pSrc.charAt(i);
+
+			if( c == pChar )
+				pBuffer.append(pChar);
+
+			pBuffer.append( c );
+		}
+		pBuffer.append(pChar);
+
+		return pBuffer.toString();
+	}
+	//--------------------------------------------
+	public static String Quote( String iStr ) {
+		return QuoteWith(iStr,'\'');
+	}
+	//--------------------------------------------
+	public static String DoubleQuote( String iStr ) {
+		return QuoteWith(iStr,'"');
+	}
+	//--------------------------------------------
 	public static String DupliqueChar( char pSrc, char pChar ){
 
 		StringBuilder pBuffer = new StringBuilder( 2 );

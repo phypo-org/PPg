@@ -10,12 +10,6 @@ import javafx.stage.Window;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.phypo.PPg.PPgUtils.Password;
 
 //*************************************************

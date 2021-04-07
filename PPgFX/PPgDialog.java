@@ -1,5 +1,6 @@
 package org.phypo.PPg.PPgFX;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -57,6 +58,7 @@ public class PPgDialog extends Stage {
 		cPrimPane.setBottom( (cFootPane = new BorderPane()) );	
 		cFootPane.setBottom( (cFootText = new Label( "" )));		
 		
+		cFootPane.setPadding(new Insets(20, 150, 10, 10));
 		cFootPane.setRight((cFlowButtonRight = FxHelper.CreateFlowPane()));
 	}
 	//---------------------------------------------------------
