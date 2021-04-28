@@ -10,6 +10,8 @@ public class AlertFxHelper {
 	
 	public static Alert MakeAlert( Stage iOwner, Alert.AlertType iType, String iStrText ) {
 		Alert lAlert = new Alert( iType, iStrText );
+		if( iOwner == null )
+			iOwner = AppliFx.sInstance.getPrimStage();
 		lAlert.initOwner( iOwner );
 		//lAlert.setX();
 		//lAlert.setY(0);

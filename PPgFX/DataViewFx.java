@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 
 //***********************************
 
-public abstract class DataViewFx<KEY, OBJ extends TreeFXObjInterface<KEY>> {
+public abstract class DataViewFx<KEY, OBJ extends DataViewObj> {
 	BorderPane cPrimPane = new BorderPane();
 	ToolBar    cToolbar = null ;	
 	protected Label                cFootLabel = new Label("no row");
@@ -33,13 +33,15 @@ public abstract class DataViewFx<KEY, OBJ extends TreeFXObjInterface<KEY>> {
 	protected Label                cTitle = null;
 	
 	static File sDirCSV=null;
+	
+	boolean cAutoResizeWhenRefresh = false;
 
 	long cFlagAutoMenu = 0;
 	public static final long MENU_SELECTION = 1;
 	public static final long MENU_CSV=2;
 	
 	//-------------------------------------
-	DataViewFx( String iTitle ){
+	protected DataViewFx( String iTitle ){
 		if( iTitle != null ){
 			cPrimPane.setTop( cTitle = new Label(iTitle) );
 		}
@@ -225,6 +227,10 @@ public abstract class DataViewFx<KEY, OBJ extends TreeFXObjInterface<KEY>> {
 		return null;
 	}	
 	//--------------------------------------------
+	public Object getDataView() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	

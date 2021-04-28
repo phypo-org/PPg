@@ -2,6 +2,11 @@ package org.phypo.PPg.Sql;
 
 import java.util.StringTokenizer;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.phypo.PPg.PPgUtils.PPgIniFile;
 import org.phypo.PPg.PPgUtils.PPgToken;
 
@@ -36,8 +41,7 @@ public class SqlServer{
 	public String cBase= null;    
 	public String cOptions= null;
 	public String cDriver= null;
-
-
+	public Properties cCerts=null;
 
 	public SqlServer( ){
 
@@ -51,6 +55,7 @@ public class SqlServer{
 		cOptions = new String(  );
 		cDriver = new String();
 	}
+	
 	public SqlServer( SqlServer pSqlServer ){
 		cServerType = pSqlServer.cServerType;
 
@@ -64,6 +69,7 @@ public class SqlServer{
 		cOptions = new String( pSqlServer.cOptions );
 		cDriver = new String(pSqlServer.cDriver);
 	}
+
 	public SqlServer( ServerType pType, String pUrl, String pName, String pMachine, String pPort,
 			String pUser, String pPass, String pBase, String pOptions, String pDriver ){
 
@@ -78,6 +84,7 @@ public class SqlServer{
 		cOptions = new String( pOptions );
 		cDriver = new String(pDriver);
 	}
+
 	public SqlServer( ServerType pType, char pUrl[], char pName[], char pMachine[], char pPort[],
 			char pUser[], char pPass[], char pBase[], char pOptions[], char pDriver[] ){
 
@@ -147,5 +154,20 @@ public class SqlServer{
 			return false;
 		}
 		return true;
+	}
+
+	public void GetCertsProperties( ){
+		
+	    try (InputStream input = new FileInputStream("certs.properties")) {
+	
+	        cCerts = new Properties();
+	
+	        // load a properties file
+	        cCerts.load(input);   
+		
+	    } catch (IOException ex) {
+	    	System.err.println( "SqlServer : Error when reading certs.properties file" );
+	        ex.printStackTrace();
+	    }	
 	}
 };

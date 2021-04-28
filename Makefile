@@ -1,5 +1,6 @@
 all::
 	cd PPgFileImgChooser;	make ;cd ..;\
+	cd PPgData;  	make ;cd ..;\
 	cd PPgFX;  	make ;cd ..;\
 	cd PPgImg;      make ;cd ..;\
 	cd PPgMath;     make ;cd ..;\
@@ -24,6 +25,7 @@ jar::
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgWin/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgFileImgChooser/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/Sql/*.class; \
+	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgData/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgFX/*.class; \
 
 
@@ -39,6 +41,7 @@ clean:
 	cd PPgImg; 	make clean;cd ..;\
 	cd PPgMath;     make clean;cd ..;\
 	cd PPgUtils; 	make clean;cd ..;\
+	cd PPgData;     make clean;cd ..;\
 	cd PPgFX;       make clean;cd ..;\
 	rm -f *.jar *.class \
 

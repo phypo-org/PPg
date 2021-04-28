@@ -10,6 +10,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
@@ -28,10 +29,12 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 import org.phypo.PPg.PPgUtils.Log;
 import org.phypo.PPg.PPgUtils.PPgIniFile;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -41,7 +44,7 @@ import javafx.event.EventType;
 //*********************************************************
 
 public class FxHelper {
-	
+
 	//--------------------------------------------
 	public static <OBJ,TYPE>  TableColumn<OBJ, TYPE> addColumn( TableView<OBJ> iTable, String iLabel, String iVarName ) {
 
@@ -67,15 +70,15 @@ public class FxHelper {
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
 	// https://stackoverflow.com/questions/10315774/javafx-2-0-activating-a-menu-like-a-menuitem
-	
+
 	// Create a menu like a menuitem in the menubar
 	public static Menu AddMenuBarItem( MenuBar iMenubar, String iLabel, EventHandler<MouseEvent> iAction ) {
 		Label menuLabel = new Label(iLabel);
 		menuLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
-		    public void handle(MouseEvent event) {
+			public void handle(MouseEvent event) {
 				iAction.handle(event);
-		};});
+			};});
 
 		Menu lMenu = new Menu();
 		lMenu.setGraphic(menuLabel);	
@@ -97,14 +100,26 @@ public class FxHelper {
 		return lItem;
 	}
 	//-------------------------------------------
+	public static MenuItem AddMenuItem( MenuButton iMenu, String iLabel, EventHandler<ActionEvent> iAction ) {
+		MenuItem lItem = new MenuItem( iLabel); 
+		iMenu.getItems().add(lItem); 
+		lItem.setOnAction( iAction );
+		return lItem;
+	}
+	//-------------------------------------------
 	public static Menu AddMenuSeparator( Menu iMenu) {
-		 iMenu.getItems().add(new SeparatorMenuItem());
+		iMenu.getItems().add(new SeparatorMenuItem());
 		return iMenu;
 	}
 	//-------------------------------------------
 	public static ContextMenu AddMenuSeparator( ContextMenu iMenu) {
-		 iMenu.getItems().add(new SeparatorMenuItem());
-		 return iMenu;
+		iMenu.getItems().add(new SeparatorMenuItem());
+		return iMenu;
+	}
+	//-------------------------------------------
+	public static MenuButton AddMenuSeparator(MenuButton iMenu) {
+		iMenu.getItems().add(new SeparatorMenuItem());
+		return iMenu;
 	}
 	//-------------------------------------------
 	public static CheckMenuItem AddMenuCheckBox( Menu iMenu, String iLabel ) {
@@ -122,7 +137,7 @@ public class FxHelper {
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
-	
+
 	public static ToggleButton CreateToggle( String iLabel, ToggleGroup iGroup, String iTip ) {
 		return CreateToggle( iLabel, iGroup, iTip, null );
 	}
@@ -137,43 +152,40 @@ public class FxHelper {
 	public static ToggleButton CreateToggle( String iLabel, ToggleGroup iGroup, String iTip, Image iImage, EventHandler<ActionEvent> iHdl ) {
 
 		ToggleButton lToggle   = new ToggleButton( iLabel);
-		
+
 		if( iGroup != null )
 			lToggle.setToggleGroup(iGroup);
-		
+
 		if( iTip != null )
 			lToggle.setTooltip( new Tooltip( iTip ));
-		
+
 		if( iImage != null ) {
 			lToggle.setGraphic( new ImageView( iImage) );
 		}
-		
+
 		if( iHdl != null )
 			lToggle.setOnAction(iHdl);
-	
+
 		return lToggle;
 	}
 	//-------------------------------------------
 	//-------------------------------------------
 	//-------------------------------------------
-	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl) {
-		return CreateButton( iLabel, iTip, iHdl, null );
+	public static MenuButton CreateMenuButton( String iLabel, String iTip) {
+		return CreateMenuButton( iLabel, iTip, null );
 	}	
 	//-------------------------------------------
-	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl, Image iImg ) {
-		
-		Button lButton  = new Button( iLabel);
-				
-		if( iHdl != null )
-			lButton.setOnAction(iHdl);
-		
+	public static MenuButton CreateMenuButton( String iLabel, String iTip, Image iImg ) {
+
+		MenuButton lButton  = new MenuButton( iLabel);
+
 		if( iTip != null )
 			lButton.setTooltip( new Tooltip( iTip ));
-		
+
 		if( iImg != null ) {
 			lButton.setGraphic( new ImageView( iImg ) );
 		}
-		
+
 		return lButton;
 	}
 	//------------------------------------------------------------------
@@ -182,13 +194,34 @@ public class FxHelper {
 	}
 	//------------------------------------------------------------------
 	public static FlowPane CreateFlowPane() {
-		
+
 		FlowPane lFlow = new FlowPane();
 		lFlow.setVgap(8);
 		lFlow.setHgap(8);
 		lFlow.setPrefWrapLength(300); // preferred width = 300
 
 		return lFlow;
+	}
+	//-------------------------------------------
+	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl) {
+		return CreateButton( iLabel, iTip, iHdl, null );
+	}	
+	//-------------------------------------------
+	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl, Image iImg ) {
+
+		Button lButton  = new Button( iLabel);
+
+		if( iHdl != null )
+			lButton.setOnAction(iHdl);
+
+		if( iTip != null )
+			lButton.setTooltip( new Tooltip( iTip ));
+
+		if( iImg != null ) {
+			lButton.setGraphic( new ImageView( iImg ) );
+		}
+
+		return lButton;
 	}
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
@@ -269,7 +302,7 @@ public class FxHelper {
 				lWidth = lHeight = 0;	
 				lScale = 1;
 				return null;
-		}				
+			}				
 
 			//						Log.Dbg( "ReadIcon Str:" + lStr + " Size:" + lSize  
 			//																+ " lWidth:" + lWidth + " lHeight:" + lHeight + " lScale:" + lScale );
@@ -290,13 +323,13 @@ public class FxHelper {
 			lHeight = (int) (lImage.getHeight()*lScale);
 			lImage = null;
 		}
-		
+
 		if( lWidth >0 && lHeight >0 ){																
 			Log.Dbg("FxHelper ReadIcon Name:" + lStr + " w:" + lWidth +" h:" + lHeight + " s:" + lScale);
 			lImage = new Image( lStr, lWidth, lHeight, true, true, false );								
 		}
 		else {
-			
+
 			lImage = new Image( lStr  );								
 			Log.Dbg("FxHelper ReadIcon Name:" + lStr + " s:" + lScale +" w="	+	lImage.getWidth());
 			if( lImage.isError() ||lImage.getWidth() == 0 ) {
@@ -322,25 +355,54 @@ public class FxHelper {
 		}		
 	}
 	//--------------------------------------
+	//--------------------------------------
+	//--------------------------------------
 	public enum DialogMsgType { INFO(AlertType.INFORMATION), WARN(AlertType.WARNING), ERR(AlertType.ERROR), OK_CANCEL( AlertType.CONFIRMATION)
 		; AlertType cType; 
 		DialogMsgType(AlertType iType ){ cType = iType; } 
-		};
-		
-		
+	};
+
+	//---------------------+-----------------
+	public static void MsgErrWait( String iTxt ) {
+		MsgAlertWait( DialogMsgType.ERR, iTxt);
+	}
+	//---------------------+-----------------
+	public static void MsgWarnWait(  String iTxt ) {
+		MsgAlertWait( DialogMsgType.WARN, iTxt);
+	}
+	//---------------------+-----------------
+	public static void MsgInfoWait( String iTxt ) {
+		MsgAlertWait( DialogMsgType.INFO, iTxt);
+	}
+	//---------------------+-----------------
 	public static void MsgAlertWait( DialogMsgType iType, String iTxt ) {
 		//METTRE LE RESULT	
-		new javafx.scene.control.Alert( iType.cType, iTxt ).showAndWait();
+		Alert lAlert = new javafx.scene.control.Alert( iType.cType, iTxt );
+		lAlert.initOwner( AppliFx.sInstance.getPrimStage()  );
+		lAlert.showAndWait();
 	}
+	//---------------------+-----------------
 	public static Alert MsgAlert( DialogMsgType iType, String iTxt ) {
 		//METTRE LE RESULT	
-		return new javafx.scene.control.Alert( iType.cType, iTxt );
+		Alert lAlert = new javafx.scene.control.Alert( iType.cType, iTxt );
+		lAlert.initOwner( AppliFx.sInstance.getPrimStage()  );
+		return lAlert;
+	}
+	//---------------------+-----------------
+	public static boolean MsgAlertWaitConfirm( String iTxt ) {
+		//METTRE LE RESULT	
+		Alert lAlert = new javafx.scene.control.Alert( AlertType.CONFIRMATION, iTxt );
+		lAlert.initOwner( AppliFx.sInstance.getPrimStage()  );
+		Optional<ButtonType> lResult = lAlert.showAndWait();
+		return (lResult.get() == ButtonType.OK);
 	}
 	//--------------------------------------
+	//--------------------------------------
+	//--------------------------------------
 	public static TextArea AddText2Alert( Alert iAlert, String iLabel, String iStr, boolean iIsEditable ) {
-		
+
 		TextArea lTextArea = new TextArea( iStr );
-	
+
 		lTextArea.setEditable(iIsEditable);
 		lTextArea.setWrapText(true);
 
@@ -357,13 +419,13 @@ public class FxHelper {
 		}
 		lContent.add( lTextArea, 0, 1);
 
-	// Set expandable Exception into the dialog pane.
+		// Set expandable Exception into the dialog pane.
 		iAlert.getDialogPane().setContent(lContent);
 		return lTextArea;
 	}	
 	//--------------------------------------
 	public static String DialogEdit( String iTitle, String iLabel, String iStr, boolean iIsEditable ) {
-		
+
 		Alert lAlert = MsgAlert( (iIsEditable ? DialogMsgType.OK_CANCEL : DialogMsgType.INFO), iLabel );
 		TextArea lText = AddText2Alert( lAlert, iLabel, iStr, iIsEditable  );
 		Optional<ButtonType> lResult = lAlert.showAndWait();
@@ -373,5 +435,32 @@ public class FxHelper {
 		return null;
 	}	
 	//--------------------------------------
+	// https://news.kynosarges.org/2014/05/01/simulating-platform-runandwait/
+	public static void RunAndWait(Runnable action) {
+
+		// run synchronously on JavaFX thread
+	    if (Platform.isFxApplicationThread()) {
+	        action.run();
+	        return;
+	    }
+
+	    // queue on JavaFX thread and wait for completion
+	    final CountDownLatch doneLatch = new CountDownLatch(1);
+	    Platform.runLater(() -> {
+	        try {
+	            action.run();
+	        } finally {
+	            doneLatch.countDown();
+	        }
+	    });
+
+	    try {
+	        doneLatch.await();
+	    } catch (InterruptedException e) {
+	        // ignore exception
+	    }
+	}
+	//--------------------------------------
 }
+
 //*********************************************************

@@ -2,6 +2,8 @@ package org.phypo.PPg.Sql;
 
 import java.awt.Frame;
 
+import java.util.Enumeration;
+
 import java.io.PrintStream;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -99,10 +101,25 @@ public class SqlConnex {
 				pServer.cUrl = new String(pServer.cUrl +"://"+pServer.cMachine+":"+pServer.cPort );
 				break;
 			}
-
+			
+			char sep = '?';
+			
 			if( pServer.cOptions.length() > 0 ) {
-				pServer.cUrl = new String(pServer.cUrl + '?' + pServer.cOptions);
-				//"?allowMultiQueries=true"; //&useSSL=true";
+				//"?allowMultiQueries=true";
+				pServer.cUrl = new String(pServer.cUrl + sep + pServer.cOptions);
+				sep = '&';
+			}
+			
+			if( pServer.cCerts != null ) {
+				//&useSSL=true&...
+			    @SuppressWarnings("unchecked")
+				Enumeration<String> enums = (Enumeration<String>) pServer.cCerts.propertyNames();
+			    while (enums.hasMoreElements()) {
+			    	String key = enums.nextElement();
+			    	String value = pServer.cCerts.getProperty(key);
+					pServer.cUrl += new String(sep + key + '=' + value);
+					sep = '&';
+			    }
 			}
 
 			Log.Dbg( "URL:" + pServer.cUrl );

@@ -236,26 +236,29 @@ public class TableFxHelper {
 	//--------------------------------------
 	//--------------------------------------
 	//--------------------------------------
+	
 	public static void AutoResizeColumns( TableView<?> table )
 	{
 	    //Set the right policy
 	    table.setColumnResizePolicy( TableView.UNCONSTRAINED_RESIZE_POLICY);
 	    table.getColumns().stream().forEach( (column) ->
 	    {
+        	Log.Dbg( column.getText().toString() );
 	        //Minimal width = columnheader
 	        Text t = new Text( column.getText() );
 	        double max = t.getLayoutBounds().getWidth();
 	        for ( int i = 0; i < table.getItems().size(); i++ )
 	        {
 	            //cell must not be empty
-	            if ( column.getCellData( i ) != null )
-	            {
+	            if ( column.getCellData( i ) != null ){
 	                t = new Text( column.getCellData( i ).toString() );
 	                double calcwidth = t.getLayoutBounds().getWidth();
+	                
+	   //         	if( calcwidth > column.getPrefWidth() )
+	     //       		calcwidth = column.getPrefWidth();
 	                //remember new max-width
-	                if ( calcwidth > max )
-	                {
-	                    max = calcwidth;
+	                if ( calcwidth > max ) {	                
+		                    max = calcwidth;
 	                }
 	            }
 	        }
@@ -263,6 +266,7 @@ public class TableFxHelper {
 	        column.setPrefWidth( max + 10.0d );
 	    } );
 	}
+
 	//--------------------------------------
 	public static void SetSortable( TableView<?> table, Boolean iFlagSort )
 	{

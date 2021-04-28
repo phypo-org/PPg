@@ -23,6 +23,12 @@ public abstract class DialogChgPwd extends PPgDialog {
 
 	//-------------------------------------------------------------------
 	public boolean verifyPass() {
+		
+		if( cOldPasswordField.getText().length() > 0 
+			&& (cOldPasswordField.getText().equals(cNewPasswordField.getText()))) {
+			new Alert(AlertType.ERROR, "New password cannot be the same as old").showAndWait();
+			return false;				
+		}
 
 		String lError = Password.VerifyPass( cNewPasswordField.getText(), cConfirmPasswordField.getText() );
 		if( lError != null ) {
@@ -32,7 +38,7 @@ public abstract class DialogChgPwd extends PPgDialog {
 		return true;
 	}
 
-	public abstract boolean validPass();
+	public abstract boolean validPass();  
 
 	//-------------------------------------------------------------------
 
@@ -55,7 +61,7 @@ public abstract class DialogChgPwd extends PPgDialog {
 		cNewPasswordField.setTooltip( new Tooltip( lTip) );
 		
 		cConfirmPasswordField.setPromptText("Confirm password");
-		cConfirmPasswordField.setTooltip(new Tooltip( "COUCOU") );
+		cConfirmPasswordField.setTooltip(new Tooltip( "Confirm password") );
 		
 		lGrid.add(new Label("Old password:"), 0, 0);
 		lGrid.add(cOldPasswordField, 1, 0);

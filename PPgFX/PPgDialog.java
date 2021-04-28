@@ -1,10 +1,15 @@
 package org.phypo.PPg.PPgFX;
 
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
@@ -56,12 +61,20 @@ public class PPgDialog extends Stage {
 		setScene( (new Scene( (cPrimPane = new BorderPane()))));  
 		
 		cPrimPane.setBottom( (cFootPane = new BorderPane()) );	
-		cFootPane.setBottom( (cFootText = new Label( "" )));		
+		cFootPane.setLeft( (cFootText = new Label( "" )));		
 		
-		cFootPane.setPadding(new Insets(20, 150, 10, 10));
+		cFootPane.setPadding(new Insets(30, 150, 10, 10));
 		cFootPane.setRight((cFlowButtonRight = FxHelper.CreateFlowPane()));
+		cFlowButtonRight.setAlignment(Pos.BOTTOM_RIGHT);
 	}
 	//---------------------------------------------------------
+	protected void addBottomSeparator() {
+		final Separator lSeparator = new Separator();
+		lSeparator.setHalignment(HPos.CENTER);
+		lSeparator.setValignment(VPos.CENTER);
+		lSeparator.setOrientation(Orientation.HORIZONTAL);
+		cFootPane.setTop( lSeparator);
+	}
 	//---------------------------------------------------------
 	protected Button addToBottomRight( Button iButton) {
 		cFlowButtonRight.getChildren().add(iButton); 
