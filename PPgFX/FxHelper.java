@@ -139,7 +139,7 @@ public class FxHelper {
 	//------------------------------------------------------------------
 
 	public static ToggleButton CreateToggle( String iLabel, ToggleGroup iGroup, String iTip ) {
-		return CreateToggle( iLabel, iGroup, iTip, null );
+		return CreateToggle( iLabel, iGroup, iTip, null, null );
 	}
 	//-------------------------------------------
 	public static ToggleButton CreateToggle( String iLabel,  String iTip, Image iImage  ) {
@@ -147,6 +147,18 @@ public class FxHelper {
 	}
 	public static ToggleButton CreateToggle( String iLabel, ToggleGroup iGroup, String iTip, Image iImage ) {
 		return CreateToggle( iLabel, iGroup, iTip, iImage, null );
+	}
+	//-------------------------------------------
+	public static ToggleButton CreateToggle( String iLabel, ToggleGroup iGroup, String iTip, EventHandler<ActionEvent> iHdl ) {
+		return CreateToggle( iLabel, iGroup, iTip, null, iHdl );
+	}
+	//-------------------------------------------
+	public static ToggleButton CreateToggle( String iLabel, String iTip, EventHandler<ActionEvent> iHdl ) {
+		return CreateToggle( iLabel, null, iTip, null, iHdl );
+	}
+	//-------------------------------------------
+	public static ToggleButton CreateToggle( String iLabel, String iTip  ) {
+		return CreateToggle( iLabel, null, iTip, null, null );
 	}
 	//-------------------------------------------
 	public static ToggleButton CreateToggle( String iLabel, ToggleGroup iGroup, String iTip, Image iImage, EventHandler<ActionEvent> iHdl ) {
@@ -163,8 +175,12 @@ public class FxHelper {
 			lToggle.setGraphic( new ImageView( iImage) );
 		}
 
-		if( iHdl != null )
+		if( iHdl != null ) {
+			Log.Info("*** CreateToggle");
+
 			lToggle.setOnAction(iHdl);
+			
+		}
 
 		return lToggle;
 	}

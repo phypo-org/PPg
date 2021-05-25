@@ -4,6 +4,7 @@ package org.phypo.PPg.Sql;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,15 +14,35 @@ import org.phypo.PPg.PPgData.DataChgNotifierClient;
 import org.phypo.PPg.PPgData.HistoryDuration;
 import org.phypo.PPg.PPgFX.DataViewObj;
 import org.phypo.PPg.PPgUtils.Log;
-import javafx.application.Platform;
 
 @SuppressWarnings("unchecked")
 
 //********************************************************************
 
 public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements DataChgNotifierClient {
+	
+	
+	HistoryDuration                cDuration      = HistoryDuration.Day1;
+	boolean                        cUseDuration   = true;
+	protected LocalDateTime        cStartDate     = null;
+	protected LocalDateTime        cEndDate       = null;
+	
+	public boolean         useDuration()  { return cUseDuration;}
+	public HistoryDuration getDuration( ) { return cDuration;}
+	public void            setIntervalDate(LocalDateTime iStartDate, LocalDateTime iEndDate ) {		
+		 cStartDate     = iStartDate;
+		 cEndDate       = iEndDate;
+		 cUseDuration   = false;
+	}	
+	public  void          setDuration(HistoryDuration iDuration ) {		
+		cDuration = iDuration;
+		cUseDuration = true;
+	}	
+	public LocalDateTime getStartDateTime( ) { return cStartDate; }
+	public LocalDateTime getEndDateTime( )   { return cEndDate; }
+	//-------------------------------------------------
+	
 
-	public HistoryDuration         cDuration     = HistoryDuration.Day1;
 	protected HashMap<KEY, OBJ>    cMap          = new HashMap<>();
 	protected HashSet<KEY>         cAlive        = null;
 
@@ -114,15 +135,23 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 	@Override public long     getTmpTimeStamp()                      { return cTmpTimeStamp;}
 
 
-
 	//-------------------------------------------------
 	public void reload( SqlConnex iConnect){
 		//TableSqlFX.this.clearLines();
 		razLastTimeStamp();
-		Platform.runLater(() -> {
+	//	Platform.runLater(() -> {
 			clearLines();
-		});
+//		});
 		callSyncLoad( iConnect );
+	}
+	//-------------------------------------------------
+	public void reload(){
+		//TableSqlFX.this.clearLines();
+		razLastTimeStamp();
+	//	Platform.runLater(() -> {
+			clearLines();
+//		});
+		callSyncLoad();
 	}
 	//-------------------------------------------------
 	//-------------------------------------------------
@@ -148,6 +177,17 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 		Log.Dbg( "=================== SqlTableReader activeUpdateTracking register : " + cName );
 		
 		DataChgNotifier.Instance().register( cName, this);
+	}
+	//-------------------------------------------------
+	protected void deactiveUpdateTracking() {
+		if( cName == null ) {
+			Log.Fatal( "SqlTableReader deactiveUpdateTracking - Target is null\n" 
+					+ Thread.currentThread().getStackTrace().toString());
+			System.exit(1);
+		}
+		Log.Dbg( "=================== SqlTableReader deactiveUpdateTracking register : " + cName );
+		
+		DataChgNotifier.Instance().unregister( cName, this);
 	}
 	//-------------------------------------------------
 	protected boolean loadFromDatabase(SqlConnex iConnex, String iStrSql) {
@@ -232,6 +272,7 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 
 		return true;
 	}
+
 }
 
 //*************************************************

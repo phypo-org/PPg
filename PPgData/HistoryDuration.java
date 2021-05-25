@@ -29,6 +29,8 @@ public enum HistoryDuration {
 		
 	private static Vector<String> sLabels = null;
 	
+	public String getLabel() { return cLabel; }
+	
 	public static final Vector<String> GetLabels(){	
 		if( sLabels == null ) {
 			sLabels = new Vector<>();		

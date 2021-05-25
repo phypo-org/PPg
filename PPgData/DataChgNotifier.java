@@ -25,6 +25,8 @@ public class DataChgNotifier {
 		return sInstance;
 	}
 	//-------------------------------------------------
+	// MT possible error !!!
+	
 	public void register( String iKey, DataChgNotifierClient iClient ) {
 		if( iKey == null ) {
 			Log.Err( "DataChgNotifier.register key is null");
@@ -44,6 +46,28 @@ public class DataChgNotifier {
 		} else {
 			if( lList.contains( iClient) == false ){
 				lList.add( iClient);
+			}
+		}			
+	}
+	//-------------------------------------------------
+	// MT possible error !!!
+	
+	public void unregister( String iKey, DataChgNotifierClient iClient ) {
+		if( iKey == null ) {
+			Log.Err( "DataChgNotifier.unregister key is null");
+			return ;
+		}
+
+		if( iClient == null ) {
+			Log.Err( "DataChgNotifier.unregister client is null for key : " +  iKey );
+			return ;
+		}
+
+		ArrayList<DataChgNotifierClient> lList = cClients.get(iKey);
+		if( lList  == null ) {
+		} else {
+			if( lList.contains( iClient)  ){
+				lList.remove( iClient);
 			}
 		}			
 	}
