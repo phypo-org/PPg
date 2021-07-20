@@ -62,6 +62,7 @@ public class Password {
 	//-------------------------------------------------------------------
 	public static String GetValidityConditions() {
 		return "\n Password must contain at least: \n"
+				+ " - " + sMinSize + " characters \n"
 				+ "	- " + sMinAlphaLower +" lowercases \n"
 			    + "	- " + sMinAlphaUpper +" uppercases\n"		 
 			    + "	- " + sMinDigit   + " digits\n"

@@ -73,8 +73,7 @@ public abstract class AppliFx extends javafx.application.Application{
 		if( GetOs() == null ) {
 			String lErr = "Cannot determine the operating system - Exit";
 		
-	        Alert lAlert = new Alert(AlertType.ERROR, lErr );
-	        lAlert.showAndWait();
+			FxHelper.MsgErrWait( lErr );
 	        	      
 			Log.Fatal( lErr);			
 			System.exit(1);
@@ -100,7 +99,7 @@ public abstract class AppliFx extends javafx.application.Application{
 				+ sSocietyName + iSep
 				+ sEmail + iSep2
 				+ sOsSystem + iSep
-				+ sJavaVersions + iSep;
+				+ sJavaVersions;
 		}
 	//----------------------------------------------------
 	public static String GetStringInfosApplicationFormat(String iSep) {

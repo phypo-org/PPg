@@ -26,13 +26,13 @@ public abstract class DialogChgPwd extends PPgDialog {
 		
 		if( cOldPasswordField.getText().length() > 0 
 			&& (cOldPasswordField.getText().equals(cNewPasswordField.getText()))) {
-			new Alert(AlertType.ERROR, "New password cannot be the same as old").showAndWait();
+			FxHelper.MsgErrWait( "New password cannot be the same as old");
 			return false;				
 		}
 
 		String lError = Password.VerifyPass( cNewPasswordField.getText(), cConfirmPasswordField.getText() );
 		if( lError != null ) {
-			new Alert(AlertType.ERROR, lError ).showAndWait();
+			FxHelper.MsgErrWait( lError );
 			return false;
 		}
 		return true;

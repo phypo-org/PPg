@@ -572,21 +572,21 @@ public class SqlConnex {
 				return false;
 
 			cCurrentStatement = cConnect.createStatement();						
-			//						System.out.println( "+++++> cCurrentStatement.execute <<<" +pQuery +">>>");
+			//					System.out.println( "+++++> cCurrentStatement.execute <<<" +pQuery +">>>");
 			cCurrentHaveResult = cCurrentStatement.execute(pQuery);
 			//						System.out.println( "++++++++++++++++++++++++++++++++++++++++++++++++++++");
 			eatResults();	    
 		}
 		catch (SQLException sqe) {
 			cOStream.println("Unexpected exception : " +															 
-					sqe.toString() + ", sqlstate = " + sqe.getSQLState());		
+					sqe.toString() + ", sqlstate = " + sqe.getSQLState() + " <<<"+ pQuery +">>>" );		
 			
 			sqe.printStackTrace();
 			return false;
 		}
 		catch (Exception e) {
 			cOStream.println("Unexpected exception : " +															 
-					e.toString() );						
+					e.toString()  + " <<<"+ pQuery +">>>" );						
 			e.printStackTrace();
 			return false;
 		}

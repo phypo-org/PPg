@@ -190,11 +190,11 @@ public abstract class DataViewFx<KEY, OBJ extends DataViewObj> {
 	}
 	//--------------------------------------------
 	public void doubleClick( MouseEvent iEv, OBJ lItem, int iPosItem  ) {	
-		System.out.println("Double clicked");
+	    //	System.out.println("Double clicked");
 	}
 	//--------------------------------------------
 	public void simpleClick( MouseEvent iEv, OBJ lItem, int iPosItem  ) {	
-		System.out.println("Double clicked");
+	    //		System.out.println("simple clicked");
 	}
 	//--------------------------------------------
 	public void writeSize2Foot( String iLabel ) {

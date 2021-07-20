@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+// https://github.com/edvin/tornadofx-controls/blob/master/src/main/java/tornadofx/control/DateTimePicker.java
+
 /**
  * A DateTimePicker with configurable datetime format where both date and time can be changed
  * via the text field and the date can additionally be changed via the JavaFX default date picker.
  */
-
 @SuppressWarnings("unused")
-
 public class DateTimePicker extends DatePicker {
 	public static final String DefaultFormat = "yyyy-MM-dd HH:mm";
 
@@ -28,13 +28,12 @@ public class DateTimePicker extends DatePicker {
 			formatter = DateTimeFormatter.ofPattern(newValue);
 		}
 	};
-	//-------------------------------------
+
 	public void alignColumnCountWithFormat() {
 		getEditor().setPrefColumnCount(getFormat().length());
 	}
-	//-------------------------------------
+
 	public DateTimePicker() {
-		
 		getStyleClass().add("datetime-picker");
 		setFormat(DefaultFormat);
 		setConverter(new InternalConverter());
@@ -73,24 +72,25 @@ public class DateTimePicker extends DatePicker {
 			if (!newValue)
 				simulateEnterPressed();
 		});
+
 	}
-	//-------------------------------------
+
 	private void simulateEnterPressed() {
 		getEditor().commitValue();
 	}
-	//-------------------------------------
+
 	public LocalDateTime getDateTimeValue() {
 		return dateTimeValue.get();
 	}
-	//-------------------------------------
+
 	public void setDateTimeValue(LocalDateTime dateTimeValue) {
 		this.dateTimeValue.set(dateTimeValue);
 	}
-	//-------------------------------------
+
 	public ObjectProperty<LocalDateTime> dateTimeValueProperty() {
 		return dateTimeValue;
 	}
-	//-------------------------------------
+
 	public String getFormat() {
 		return format.get();
 	}
@@ -98,12 +98,12 @@ public class DateTimePicker extends DatePicker {
 	public ObjectProperty<String> formatProperty() {
 		return format;
 	}
-	//-------------------------------------
+
 	public void setFormat(String format) {
 		this.format.set(format);
 		alignColumnCountWithFormat();
 	}
-	//-------------------------------------
+
 	class InternalConverter extends StringConverter<LocalDate> {
 		public String toString(LocalDate object) {
 			LocalDateTime value = getDateTimeValue();

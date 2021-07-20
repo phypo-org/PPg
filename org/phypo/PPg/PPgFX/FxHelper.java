@@ -36,9 +36,7 @@ import org.phypo.PPg.PPgUtils.PPgIniFile;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 
 
 //*********************************************************
@@ -376,39 +374,66 @@ public class FxHelper {
 	public enum DialogMsgType { INFO(AlertType.INFORMATION), WARN(AlertType.WARNING), ERR(AlertType.ERROR), OK_CANCEL( AlertType.CONFIRMATION)
 		; AlertType cType; 
 		DialogMsgType(AlertType iType ){ cType = iType; } 
-	};
-
-	//---------------------+-----------------
+	}
+	//--------------------------------------
 	public static void MsgErrWait( String iTxt ) {
 		MsgAlertWait( DialogMsgType.ERR, iTxt);
 	}
-	//---------------------+-----------------
+	//--------------------------------------
 	public static void MsgWarnWait(  String iTxt ) {
 		MsgAlertWait( DialogMsgType.WARN, iTxt);
 	}
-	//---------------------+-----------------
+	//--------------------------------------
 	public static void MsgInfoWait( String iTxt ) {
 		MsgAlertWait( DialogMsgType.INFO, iTxt);
 	}
-	//---------------------+-----------------
+	//--------------------------------------
 	public static void MsgAlertWait( DialogMsgType iType, String iTxt ) {
-		//METTRE LE RESULT	
+		MsgAlertWait( AppliFx.sInstance.getPrimStage(), iType, iTxt  );
+	}
+	//--------------------------------------
+	public static void MsgErrWait(  Stage iOwner, String iTxt ) {
+	    MsgAlertWait( iOwner,DialogMsgType.ERR, iTxt);
+	}
+	//--------------------------------------
+	public static void MsgWarnWait(   Stage iOwner, String iTxt ) {
+	    MsgAlertWait( iOwner,DialogMsgType.WARN, iTxt);
+	}
+	//--------------------------------------
+	public static void MsgInfoWait(  Stage iOwner, String iTxt ) {
+	    MsgAlertWait( iOwner, DialogMsgType.INFO, iTxt);
+	}
+	//--------------------------------------
+	public static void MsgAlertWait(  Stage iOwner, DialogMsgType iType, String iTxt ) {
 		Alert lAlert = new javafx.scene.control.Alert( iType.cType, iTxt );
-		lAlert.initOwner( AppliFx.sInstance.getPrimStage()  );
+		if( iOwner != null ) {
+			lAlert.initOwner( iOwner );
+		}
 		lAlert.showAndWait();
 	}
-	//---------------------+-----------------
+	//--------------------------------------
+	//--------------------------------------
+	//--------------------------------------
 	public static Alert MsgAlert( DialogMsgType iType, String iTxt ) {
-		//METTRE LE RESULT	
+	    return MsgAlert(  AppliFx.sInstance.getPrimStage(), DialogMsgType.INFO, iTxt);
+	}
+	//--------------------------------------
+	public static Alert MsgAlert(  Stage iOwner, DialogMsgType iType, String iTxt ) {
 		Alert lAlert = new javafx.scene.control.Alert( iType.cType, iTxt );
-		lAlert.initOwner( AppliFx.sInstance.getPrimStage()  );
+		lAlert.initOwner( iOwner );
 		return lAlert;
 	}
-	//---------------------+-----------------
+	//--------------------------------------
+	//--------------------------------------
+	//--------------------------------------
 	public static boolean MsgAlertWaitConfirm( String iTxt ) {
-		//METTRE LE RESULT	
+	
+	    return MsgAlertWaitConfirm(  AppliFx.sInstance.getPrimStage(), iTxt );
+	}
+	//--------------------------------------
+	public static boolean MsgAlertWaitConfirm(  Stage iOwner, String iTxt ) {
 		Alert lAlert = new javafx.scene.control.Alert( AlertType.CONFIRMATION, iTxt );
-		lAlert.initOwner( AppliFx.sInstance.getPrimStage()  );
+		lAlert.initOwner( iOwner );
 		Optional<ButtonType> lResult = lAlert.showAndWait();
 		return (lResult.get() == ButtonType.OK);
 	}
