@@ -17,7 +17,7 @@ public class PPgParam {
 
 		//System.out.print( " | " + arg );
 
-			if( arg.startsWith( p_prefix )){								
+			if( arg.startsWith( p_prefix )){
 				args[i] = "";
 				return arg.substring( lSz );
 			}
@@ -92,10 +92,10 @@ public class PPgParam {
 				return Integer.parseInt( lVar);
 			}catch(NumberFormatException ex){
 				System.err.println( "Mauvais format pour commande "+p_prefix);
-			}										
+			}
 		}
 		return pDefault;
-	}		
+	}
 	//---------------------------------
 	public static double GetDouble( String[] args, String p_prefix, double pDefault){
 
@@ -109,10 +109,10 @@ public class PPgParam {
 				return Double.parseDouble( lVar );
 			}catch(NumberFormatException ex){
 				System.err.println( "Mauvais format pour commande "+p_prefix);
-			}										
+			}
 		}
 		return pDefault;
-	}		
+	}
 	//---------------------------------
 	public static float GetFloat( String[] args, String p_prefix, float pDefault){
 
@@ -128,10 +128,10 @@ public class PPgParam {
 				return Float.parseFloat( lVar );
 			}catch(NumberFormatException ex){
 				System.err.println( "Mauvais format pour commande "+p_prefix);
-			}										
+			}
 		}
 		return pDefault;
-	}		
+	}
 }
 
 //*************************************************

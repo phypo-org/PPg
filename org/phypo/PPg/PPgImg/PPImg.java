@@ -4,16 +4,17 @@ package org.phypo.PPg.PPgImg;
 
 
 
-import java.awt.*;
+import java.awt.Graphics2D;
+
 import javax.swing.ImageIcon;
 
 
 //*************************************************
 
 public class PPImg extends ImageIcon  implements  PPgImgBase {
-		
+
 		/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 4571075702893794403L;
 		int lSz=0;
@@ -22,11 +23,13 @@ public class PPImg extends ImageIcon  implements  PPgImgBase {
 				super( pStr);
 		}
 
+		@Override
 		public int getWidth()  { return getIconWidth();  }
+		@Override
 		public int getHeight() { return getIconHeight(); }
 
 		void draw( Graphics2D pG, int pX, int pY ) {
-				pG.drawImage( getImage(), pX-getIconWidth()/2, pY-getIconHeight(),  null);	
+				pG.drawImage( getImage(), pX-getIconWidth()/2, pY-getIconHeight(),  null);
 		}
 
 		void prepareNextDraw( int pState, int pSequence, double pAngle ){
@@ -53,7 +56,7 @@ public class PPImg extends ImageIcon  implements  PPgImgBase {
 		@Override
 		public void draw(Graphics2D pG, int pX, int pY, int pState, double pTimeSeq) {
 			// TODO Auto-generated method stub
-			
+
 		}
-};
+}
 //*************************************************

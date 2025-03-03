@@ -1,0 +1,1 @@
+java -debug -cp ../../../..  com/phipo/PPg/T1m3/T1m3 $*

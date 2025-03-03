@@ -1,7 +1,7 @@
 package org.phypo.PPg.PPgUtils;
 
 
-import org.w3c.dom.*;
+import org.w3c.dom.Node;
 
 
 //**********************************************************

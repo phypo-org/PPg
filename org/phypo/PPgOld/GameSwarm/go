@@ -1,0 +1,2 @@
+java -debug -cp ../../../.. com/phipo/PPg/PPgSwarm/PPgSwarm $* -fps
+#  -S1280x1024-32

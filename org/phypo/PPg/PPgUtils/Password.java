@@ -64,20 +64,20 @@ public class Password {
 		return "\n Password must contain at least: \n"
 				+ " - " + sMinSize + " characters \n"
 				+ "	- " + sMinAlphaLower +" lowercases \n"
-			    + "	- " + sMinAlphaUpper +" uppercases\n"		 
+			    + "	- " + sMinAlphaUpper +" uppercases\n"
 			    + "	- " + sMinDigit   + " digits\n"
 			    + "	- " + sMinSpecial + " special characters\n" ;
 	}
-	
+
 	//-------------------------------------------------------------------
 	public static String VerifyPass( String iNewPass, String iConfirmPass ) {
-		if( iNewPass == null 
+		if( iNewPass == null
 				||  iNewPass.length() < sMinSize ) {
-			return  "Password must be at least " +  Password.sMinSize + " characters";				
+			return  "Password must be at least " +  Password.sMinSize + " characters";
 		}
 
 		int cAlphaLower=0;
-		int cAlphaUpper=0;		
+		int cAlphaUpper=0;
 		int cDigit=0;
 		int cSpecial=0;
 
@@ -85,7 +85,7 @@ public class Password {
 			char c = iNewPass.charAt(i);
 			if( Character.isDigit(c)) {
 				cDigit++;
-			} 
+			}
 			else if(	 Character.isLowerCase(c) ) {
 				cAlphaLower++;
 			}
@@ -108,12 +108,12 @@ public class Password {
 		if( cSpecial < sMinSpecial) {
 			return "Password must contain at least " + sMinSpecial +" special character";
 		}
-		if( iConfirmPass == null 
+		if( iConfirmPass == null
 				||  iConfirmPass.length() ==0 ) {
 			return "Confirm password is void";
 		}
 
-		if( iNewPass.equals( iConfirmPass ) ==false ) {
+		if( !iNewPass.equals( iConfirmPass ) ) {
 			return "Confirm password is different";
 		}
 

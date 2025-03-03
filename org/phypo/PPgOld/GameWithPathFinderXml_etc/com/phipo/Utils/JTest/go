@@ -1,0 +1,1 @@
+java -debug -cp ../../../../../../OrsJavaLib/src:../../../../src com/phipo/JTest/JTest  com/phipo/JTest/JTest $* 

@@ -1,0 +1,2 @@
+java -debug -cp ../../.. org/phypo/GameSwarm/PPgSwarm $* -fps
+#  -S1280x1024-32

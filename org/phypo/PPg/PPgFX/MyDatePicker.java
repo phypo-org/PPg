@@ -1,37 +1,37 @@
 package org.phypo.PPg.PPgFX;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.DatePicker;
 import javafx.util.StringConverter;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 // Correction of DatePicker bug when when use textfield
 //  https://stackoverflow.com/questions/32346893/javafx-datepicker-not-updating-value
-	
+
 //**********************************
 public class MyDatePicker  extends DatePicker  {
 
 	public boolean harmonizeValues(){
 		String lStr = getEditor().getText();
-		if( lStr == null ) {			
+		if( lStr == null ) {
 			return false;
 		}
-			
+
 		setValue(getConverter().fromString(lStr));
-		
+
 		if( getValue() == null )
 			return false;
-		
+
 		return true;
 	}
-	
+
 	public MyDatePicker(){
-		
+
 		setPromptText("yyyy/MM/dd");
-		
+
 		setConverter(new StringConverter<LocalDate>() {
 	        private DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy/MM/dd");
 	        @Override

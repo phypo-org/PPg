@@ -5,11 +5,11 @@ package org.phypo.PPg.PPgUtils;
 
 //***********************************
 public class PPgPair<KeyType, ValueType> {
-		  
+
 	    private final KeyType key;
 	    private final ValueType value;
 
-	    public PPgPair(KeyType key, ValueType value) {  
+	    public PPgPair(KeyType key, ValueType value) {
 	        this.key = key;
 	        this.value = value;
 	    }
@@ -22,8 +22,9 @@ public class PPgPair<KeyType, ValueType> {
 	        return value;
 	    }
 
-	    public String toString() { 
-	        return "(" + key + ", " + value + ")";  
+	    @Override
+		public String toString() {
+	        return "(" + key + ", " + value + ")";
 	    }
 	}
 //***********************************

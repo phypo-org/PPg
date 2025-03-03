@@ -1,0 +1,5 @@
+
+
+java -debug -jar PPgG3d.jar $*
+
+# java -debug -cp .:$LWGL_JAR:./PPgG3d.jar com.phipo.PPg.PPgG3d.PPgG3d $*

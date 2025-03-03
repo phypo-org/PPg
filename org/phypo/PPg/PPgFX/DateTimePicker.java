@@ -1,14 +1,14 @@
 package org.phypo.PPg.PPgFX;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.DatePicker;
-import javafx.util.StringConverter;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.DatePicker;
+import javafx.util.StringConverter;
 
 // https://github.com/edvin/tornadofx-controls/blob/master/src/main/java/tornadofx/control/DateTimePicker.java
 
@@ -22,7 +22,8 @@ public class DateTimePicker extends DatePicker {
 
 	private DateTimeFormatter formatter;
 	private ObjectProperty<LocalDateTime> dateTimeValue = new SimpleObjectProperty<>(LocalDateTime.now());
-	private ObjectProperty<String> format = new SimpleObjectProperty<String>() {
+	private ObjectProperty<String> format = new SimpleObjectProperty<>() {
+		@Override
 		public void set(String newValue) {
 			super.set(newValue);
 			formatter = DateTimeFormatter.ofPattern(newValue);
@@ -105,11 +106,13 @@ public class DateTimePicker extends DatePicker {
 	}
 
 	class InternalConverter extends StringConverter<LocalDate> {
+		@Override
 		public String toString(LocalDate object) {
 			LocalDateTime value = getDateTimeValue();
 			return (value != null) ? value.format(formatter) : "";
 		}
 
+		@Override
 		public LocalDate fromString(String value) {
 			if (value == null || value.isEmpty()) {
 				dateTimeValue.set(null);

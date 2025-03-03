@@ -1,0 +1,9 @@
+Main-Class:  com.phipo.PPg.T1m3.T1m3
+Class-Path:  com.phipo.PPg.PPgUtils com.phipo.PPg.PPgWin com.phipo.PPg.PPgSound com.phipo.PPg.T1m3
+Specification-Title: T1m3
+Specification-Version: 1.0
+Specification-Vendor: Philippe Poupon
+Implementation-Title: com.phipo.PPg.T1m3
+Implementation-Version: build32
+Implementation-Vendor: Philippe Poupon
+Sealed: true

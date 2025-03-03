@@ -1,0 +1,9 @@
+Main-Class: com.phipo.PPg.M0k4.M0k4
+Class-Path: com.phipo.PPg.PPgUtils com.phipo.PPg.PPgWin com.phipo.PPg.M0k4.M0k4
+Specification-Title: M0k4
+Specification-Version: 1.0
+Specification-Vendor: Philippe Poupon
+Implementation-Title: M0k4
+Implementation-Version: build32
+Implementation-Vendor: Philippe Poupon
+Sealed: true

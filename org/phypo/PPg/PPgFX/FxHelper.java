@@ -1,5 +1,14 @@
 package org.phypo.PPg.PPgFX;
 
+import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+
+import org.phypo.PPg.PPgUtils.PPgIniFile;
+import org.phypo.PPg.PPgUtils.PPgTrace;
+
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -28,16 +37,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
-import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-
-import org.phypo.PPg.PPgUtils.Log;
-import org.phypo.PPg.PPgUtils.PPgIniFile;
-
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-
 
 //*********************************************************
 
@@ -46,21 +45,21 @@ public class FxHelper {
 	//--------------------------------------------
 	public static <OBJ,TYPE>  TableColumn<OBJ, TYPE> addColumn( TableView<OBJ> iTable, String iLabel, String iVarName ) {
 
-		TableColumn<OBJ, TYPE> lCol = new TableColumn<OBJ, TYPE>(iLabel);
-		lCol.setCellValueFactory(new PropertyValueFactory<OBJ,TYPE>((String) iVarName));
+		TableColumn<OBJ, TYPE> lCol = new TableColumn<>(iLabel);
+		lCol.setCellValueFactory(new PropertyValueFactory<OBJ,TYPE>(iVarName));
 		iTable.getColumns().add(lCol);
 		return lCol;
-	}	
+	}
 	//--------------------------------------------
 	public static <OBJ,TYPE>  TableColumn<OBJ, TYPE> addTopColumn( TableView<OBJ> iTable, String iLabel ){
-		TableColumn<OBJ, TYPE> lCol   = new TableColumn<OBJ, TYPE>(iLabel);
+		TableColumn<OBJ, TYPE> lCol   = new TableColumn<>(iLabel);
 		iTable.getColumns().add(lCol);
 		return lCol;
-	}	
+	}
 	//--------------------------------------------
 	public static <OBJ,TYPE>  TableColumn<OBJ,TYPE> addSubColumn(  TableColumn<OBJ,TYPE> iCol, String iLabel, String iVarName  ){
-		TableColumn<OBJ, TYPE> lCol = new TableColumn<OBJ, TYPE>(iLabel);
-		lCol.setCellValueFactory(new PropertyValueFactory<OBJ,TYPE>((String) iVarName));
+		TableColumn<OBJ, TYPE> lCol = new TableColumn<>(iLabel);
+		lCol.setCellValueFactory(new PropertyValueFactory<OBJ,TYPE>(iVarName));
 		iCol.getColumns().add(lCol);
 		return lCol;
 	}
@@ -76,31 +75,31 @@ public class FxHelper {
 			@Override
 			public void handle(MouseEvent event) {
 				iAction.handle(event);
-			};});
+			}});
 
 		Menu lMenu = new Menu();
-		lMenu.setGraphic(menuLabel);	
-		iMenubar.getMenus().add( lMenu);		
+		lMenu.setGraphic(menuLabel);
+		iMenubar.getMenus().add( lMenu);
 		return lMenu;
 	}
 	//-------------------------------------------
 	public static MenuItem AddMenuItem( Menu iMenu, String iLabel, EventHandler<ActionEvent> iAction) {
-		MenuItem lItem = new MenuItem( iLabel); 
-		iMenu.getItems().add(lItem); 
+		MenuItem lItem = new MenuItem( iLabel);
+		iMenu.getItems().add(lItem);
 		lItem.setOnAction( iAction );
 		return lItem;
 	}
 	//-------------------------------------------
 	public static MenuItem AddMenuItem( ContextMenu iMenu, String iLabel, EventHandler<ActionEvent> iAction ) {
-		MenuItem lItem = new MenuItem( iLabel); 
-		iMenu.getItems().add(lItem); 
+		MenuItem lItem = new MenuItem( iLabel);
+		iMenu.getItems().add(lItem);
 		lItem.setOnAction( iAction );
 		return lItem;
 	}
 	//-------------------------------------------
 	public static MenuItem AddMenuItem( MenuButton iMenu, String iLabel, EventHandler<ActionEvent> iAction ) {
-		MenuItem lItem = new MenuItem( iLabel); 
-		iMenu.getItems().add(lItem); 
+		MenuItem lItem = new MenuItem( iLabel);
+		iMenu.getItems().add(lItem);
 		lItem.setOnAction( iAction );
 		return lItem;
 	}
@@ -131,7 +130,7 @@ public class FxHelper {
 		iMenu.getItems().add(lItem);
 		lItem.setOnAction( iAction );
 		return lItem;
-	}	
+	}
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
 	//------------------------------------------------------------------
@@ -174,10 +173,10 @@ public class FxHelper {
 		}
 
 		if( iHdl != null ) {
-			Log.Info("*** CreateToggle");
+			PPgTrace.Info("*** CreateToggle");
 
 			lToggle.setOnAction(iHdl);
-			
+
 		}
 
 		return lToggle;
@@ -187,7 +186,7 @@ public class FxHelper {
 	//-------------------------------------------
 	public static MenuButton CreateMenuButton( String iLabel, String iTip) {
 		return CreateMenuButton( iLabel, iTip, null );
-	}	
+	}
 	//-------------------------------------------
 	public static MenuButton CreateMenuButton( String iLabel, String iTip, Image iImg ) {
 
@@ -219,7 +218,7 @@ public class FxHelper {
 	//-------------------------------------------
 	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl) {
 		return CreateButton( iLabel, iTip, iHdl, null );
-	}	
+	}
 	//-------------------------------------------
 	public static Button CreateButton( String iLabel, String iTip, EventHandler<ActionEvent> iHdl, Image iImg ) {
 
@@ -263,22 +262,22 @@ public class FxHelper {
 		double lFlipV = 1;
 		//	Log.Dbg( "Icon possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 
-		if( lPosSize == -1 ) {						
+		if( lPosSize == -1 ) {
 			lPosSize = lStr.lastIndexOf( '>' );
 			//		Log.Dbg( "Icon > possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			if(lPosSize != -1 ) {
 				lFlipH = -1;
 			}
 		}
-		if( lPosSize == -1 ) {											
+		if( lPosSize == -1 ) {
 			lPosSize = lStr.lastIndexOf( 'V' );
 			//		Log.Dbg( "Icon V possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			if(lPosSize != -1 ) {
 				lFlipV = -1;
-				Log.Dbg( "V "+ " Flip:" + lFlipH + " " + lFlipV);
+				PPgTrace.Dbg( "V "+ " Flip:" + lFlipH + " " + lFlipV);
 			}
 		}
-		if( lPosSize == -1 ) {						
+		if( lPosSize == -1 ) {
 			//		Log.Dbg( "Icon X possize:" + lPosSize + " Flip:" + lFlipH + " " + lFlipV);
 			lPosSize = lStr.lastIndexOf( 'X' );
 			if(lPosSize != -1 ) {
@@ -312,19 +311,19 @@ public class FxHelper {
 					lHeight = Integer.parseInt( lSize.substring( lPosSize+1 ) );
 				}
 			}catch(NumberFormatException ex){
-				Log.Dbg( "ReadIcon NumberFormatException for " + lSize );
-				lWidth = lHeight = 0;	
+				PPgTrace.Dbg( "ReadIcon NumberFormatException for " + lSize );
+				lWidth = lHeight = 0;
 				lScale = 1;
 				return null;
-			}				
+			}
 
-			//						Log.Dbg( "ReadIcon Str:" + lStr + " Size:" + lSize  
+			//						Log.Dbg( "ReadIcon Str:" + lStr + " Size:" + lSize
 			//																+ " lWidth:" + lWidth + " lHeight:" + lHeight + " lScale:" + lScale );
 
 		}
 
 		if( lStr == null || lStr.length() == 0 ){
-			Log.Err( "PPIniFile.Image return null .size error for " 	+ pSection + ":" + pKey );
+			PPgTrace.Err( "PPIniFile.Image return null .size error for " 	+ pSection + ":" + pKey );
 			return null;
 		}
 
@@ -332,48 +331,48 @@ public class FxHelper {
 		Image lImage = null;
 
 		if( lScale != 1) {
-			lImage = new Image( lStr );	
+			lImage = new Image( lStr );
 			lWidth = (int) (lImage.getWidth()*lScale);
 			lHeight = (int) (lImage.getHeight()*lScale);
 			lImage = null;
 		}
 
-		if( lWidth >0 && lHeight >0 ){																
-			Log.Dbg("FxHelper ReadIcon Name:" + lStr + " w:" + lWidth +" h:" + lHeight + " s:" + lScale);
-			lImage = new Image( lStr, lWidth, lHeight, true, true, false );								
+		if( lWidth >0 && lHeight >0 ){
+			PPgTrace.Dbg("FxHelper ReadIcon Name:" + lStr + " w:" + lWidth +" h:" + lHeight + " s:" + lScale);
+			lImage = new Image( lStr, lWidth, lHeight, true, true, false );
 		}
 		else {
 
-			lImage = new Image( lStr  );								
-			Log.Dbg("FxHelper ReadIcon Name:" + lStr + " s:" + lScale +" w="	+	lImage.getWidth());
+			lImage = new Image( lStr  );
+			PPgTrace.Dbg("FxHelper ReadIcon Name:" + lStr + " s:" + lScale +" w="	+	lImage.getWidth());
 			if( lImage.isError() ||lImage.getWidth() == 0 ) {
-				Log.Dbg( "FxHelper ReadIcon error:" + lImage.errorProperty() + " ex:" + lImage.getException());
+				PPgTrace.Dbg( "FxHelper ReadIcon error:" + lImage.errorProperty() + " ex:" + lImage.getException());
 				return null;
 			}
 		}
 
 		return lImage;
-	}	
+	}
 	//--------------------------------------
 	//--------------------------------------
 	//--------------------------------------
-	public static void SetIcon( Stage iStage, Image iImage ) {	
+	public static void SetIcon( Stage iStage, Image iImage ) {
 		if( iImage != null && iStage != null) {
-			iStage.getIcons().add( iImage ); 
+			iStage.getIcons().add( iImage );
 		}
 	}
 	//--------------------------------------
-	public static void SetIcon( Dialog iStage, Image iImage ) {	
+	public static void SetIcon( Dialog iStage, Image iImage ) {
 		if( iImage != null && iStage != null) {
-			iStage.setGraphic(new ImageView( iImage )); 
-		}		
+			iStage.setGraphic(new ImageView( iImage ));
+		}
 	}
 	//--------------------------------------
 	//--------------------------------------
 	//--------------------------------------
 	public enum DialogMsgType { INFO(AlertType.INFORMATION), WARN(AlertType.WARNING), ERR(AlertType.ERROR), OK_CANCEL( AlertType.CONFIRMATION)
-		; AlertType cType; 
-		DialogMsgType(AlertType iType ){ cType = iType; } 
+		; AlertType cType;
+		DialogMsgType(AlertType iType ){ cType = iType; }
 	}
 	//--------------------------------------
 	public static void MsgErrWait( String iTxt ) {
@@ -427,7 +426,7 @@ public class FxHelper {
 	//--------------------------------------
 	//--------------------------------------
 	public static boolean MsgAlertWaitConfirm( String iTxt ) {
-	
+
 	    return MsgAlertWaitConfirm(  AppliFx.sInstance.getPrimStage(), iTxt );
 	}
 	//--------------------------------------
@@ -463,7 +462,7 @@ public class FxHelper {
 		// Set expandable Exception into the dialog pane.
 		iAlert.getDialogPane().setContent(lContent);
 		return lTextArea;
-	}	
+	}
 	//--------------------------------------
 	public static String DialogEdit( String iTitle, String iLabel, String iStr, boolean iIsEditable ) {
 
@@ -474,7 +473,7 @@ public class FxHelper {
 			return lAlert.getContentText();
 		}
 		return null;
-	}	
+	}
 	//--------------------------------------
 	// https://news.kynosarges.org/2014/05/01/simulating-platform-runandwait/
 	public static void RunAndWait(Runnable action) {

@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.StringTokenizer;
 
-import org.phypo.PPg.PPgUtils.Log;
+import org.phypo.PPg.PPgUtils.PPgTrace;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -43,6 +43,7 @@ public class TableFxHelper {
 		KeyCodeCombination copyKeyCodeCompination = new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_ANY);
 		KeyCodeCombination pasteKeyCodeCompination = new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_ANY);
 
+		@Override
 		public void handle(final KeyEvent keyEvent) {
 
 			if (copyKeyCodeCompination.match(keyEvent)) {
@@ -51,14 +52,14 @@ public class TableFxHelper {
 					copySelectionToClipboard( (TableView<?>) keyEvent.getSource());// copy to clipboard
 					keyEvent.consume(); // event is handled, consume it
 				}
-			} 
+			}
 			else if (pasteKeyCodeCompination.match(keyEvent)) {
 
-				if( keyEvent.getSource() instanceof TableView) {					
-					pasteFromClipboard( (TableView<?>) keyEvent.getSource());// copy to clipboard					
+				if( keyEvent.getSource() instanceof TableView) {
+					pasteFromClipboard( (TableView<?>) keyEvent.getSource());// copy to clipboard
 					keyEvent.consume();// event is handled, consume it
 				}
-			} 
+			}
 		}
 	}
 	//--------------------------------------
@@ -87,7 +88,7 @@ public class TableFxHelper {
 
 			// create string from cell
 			String text = "";
-			Object observableValue = (Object) table.getColumns().get(col).getCellObservableValue( row);
+			Object observableValue = table.getColumns().get(col).getCellObservableValue( row);
 
 			// null-check: provide empty string for nulls
 			if (observableValue == null) {
@@ -96,14 +97,14 @@ public class TableFxHelper {
 			else if( observableValue instanceof DoubleProperty) { // TODO: handle boolean etc
 				text = numberFormatter.format( ((DoubleProperty) observableValue).get());
 			}
-			else if( observableValue instanceof IntegerProperty) { 
+			else if( observableValue instanceof IntegerProperty) {
 				text = numberFormatter.format( ((IntegerProperty) observableValue).get());
-			}			    	
-			else if( observableValue instanceof StringProperty) { 
+			}
+			else if( observableValue instanceof StringProperty) {
 				text = ((StringProperty) observableValue).get();
 			}
 			else {
-				Log.Err("copySelectionToClipboard _ Unsupported observable value: " + observableValue);
+				PPgTrace.Err("copySelectionToClipboard _ Unsupported observable value: " + observableValue);
 			}
 
 			clipboardString.append(text);	// add new item to clipboard
@@ -128,11 +129,11 @@ public class TableFxHelper {
 		// get the cell position to start with
 		TablePosition pasteCellPosition = table.getSelectionModel().getSelectedCells().get(0);
 
-		Log.Dbg("Pasting into cell " + pasteCellPosition);
+		PPgTrace.Dbg("Pasting into cell " + pasteCellPosition);
 
 		String pasteString = Clipboard.getSystemClipboard().getString();
 
-		Log.Dbg(pasteString);
+		PPgTrace.Dbg(pasteString);
 
 		int rowClipboard = -1;
 
@@ -146,7 +147,7 @@ public class TableFxHelper {
 			int colClipboard = -1;
 
 			while( columnTokenizer.hasMoreTokens()) {
-				colClipboard++;				
+				colClipboard++;
 				String clipboardCellContent = columnTokenizer.nextToken();// get next cell data from clipboard
 
 				// calculate the position in the table cell
@@ -154,10 +155,7 @@ public class TableFxHelper {
 				int colTable = pasteCellPosition.getColumn() + colClipboard;
 
 
-				if( rowTable >= table.getItems().size()) { // skip if we reached the end of the table
-					continue;
-				}
-				if( colTable >= table.getColumns().size()) {
+				if( (rowTable >= table.getItems().size()) || (colTable >= table.getColumns().size())) {
 					continue;
 				}
 
@@ -165,10 +163,10 @@ public class TableFxHelper {
 				TableColumn tableColumn = table.getColumns().get(colTable);
 				ObservableValue observableValue = tableColumn.getCellObservableValue(rowTable);
 
-				Log.Dbg( rowTable + "/" + colTable + ": " +observableValue);
+				PPgTrace.Dbg( rowTable + "/" + colTable + ": " +observableValue);
 
 				// TODO: handle boolean, etc
-				if( observableValue instanceof DoubleProperty) { 
+				if( observableValue instanceof DoubleProperty) {
 
 					try {
 						double value = numberFormatter.parse(clipboardCellContent).doubleValue();
@@ -178,7 +176,7 @@ public class TableFxHelper {
 						e.printStackTrace();
 					}
 				}
-				else if( observableValue instanceof IntegerProperty) { 
+				else if( observableValue instanceof IntegerProperty) {
 
 					try {
 						int value = NumberFormat.getInstance().parse(clipboardCellContent).intValue();
@@ -187,16 +185,16 @@ public class TableFxHelper {
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-				}			    	
-				else if( observableValue instanceof StringProperty) { 
+				}
+				else if( observableValue instanceof StringProperty) {
 
 					((StringProperty) observableValue).set(clipboardCellContent);
 
 				} else {
 
-					Log.Err("pasteFromClipboard - Unsupported observable value: " + observableValue);
+					PPgTrace.Err("pasteFromClipboard - Unsupported observable value: " + observableValue);
 				}
-				Log.Dbg(rowTable + "/" + colTable);
+				PPgTrace.Dbg(rowTable + "/" + colTable);
 			}
 		}
 	}
@@ -217,9 +215,9 @@ public class TableFxHelper {
 	}
 
 	public static <OBJ> void AutoFitTable(TableView<OBJ> iTableView) {
-		
+
 		iTableView.getItems().addListener( new ListChangeListener<OBJ>() {
-			
+
 			@Override
 			public void onChanged(Change<? extends OBJ> iArg) {
 				for (Object column : iTableView.getColumns()) {
@@ -228,7 +226,7 @@ public class TableFxHelper {
 					} catch (IllegalAccessException | InvocationTargetException e) {
 						e.printStackTrace();
 					}
-				}			
+				}
 			}
 		});
 	}
@@ -236,14 +234,14 @@ public class TableFxHelper {
 	//--------------------------------------
 	//--------------------------------------
 	//--------------------------------------
-	
+
 	public static void AutoResizeColumns( TableView<?> table )
 	{
 	    //Set the right policy
 	    table.setColumnResizePolicy( TableView.UNCONSTRAINED_RESIZE_POLICY);
 	    table.getColumns().stream().forEach( (column) ->
 	    {
-        	Log.Dbg( column.getText().toString() );
+        	PPgTrace.Dbg( column.getText().toString() );
 	        //Minimal width = columnheader
 	        Text t = new Text( column.getText() );
 	        double max = t.getLayoutBounds().getWidth();
@@ -253,11 +251,11 @@ public class TableFxHelper {
 	            if ( column.getCellData( i ) != null ){
 	                t = new Text( column.getCellData( i ).toString() );
 	                double calcwidth = t.getLayoutBounds().getWidth();
-	                
+
 	   //         	if( calcwidth > column.getPrefWidth() )
 	     //       		calcwidth = column.getPrefWidth();
 	                //remember new max-width
-	                if ( calcwidth > max ) {	                
+	                if ( calcwidth > max ) {
 		                    max = calcwidth;
 	                }
 	            }
@@ -272,7 +270,7 @@ public class TableFxHelper {
 	{
 	    table.getColumns().stream().forEach( (iColumn) ->
 	    {
-	        iColumn.setSortable(false);	
+	        iColumn.setSortable(false);
 	    } );
 	}
 }

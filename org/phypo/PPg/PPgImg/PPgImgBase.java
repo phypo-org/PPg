@@ -4,10 +4,7 @@ package org.phypo.PPg.PPgImg;
 
 
 
-import java.awt.geom.*;
-import java.awt.*;
-import java.awt.geom.Point2D.*;
-import java.awt.event.*;
+import java.awt.Graphics2D;
 
 //*************************************************
 
@@ -15,7 +12,7 @@ public interface PPgImgBase{
 
 		public int getWidth();
 		public int getHeight();
- 
+
 		public int    getAnimNbState();
 		public int    getAnimSizeSequence();
 		public double getAnimDuration();
@@ -24,5 +21,5 @@ public interface PPgImgBase{
 
 
 
-};
+}
 //*************************************************

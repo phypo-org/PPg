@@ -7,17 +7,19 @@ all::
 	cd PPgUtils;    make ;cd ..;\
 	cd PPgWin; 	make ;cd ..;\
 	cd Sql; 	make ;cd ..;\
+	cd PPgMidi; 	make ;cd ..;\
+	cd PPgSound;    make ;cd ..;\
 
 
 
 NAME=PPgLib
 PACK=org/phypo/PPg
 ROOT=../../..
-JAR_PATH=../../../../../Bin
+JAR_PATH=${ROOT}/JAR
 
 
 jar::
-	cd ../../.. \
+	cd ${ROOT} \
 	rm  -f ${PACK}/${Name}.jar;  \
 	jar cf       ${PACK}/${NAME}.jar  ${PACK}/PPgUtils/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgImg/*.class; \
@@ -27,10 +29,12 @@ jar::
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/Sql/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgData/*.class; \
 	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgFX/*.class; \
+	jar uf       ${PACK}/${NAME}.jar  ${PACK}/PPgMidi/*.class; \
 
 
 
 install::
+	mkdir -p ${JAR_PATH}; \
 	cp -p ${NAME}.jar  ${JAR_PATH}
 
 
@@ -43,6 +47,8 @@ clean:
 	cd PPgUtils; 	make clean;cd ..;\
 	cd PPgData;     make clean;cd ..;\
 	cd PPgFX;       make clean;cd ..;\
+	cd PPgMidi;     make clean;cd ..;\
+	cd PPgSound;     make clean;cd ..;\
 	rm -f *.jar *.class \
 
 .PHONY: clean

@@ -1,0 +1,12 @@
+Main-Class: com.phipo.PPg.PPgGame3d.PPgGame3d
+Class-Path: com.phipo.PPg.PPgUtils com.phipo.PPg.PPgWin com.phipo.PPg.PPgMath com.phipo.PPg.PPgGame3d  
+ ./jogamp/jar/*./jogamp/jar/joal.jar ./jogamp/jar/jocl.jar  ./jogamp/jar/jogl-all.jar ./jogamp/jar/gluegen-rt.jar 
+ ./jogamp/jar/*-natives-*.jar	
+Specification-Title: PPgGame3d
+Specification-Version: 1.0
+Specification-Vendor: Philippe Poupon
+Implementation-Title: PPgGame3d
+Implementation-Version: build32
+Implementation-Vendor: Philippe Poupon
+Sealed: true
+	

@@ -34,17 +34,17 @@ public class PPgToken {
 		c_reader = l_reader;
 		c_forend = p_forend;
 		c_toeat  = p_toeat;
-	} 
+	}
 	//-----------------------------
 	public	PPgToken( String pStr, String p_toeat, String p_forend ){
 		c_reader = new StringReader( pStr );
 		c_forend = p_forend;
 		c_toeat  = p_toeat;
-	} 
+	}
 	//-----------------------------
 	public	PPgToken( String pStr ){
 		c_reader = new StringReader( pStr );
-	} 
+	}
 	//------------
 	public	int read(){
 		int c='\0';
@@ -52,7 +52,7 @@ public class PPgToken {
 
 			if( c_back != '\0' )
 			{
-				c = (int)c_back;
+				c = c_back;
 				c_back = '\0';
 			}
 			else
@@ -61,7 +61,7 @@ public class PPgToken {
 					//						System.out.println("PPgToken read :" +(char)c);
 					return c;
 				}
-				else 
+				else
 					return -1;
 		}
 		catch( IOException e )
@@ -101,7 +101,7 @@ public class PPgToken {
 		return nextToken( c_toeat, c_forend );
 	}
 	//------------
-	public	StringBuilder nextToken( String p_toeat, String p_forend ){		
+	public	StringBuilder nextToken( String p_toeat, String p_forend ){
 		int rc;
 		char c;
 		c_sep ='\0';
@@ -115,14 +115,14 @@ public class PPgToken {
 			if( p_forend.indexOf( c )!=-1)
 			{
 				c_sep = c;
-				if( c_eatsep == false)		putback( c );
+				if( !c_eatsep)		putback( c );
 				break;
 			}
 
 			if( c == '\n' )
 				c_numline++;
 
-			l_strbuf.append(  c );				
+			l_strbuf.append(  c );
 		}
 
 		if( l_strbuf.length()  == 0 && rc == -1 )
@@ -132,25 +132,25 @@ public class PPgToken {
 		return l_strbuf;
 	}
 	//------------
-	public	String nextTokenString( String p_toeat, String p_forend ){		
+	public	String nextTokenString( String p_toeat, String p_forend ){
 		StringBuilder lTmp =  nextToken(p_toeat, p_forend );
 		if( lTmp == null) return "";
 		return lTmp.toString();
 	}
 	//------------
-	public	String nextTokenStringTrim( String p_toeat, String p_forend ){		
+	public	String nextTokenStringTrim( String p_toeat, String p_forend ){
 		StringBuilder lTmp =  nextToken(p_toeat, p_forend );
 		if( lTmp == null) return "";
 		return lTmp.toString().trim();
 	}
 	//------------
-	public	String nextTokenString( ){		
+	public	String nextTokenString( ){
 		StringBuilder lTmp =  nextToken(c_toeat, c_forend);
 		if( lTmp == null) return "";
 		return lTmp.toString();
 	}
 	//------------
-	public	String nextTokenStringTrim( ){		
+	public	String nextTokenStringTrim( ){
 		StringBuilder lTmp =  nextToken(c_toeat, c_forend );
 		if( lTmp == null) return "";
 		return lTmp.toString().trim();
@@ -188,7 +188,7 @@ public class PPgToken {
 			if( l_deep <= 0)
 				break;
 
-			l_strbuf.append( (char)rc );				
+			l_strbuf.append( (char)rc );
 		}
 
 		if( l_strbuf.length()  == 0)
@@ -196,6 +196,6 @@ public class PPgToken {
 
 		//		System.out.println( "Paragraph=" + l_strbuf );
 		return l_strbuf;
-	}				
+	}
 }
 //***********************************

@@ -1,0 +1,68 @@
+Descriptions des differents repertoires :
+
+
+Les librairies generalistes
+=============================
+
+PPgUtils :
+
+ Classes de base utilitaire, gestion des parametre, des fichiers ini
+ des token ...
+
+
+
+PPgMath :
+
+ Classes de base mathematiques : points, rectangle, vecteurs ...
+
+
+
+PPgImg :
+
+ Classes de base portant sur les images
+
+
+
+Les librairies pour jeux
+=============================
+
+
+PPgGame :
+
+	Les classes de  base pour les jeux videos
+
+
+PPgRts :
+
+  Des classes specialisé pour les RTS
+
+
+Les programmes/Test/Demos
+========================
+
+Towers :
+			 
+	Une demos de RTS
+
+
+
+
+PPgTest :
+
+	Une simple demo utilisant des boids ( a partir d'un exmple du Web)
+
+Boid :
+
+	Une simple demo utilisant des boids ( adaptation du code de Poul
+	Henriksen)
+
+
+Divers
+========================
+
+Ressources :
+		
+		Des ressources graphiques ou autre pour les differents programmes
+
+OldGLib :
+	 Vieux code pour RTS 

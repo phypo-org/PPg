@@ -13,40 +13,40 @@ import org.phypo.PPg.PPgData.DataChgNotifier;
 import org.phypo.PPg.PPgData.DataChgNotifierClient;
 import org.phypo.PPg.PPgData.HistoryDuration;
 import org.phypo.PPg.PPgFX.DataViewObj;
-import org.phypo.PPg.PPgUtils.Log;
+import org.phypo.PPg.PPgUtils.PPgTrace;
 
 @SuppressWarnings("unchecked")
 
 //********************************************************************
 
 public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements DataChgNotifierClient {
-	
-	
+
+
 	HistoryDuration                cDuration      = HistoryDuration.Day1;
 	boolean                        cUseDuration   = true;
 	protected LocalDateTime        cStartDate     = null;
 	protected LocalDateTime        cEndDate       = null;
-	
+
 	public boolean         useDuration()  { return cUseDuration;}
 	public HistoryDuration getDuration( ) { return cDuration;}
-	public void            setIntervalDate(LocalDateTime iStartDate, LocalDateTime iEndDate ) {		
+	public void            setIntervalDate(LocalDateTime iStartDate, LocalDateTime iEndDate ) {
 		 cStartDate     = iStartDate;
 		 cEndDate       = iEndDate;
 		 cUseDuration   = false;
-	}	
-	public  void          setDuration(HistoryDuration iDuration ) {		
+	}
+	public  void          setDuration(HistoryDuration iDuration ) {
 		cDuration = iDuration;
 		cUseDuration = true;
-	}	
+	}
 	public LocalDateTime getStartDateTime( ) { return cStartDate; }
 	public LocalDateTime getEndDateTime( )   { return cEndDate; }
 	//-------------------------------------------------
-	
+
 
 	protected HashMap<KEY, OBJ>    cMap          = new HashMap<>();
 	protected HashSet<KEY>         cAlive        = null;
 
-	
+
 	protected void killZombieAtLoad() {
 		cAlive = new HashSet<>();
 	}
@@ -93,13 +93,13 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 	}
 	//-------------------------------------------------
 	public void removeObject( OBJ iObj, Iterator<OBJ> iIterObj ) {
-		cMap.remove( (KEY)iObj.getKey());
+		cMap.remove( iObj.getKey());
 		iIterObj.remove();
 	}
 	//-------------------------------------------------
 	public void removeObject( OBJ iObj ) {
 		myViewRemoveLine( iObj );
-		cMap.remove((KEY)iObj.getKey());
+		cMap.remove(iObj.getKey());
 	}
 	//-------------------------------------------------
 	OBJ getFromKey( KEY iKey ) {
@@ -107,7 +107,7 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 	}
 	//-------------------------------------------------
 	public abstract boolean hasViewRight();
-	public abstract boolean hasModifRight(); 
+	public abstract boolean hasModifRight();
 	protected abstract boolean load(SqlConnex iConnex);
 	public synchronized boolean callSyncLoad( SqlConnex iConnex ) { return load(iConnex);}
 
@@ -165,52 +165,52 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 	protected SqlTableReader(String iName){
 		//		super( iTitle, false);
 		if( iName != null )
-			cName = iName;		
+			cName = iName;
 	}
 	//-------------------------------------------------
 	protected void activeUpdateTracking() {
 		if( cName == null ) {
-			Log.Fatal( "SqlTableReader activeUpdateTracking - Target is null\n" 
+			PPgTrace.Fatal( "SqlTableReader activeUpdateTracking - Target is null\n"
 					+ Thread.currentThread().getStackTrace().toString());
 			System.exit(1);
 		}
-		Log.Dbg( "=================== SqlTableReader activeUpdateTracking register : " + cName );
-		
+		PPgTrace.Dbg( "=================== SqlTableReader activeUpdateTracking register : " + cName );
+
 		DataChgNotifier.Instance().register( cName, this);
 	}
 	//-------------------------------------------------
 	protected void deactiveUpdateTracking() {
 		if( cName == null ) {
-			Log.Fatal( "SqlTableReader deactiveUpdateTracking - Target is null\n" 
+			PPgTrace.Fatal( "SqlTableReader deactiveUpdateTracking - Target is null\n"
 					+ Thread.currentThread().getStackTrace().toString());
 			System.exit(1);
 		}
-		Log.Dbg( "=================== SqlTableReader deactiveUpdateTracking register : " + cName );
-		
+		PPgTrace.Dbg( "=================== SqlTableReader deactiveUpdateTracking register : " + cName );
+
 		DataChgNotifier.Instance().unregister( cName, this);
 	}
 	//-------------------------------------------------
 	protected boolean loadFromDatabase(SqlConnex iConnex, String iStrSql) {
-		
+
 		prepareKillZombies();
 
 		//				SqlConnex lConnex = JizAd.Instance().getDatabaseConnex();
 		if( iConnex == null ) return false;
 
-		if( (iConnex.sendCommandResult(iStrSql,new SqlResultsExecData(){			
-			public void oneRow(int pNumResult, int pNumRow, ResultSetMetaData pMeta, ResultSet pResultSet) throws SQLException {	
-				setLineFromRow( pResultSet );			
-			}})
-				) == false ){
-			Log.Err( "SqlTableReader.loadFromDatabase <" +iStrSql+"> failed");
+		if( !iConnex.executeStatementCursor(iStrSql,new SqlResultsExecData(){
+			@Override
+			public void oneRow(int pNumResult, int pNumRow, ResultSetMetaData pMeta, ResultSet pResultSet) throws SQLException {
+				setLineFromRow( pResultSet );
+			}}) ){
+			PPgTrace.Err( "SqlTableReader.loadFromDatabase <" +iStrSql+"> failed");
 			return false;
 		}
 
 		killZombies();
-		
+
 		myViewRefreshView();
-		
-		return true;	
+
+		return true;
 	}
 	//-------------------------------------------------
 	protected void prepareKillZombies() {
@@ -229,23 +229,23 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 				Iterator<OBJ> lIter = myViewGetIterator();
 				if( lIter == null ) {
 					return ;
-				}					
+				}
 				while( lIter.hasNext()) {
 					OBJ lObj = lIter.next();
-					if( cAlive.contains(lObj.getKey()) == false ) {
+					if( !cAlive.contains(lObj.getKey()) ) {
 						removeObject(lObj, lIter);
 						lObj.setInvalid();
 					}
 				}
 				if( lNbDel != 0 ) {
-					Log.Dbg( "loadFromDatabase " + " delete " + lNbDel);
+					PPgTrace.Dbg( "loadFromDatabase " + " delete " + lNbDel);
 				}
 //			});
 			//===========================
-		}	
+		}
 	}
 	//-------------------------------------------------
-	abstract protected OBJ createLineFromRow( ResultSet pResultSet) throws SQLException;	
+	abstract protected OBJ createLineFromRow( ResultSet pResultSet) throws SQLException;
 	//-------------------------------------------------
 	private boolean setLineFromRow( ResultSet iResultSet)throws SQLException{
 
@@ -257,16 +257,16 @@ public abstract class SqlTableReader< KEY, OBJ extends DataViewObj>  implements 
 
 		OBJ lOld = cMap.get( lObj.getKey());
 		if( lOld != null ) {
-				Log.Dbg3( "setLineFromRow SET " + cName +"."+ lOld.getKey() );
-			
+				PPgTrace.Dbg3( "setLineFromRow SET " + cName +"."+ lOld.getKey() );
+
 			lOld.setFrom( lObj );
 		} else {
-				Log.Dbg3( "setLineFromRow ADD "+ cName +"."+ lObj.getKey() );
+				PPgTrace.Dbg3( "setLineFromRow ADD "+ cName +"."+ lObj.getKey() );
 			addLine( lObj );
 		}
 
 		if( cAlive != null ) {
-			// Stocking all the living 
+			// Stocking all the living
 			cAlive.add((KEY)lObj.getKey());
 		}
 

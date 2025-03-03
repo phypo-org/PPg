@@ -1,0 +1,13 @@
+all:: D4K.class FrameMaps.class DKMap.class IniParam.class FrameMaps.class DialogNewMap.class Machine.class Service.class FrameMachines.class CanvasMachines.class InterfaceCanvas.class FrameCanvasCnx.class Sprite.class SpriteImg.class SpriteAppli.class SpriteCnx.class DataCanvasCnx.class ServBase.class FrameProps.class SurvParam.class
+
+
+
+FREECHART_JAR=${JFREECHART_PATH}/jfreechart-1.0.19.jar:${JFREECHART_PATH}/jcommon-1.0.23.jar
+MARIADB_JAR=~/bin/mariadb-java-client-1.1.10.jar
+
+clean::
+	rm *.class 
+
+%.class: %.java
+	javac   -classpath ../../..:${FREECHART_JAR}:${MARIADB_JAR} -deprecation -g  $*.java
+

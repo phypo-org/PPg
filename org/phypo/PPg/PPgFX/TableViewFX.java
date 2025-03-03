@@ -7,8 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import org.phypo.PPg.PPgUtils.Log;
-
+import org.phypo.PPg.PPgUtils.PPgTrace;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -28,21 +27,21 @@ import javafx.scene.input.MouseEvent;
 //***********************************
 public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY, OBJ > {
 
-	protected TableView<OBJ>    cTable = new TableView<OBJ>();
+	protected TableView<OBJ>    cTable = new TableView<>();
 	public ObservableList<OBJ>  cList  = null;
 
 	public TableView<OBJ>      getTableView() { return cTable; }
 	public ObservableList<OBJ> getContainer() { return cList; }
 
 	boolean cAutoResize = false;
-	
+
 	// Only use with second constructor
 	private FilteredList<OBJ>     cFilteredList = null;
 	private SortedList<OBJ>       cSortedList   = null;
 
 	//--------------------------------------------
 	@Override
-	public void setFilter( Predicate<OBJ> iPred ) { 
+	public void setFilter( Predicate<OBJ> iPred ) {
 		cFilteredList.setPredicate( iPred );
 		writeSize2Foot();
 	}
@@ -57,11 +56,11 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	//--------------------------------------------
 	public TableViewFX( String iTitle ){
 		this( iTitle, false );
-	}	
+	}
 	//--------------------------------------------
 	public TableViewFX( String iTitle, ObservableList<OBJ>  iList ){
 		this( iTitle, false, iList );
-	}	
+	}
 	//--------------------------------------------
 	public TableViewFX( String iTitle, boolean iFilter ) {
 		this( iTitle, iFilter, null);
@@ -69,37 +68,37 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	//--------------------------------------------
 	public TableViewFX( String iTitle, boolean iFilter, ObservableList<OBJ>  iList ) {
 		super( iTitle );
-		
+
 		if(  iList == null ) {
 			cList  = FXCollections.observableArrayList();
 		} else {
 			cList = iList;
 		}
-		
-		
+
+
 		cPrimPane.setCenter( cTable );
 		//		Log.Dbg("TableFX");
 
 		setMouveEventHandler();
 
 
-		if( iFilter ) {			
+		if( iFilter ) {
 			cFilteredList = new FilteredList<>( cList, p -> true);
 			cSortedList   = new SortedList<>(cFilteredList);
 			cSortedList.comparatorProperty().bind(cTable.comparatorProperty());
-			cTable.setItems( cSortedList );		
+			cTable.setItems( cSortedList );
 		}
 		else {
 			cTable.setItems(cList);
-		}		
+		}
 		setListenerSelectWriteFoot();
 	}
 	//--------------------------------------------
 	protected void setListenerSelectWriteFoot() {
 		cTable.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change<? extends OBJ> c) -> {
 
-			// Platform.runLater( () -> { 
-			writeSize2Foot(); 	
+			// Platform.runLater( () -> {
+			writeSize2Foot();
 		});
 	}
 	//--------------------------------------------
@@ -108,12 +107,12 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	//--------------------------------------------
 	@Override
 	public void refreshView() {
-		
-		Log.Dbg( "       TableViewFX.refreshView ");
-		
+
+		PPgTrace.Dbg( "       TableViewFX.refreshView ");
+
 		if( cAutoResize )
 			autoResizeColumns();
-		
+
 		getTableView().refresh();
 		writeSize2Foot();
 	}
@@ -126,38 +125,38 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 		TableFxHelper.SetSortable( getTableView(), iFlagSort );
 	}
 	//--------------------------------------------
-	@Override 
+	@Override
 	public void	setMouveEventHandler() {
 		cTable.addEventHandler( MouseEvent.MOUSE_PRESSED,
 
 				new EventHandler<MouseEvent>() {
-			//=========================				
+			//=========================
 			@Override
 			public void handle(MouseEvent iEv) {
-				Log.Dbg("TableFx handle(MouseEvent " + iEv);
+				PPgTrace.Dbg("TableFx handle(MouseEvent " + iEv);
 
 				OBJ lItem  = getSelectedItem();
 				int lPosItem = getSelectedIndex();
 
 				if(iEv.getButton().equals(MouseButton.PRIMARY)){
 					if(iEv.getClickCount() == 2){
-						doubleClick( iEv, lItem, lPosItem );				           
+						doubleClick( iEv, lItem, lPosItem );
 					}
 					else {
-						simpleClick( iEv, lItem, lPosItem );				           
+						simpleClick( iEv, lItem, lPosItem );
 					}
 				}
-				else if( iEv.getButton().equals(MouseButton.SECONDARY)) { 
-					Log.Dbg("TableFx handle secondary");
+				else if( iEv.getButton().equals(MouseButton.SECONDARY)) {
+					PPgTrace.Dbg("TableFx handle secondary");
 
 					ContextMenu lMenu = new ContextMenu();
 					lMenu.setOnAutoHide(null);
 
-					if( addPopupMenuItems( lMenu, iEv, lItem, lPosItem) ){	
+					if( addPopupMenuItems( lMenu, iEv, lItem, lPosItem) ){
 						lMenu.show(cTable.getScene().getWindow(),iEv.getScreenX(), iEv.getScreenY());
 					}
 					if( (cFlagAutoMenu & MENU_SELECTION) != 0 ) addSelectMenuItems( lMenu, iEv, lItem,  lPosItem  );
-					if( (cFlagAutoMenu & MENU_CSV) != 0 )       addCSVMenuItems   ( lMenu, iEv, lItem,  lPosItem );					
+					if( (cFlagAutoMenu & MENU_CSV) != 0 )       addCSVMenuItems   ( lMenu, iEv, lItem,  lPosItem );
 				}
 				//=========================
 			}
@@ -174,7 +173,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	}
 	//--------------------------------------------
 	@Override
-	public void writeSize2Foot() {		
+	public void writeSize2Foot() {
 		if( totalSize() == 0 ) {
 			writeFoot( cFootLastMsg + " no row");
 		}
@@ -185,7 +184,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 
 			int lNbSelect = cTable.getSelectionModel().getSelectedItems().size();
 			if( lNbSelect > 0 ) {
-				lStrSelect = "["+lNbSelect +']';	
+				lStrSelect = "["+lNbSelect +']';
 			}
 
 
@@ -203,7 +202,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	//--------------------------------------------
 	public <TYPE>  TableColumn<OBJ, TYPE> addTopColumn( String iLabel ){
 		return  FxHelper.addTopColumn( cTable, iLabel );
-	}	
+	}
 	//--------------------------------------------
 	public <TYPE>  TableColumn<OBJ,TYPE> addSubColumn( TableColumn<OBJ,TYPE> iCol, String iLabel, String iVarName  ){
 		return FxHelper.addSubColumn( iCol, iLabel, iVarName);
@@ -215,21 +214,21 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 		if( cSortedList != null ) {
 			return cSortedList;
 		}
-		return cList;		
+		return cList;
 	}
 	//---------------------------------------------------------------
 	@Override
-	public void clearLines()        { 
-		Log.Dbg( "TableFx.clearLines" );
+	public void clearLines()        {
+		PPgTrace.Dbg( "TableFx.clearLines" );
 		cList.clear();
 	}
 	public int  totalSize()           { return cList.size(); }
 	//--------------------------------------------
-	public int filterSize() { 
+	public int filterSize() {
 		if( cSortedList != null ) {
-			return cSortedList.size() ;		
-		} 
-		return totalSize(); 
+			return cSortedList.size() ;
+		}
+		return totalSize();
 	}
 	//--------------------------------------------
 	public OBJ addLine( OBJ iObj ) {
@@ -251,8 +250,8 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 
 		cList.addAll( iCollect);
 		//for( OBJ lObj :  iCollect ) {
-		//			addLine( lObj); 
-		//	}	
+		//			addLine( lObj);
+		//	}
 		writeSize2Foot("");
 	}
 	//--------------------------------------------
@@ -293,10 +292,10 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 
 	//--------------------------------------------
 	/*public void removeSelectedLine() {
-		//	cTablesetEditable(true)		
+		//	cTablesetEditable(true)
 		int lSelectedIndex = cTable.getSelectionModel().getSelectedIndex();
 		if (lSelectedIndex >= 0) {
-			cTable.getItems().remove(lSelectedIndex);	
+			cTable.getItems().remove(lSelectedIndex);
 			writeSize2Foot("");
 		}
 	}
@@ -304,11 +303,11 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	//--------------------------------------------
 	/*
 	public OBJ removeSelectedLineObject() {
-		//	cTablesetEditable(true)		
+		//	cTablesetEditable(true)
 		int lSelectedIndex = cTable.getSelectionModel().getSelectedIndex();
 		if (lSelectedIndex >= 0) {
-			OBJ lTmp = cTable.getItems().get( lSelectedIndex );			
-			cTable.getItems().remove(lSelectedIndex);	
+			OBJ lTmp = cTable.getItems().get( lSelectedIndex );
+			cTable.getItems().remove(lSelectedIndex);
 			writeSize2Foot("");
 			return lTmp;
 		}
@@ -329,7 +328,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 			cTable.getItems().remove(i.intValue()); //    UnsupportedOperationException !!!!!!!!!
 		}
 		writeSize2Foot("");
-	}	
+	}
 
 	//--------------------------------------------
 	public ArrayList<OBJ>  removeSelectedLinesByObject() {
@@ -337,7 +336,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 		ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
 		cList.removeAll( lListObj );
 		return lListObj;
-	}		
+	}
 	//--------------------------------------------
 
 	public ArrayList<OBJ>removeAndGetAllSelectedLines() {
@@ -345,20 +344,20 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 		ArrayList<OBJ> lListObj = new ArrayList<>( getSelectedItems() );
 		removeAllSelectedLines();
 		return lListObj;
-	}		
+	}
 
 	//--------------------------------------------
 	public void removeObject( OBJ iObj ) {
-		cTable.getItems().remove(iObj);	
+		cTable.getItems().remove(iObj);
 		writeSize2Foot("");
 	}
 	//--------------------------------------------
 	public void removeIndex( int iPos ) {
-		cTable.getItems().remove(iPos);	
+		cTable.getItems().remove(iPos);
 		writeSize2Foot("");
 	}
 	//--------------------------------------------
-	public void setSelectionMode( SelectionMode value) { 
+	public void setSelectionMode( SelectionMode value) {
 		cTable.getSelectionModel().setSelectionMode(value );
 
 		// SelectionMode.MULTIPLE);
@@ -367,7 +366,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	public void setSelectItem( OBJ iObj  ) {
 
 		int lPos = getIndexOf( iObj );
-		setSelectIndex( lPos );	
+		setSelectIndex( lPos );
 	}
 	//--------------------------------------------
 	public void scrollToIndex( int iIndex ) {
@@ -395,13 +394,13 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	}
 	//--------------------------------------------
 	@Override
-	public void selectAll() { 
-		cTable.getSelectionModel().selectAll();		
+	public void selectAll() {
+		cTable.getSelectionModel().selectAll();
 		// SelectionMode.MULTIPLE);
 	}
 	//--------------------------------------------
-	public ObservableList<OBJ> getSelectedItems(){ 
-		return cTable.getSelectionModel().getSelectedItems();		
+	public ObservableList<OBJ> getSelectedItems(){
+		return cTable.getSelectionModel().getSelectedItems();
 	}
 	//--------------------------------------------
 	public ObservableList<Integer> getSelectedIndexs(){
@@ -410,7 +409,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	//--------------------------------------------
 	public void select( List<OBJ>  iList ) {
 
-		for( OBJ lObj :  iList ) 
+		for( OBJ lObj :  iList )
 			cTable.getSelectionModel().select( lObj );
 	}
 	//--------------------------------------------
@@ -420,13 +419,13 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 	//--------------------------------------------
 	public void selectPos( List<Integer>  iList ) {
 
-		for( Integer lIndice :  iList ) 
+		for( Integer lIndice :  iList )
 			cTable.getSelectionModel().select( lIndice );
 	}
 	//--------------------------------------------
 	public String export2CSV( File iFile, String iType, boolean iFlagSelection) {
 
-		Log.Dbg( "   TableFx export2CSV" );
+		PPgTrace.Dbg( "   TableFx export2CSV" );
 
 		List<OBJ> lList = null;
 		if( iFlagSelection ) {
@@ -435,7 +434,7 @@ public class TableViewFX<KEY, OBJ extends DataViewObj>  extends DataViewFx <KEY,
 		{
 			lList = getContainer();
 		}
-		return  writeFile( iType, iFile, lList);			
+		return  writeFile( iType, iFile, lList);
 	}
 }
 //***********************************

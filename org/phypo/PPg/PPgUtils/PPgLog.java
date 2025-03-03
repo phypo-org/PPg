@@ -7,11 +7,11 @@ import java.io.PrintStream;
 //*************************************************
 
 public class PPgLog{
-
 	public static PrintStream Out =  System.out ;
 	public static PrintStream Err =  System.err;
 
 	public static PrintStream Dbg = new PrintStream( new OutputStream() {
+		@Override
 		public void write(int b) {
 			//DO NOTHING
 		}}
@@ -26,19 +26,19 @@ public class PPgLog{
 			Out = lTmp ;
 			Err = lTmp ;
 			return true;
-		} catch (FileNotFoundException e) {				
+		} catch (FileNotFoundException e) {
 			return false;
 		}
-	}	
+	}
 	static public boolean UseDbgFile( String iFilename ){
 		try {
 			Dbg = new PrintStream(  iFilename );
 			return true;
-		} catch (FileNotFoundException e) {				
+		} catch (FileNotFoundException e) {
 			return false;
 		}
 	}
-	
+
 	static public boolean UseDbg( ){
 		Dbg = Out;
 		return true;

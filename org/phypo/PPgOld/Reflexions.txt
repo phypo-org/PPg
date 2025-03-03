@@ -1,0 +1,94 @@
+		Dans le jeu il existe des entite active qui execute un programme a
+		chaque tour de jeu nous les appelerons Entité ou Acteur. Celle ci ne seront
+		pas forcement implementé sous une forme graphique visible par le
+		joueur, bien qu'en général se soit le cas,  celle ci peuvent dans
+		ce cas avoir une positon geographique et une representation
+		physique elles peuvent etre mobile ou non.
+
+		Les acteurs peuvent etres créées au demarage du jeu ou au cours de
+		celui ci, des entitées peuvent en créer d'autres.
+
+
+
+		// Ils faut qu'il existe des proprietes pouvant etre associees a tout les types d'objets chaque a chaque proprietes on peut associer un mode d'action
+		// un temps d'actions un sns +/- enemi/amis portées, rayon d'action
+
+		// c'est proprietes peuvent etre associe  a des unites des lieux des items ...
+		
+
+		// Cout en ressource a la creation
+		// Cout en ressource en existence
+
+		// Capactite de production de ressource
+		// Capacite de Construction d'autre entity
+
+		// Les ressources propres a chaque unite Vie, Mana, Endurence, Experience ...  + capacite de recuperation pour chacune
+
+		// Deplacement : Vitesse acceleration, agilté, Capacite de deplacement en fonction du terrain
+		// Detection   : vision, vison en fonction du terrain, vision des unitées furtives, sous marine...
+
+		// Les differentes capacites peuvent etre ajoute au unites sous formes de listes d'effets  ( armes,sort, boucliers pouvant agir sur tout )
+		// Capacite d'attaque  : -> listes des armes et des sorts  (chaque arme avec les effets les ressources des unités)
+		// Capacite de defense : -> listes des defense et des sorts
+
+
+		Resource: Or,Bois,Pierre,Mana,Energie,Fer ...             // il	s'agit de ressources generales
+		Qualité: Vitesse, Agilite, Force, Vie, Mana, Resistance,
+		resistance au feu, resistance au poison ...  // il
+		s'agit de resource propre aux entites avec un operateur +-/* ...
+		
+
+
+		Une unite a forcément toute les Qualite avec une valeur Max
+		(Prototype) et une valeur courante certaine valeur (vie) pouvant
+		entrainer le disparition de l'entité, des items peuvent augmenter
+		les capacités :
+		
+		Une Armure Agilitee -10%, Resistance + 500% 
+		Bague magique Vie +2
+		
+		Il peut s'agir d'un item temporaire -> enchantement !
+		Certain items peuvent de vendre ou s'echanger ou s'user
+
+
+		Questions:
+
+		 Pour les unitées toutes les ressources sont elles aux meme nveau ou faut il
+		 differenecier les ressources comme l'or le bois ... des autres
+		 ressources. J'aurais tendance a differencier les ressources
+		 globales bois, or ... des ressources propre aux unites vie, mana
+		 ...
+		 Dans un jeu a la premiére personne il n'yaura par exmple qu'une
+		 seule unité du coté du joueur !
+
+		 Faut ils avoir une grandre liste de de toutes les proprites en
+		 vrac, ou faut il essayer de les classer ?
+		 Dans le cas de capacite par exemple la Vie, il suffit d'addionner
+		 dans le cas d'arme pour peut qu'elles est des portées diffentes,
+		 des temps de latence différents ...
+		 Peut etre faut 'il differencie les items actifs comme les armes
+		 des items passifs, les actifs etant represente par des sous
+		 entites indepedantes
+
+		 unite --- arme 1
+		 			 |-- arme 2
+					 |__ arme 3
+
+					 chaque arme étant activer a son tour
+
+		On pourrait avoir pluisieurs listes :
+		 - la listes des proprietes de base
+		 - la liste des items passifs
+  	 - liste des items actifs (des sous unites), avec leur propres
+		activations et pouvant faire heriter l'unite maitre de leurs proprietes
+
+
+		 Remarques: 
+		 Les unitées mobiles, les batiments, les defenses, les piéges les sorts de zones
+		 ... tout peut etre considerees comme un seul type de base : les
+		 unites , seul leur proprites les differencies
+
+
+		 Les items peuvent rattaché a des classes  (ex: Armes, Armures,
+		 potions, poison ) qui obligent un mode opératoire bien précis ,
+		 voir dans certain cas l'implementation dans des classes d'objets prédéfinies.

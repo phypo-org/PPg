@@ -2,12 +2,10 @@ package org.phypo.PPg.PPgUtils;
 
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Base64;
+import java.util.Collection;
 
 
 //*************************************************
@@ -45,7 +43,7 @@ public class PPgUtils{
 
 		int lLength = pSrc.length();
 		StringBuilder pBuffer = new StringBuilder( lLength + 8 );
-		
+
 		pBuffer.append(pChar);
 		for( int i=0 ; i < lLength; i++ ) {
 
@@ -88,15 +86,15 @@ public class PPgUtils{
 		StringBuilder lStr;
 
 		while( (lStr=lTok.nextToken())!= null){
-			pCollect.add(lStr.toString());						
+			pCollect.add(lStr.toString());
 		}
 		return pCollect ;
 	}
 
 	//--------------------------------------------
 	public static boolean CheckAscii (byte iArray[]) {
-		for (int i=0; i< iArray.length; i++) {
-			if (iArray[i] < 0) return false;
+		for (byte element : iArray) {
+			if (element < 0) return false;
 		}
 		return true;
 	}
@@ -104,15 +102,15 @@ public class PPgUtils{
 	public static String HexDump(String iStr, StringBuilder iBuilder) {
 		byte [] lArray = Base64.getDecoder().decode(iStr);
 
-		return HexDump(lArray, iBuilder);		
-	}		
+		return HexDump(lArray, iBuilder);
+	}
 	//---------------------
 	public static String HexDump( byte iArray[] , StringBuilder iBuilder) {
 
 		final int lWidth = 16;
 		int lLength = iArray.length;
 
-		//==========================			
+		//==========================
 		for (int lOffset = 0; lOffset <  lLength; lOffset += lWidth) {
 			iBuilder.append(String.format("%04d: ", lOffset));
 
@@ -125,16 +123,16 @@ public class PPgUtils{
 			}
 
 
-			//	if (lOffset < lLength) 
-			{				
+			//	if (lOffset < lLength)
+			{
 				iBuilder.append("| ");
 				for (int index = 0; index < lWidth; index++) {
-					if (lOffset + index < lLength) {						
+					if (lOffset + index < lLength) {
 						byte lVal= iArray[lOffset + index];
-						if( lVal < 32 || lVal > 127 ) 
+						if( lVal < 32 || lVal > 127 )
 							lVal = '.';
 						iBuilder.append((char)lVal );
-					}				
+					}
 					else {
 						iBuilder.append(' ' );
 					}
@@ -146,16 +144,16 @@ public class PPgUtils{
 						//If UTF-8 isn't available as an encoding then what can we do?!
 					}
 				 */
-			}			
+			}
 			iBuilder.append(String.format("%n"));
-		}			
-		//==========================			
+		}
+		//==========================
 
 		return iBuilder.toString();
-	}	
+	}
 	//-------------------------------
 	// lit le stream et met le resultat dans le StringBuilder
-	public static boolean Read( String iTag, InputStreamReader iInput, BufferedReader iReader, StringBuilder iBuild ) throws IOException {		
+	public static boolean Read( String iTag, InputStreamReader iInput, BufferedReader iReader, StringBuilder iBuild ) throws IOException {
 
 		boolean lFlagRead = false;
 
@@ -166,9 +164,9 @@ public class PPgUtils{
 			lFlagRead = true;
 		}
 //////		Log.Dbg3(" PPgUtils.Read ->" + iBuild.toString());
-		if( lFlagRead) {			
+		if( lFlagRead) {
 			return true;
-		} 
+		}
 		return false;
 	}
 

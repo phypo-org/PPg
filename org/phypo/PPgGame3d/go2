@@ -1,0 +1,11 @@
+
+JOGAMP_JAR\
+=${JOGAMP_PATH}/jar/joal.jar\
+:${JOGAMP_PATH}/jar/jocl.jar\
+:${JOGAMP_PATH}/jar/jogl-all.jar\
+:${JOGAMP_PATH}/jar/gluegen-rt.jar\
+:${JOGAMP_PATH}/jar/*natives-linux-i586.jar\
+
+echo $LD_LIBRARY_PATH
+
+java  -debug -cp ../../..:${JOGAMP_JAR}  org/phypo/PPgGame3d/PPgGame3d -F30 -f 

@@ -1,0 +1,1 @@
+java -debug -Xmx256m -cp :$JAVA_HOME/lib/ext/j3dcore.jar:$JAVA_HOME/lib/ext/j3dutils.jar:$JAVA_HOME/lib/ext/vecmath.jar:../../.. com/phipo/NEW/Test/TGLib  $* 

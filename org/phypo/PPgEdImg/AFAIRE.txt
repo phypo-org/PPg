@@ -1,0 +1,80 @@
+
+
+X - Bug saisie Pencil changement de fenetre
+X - Selection avec cadre 
+
+X Partage d'une partie des outils entre les instances
+x Partage du contenu de la selection entre instances
+
+- Pb d'affichage de la selection dut au partage de la selection
+	(afficher la selection que dans l'instance vivante) et faire un
+	redessin en quittant une fenetre !
+
+X - Bug Affichage Figure avec fond transaparent
+
+x - Dialogue couleurs pb avec souris et autre
+
+X - Curseurs pour chaque outils
+
+x - Afficher les dialogues au milieu de l'ecran !
+
+? - Rectangle 3d ne marche pas ( reglages)
+
+
+X - Resize de l'image
+
+
+- Refaire historique Rotation plus simple
+
+- Rotation libre a refaire
+
+- Pinceau, Degrades, Wand, Texte a faire
+
+? - Zoom : effacer Toute la fenetre car trace parasite 
+
+- Mettre Histo pour toute les fonctions
+
+
+- Sauvegarde avec autre chose que PNG
+
+- Modification de la Selection pb avec les inversion d'axes : pas
+  d'inversion del'image
+
+- Debug FillColor degradé
+
+- HISTORIQUE MARCHE PLUS !!!
+
+- Transaprence pour degrade ...
+
+- Mettre les outils commun en un seul exemplaire pou tous
+
+====================================================================
+
+- Lasso comme un polyline
+
+- Layer : masque Opaque/transparent  OR/XOR/AND ...
+X - Layer	up/down, delete, fusion
+
+- Windows liste des frames
+
+- Degrader ligne carre, cercle avec saisie par une ligne debut /fin
+	calcul du pas avec la distance
+
+- Outil loupe +/- celon bouton + rectangle 
+
+X - Presse-papier ^C ^V ^X ...
+
+- Polyline
+
+- Polyspline
+
+- Flip/flap qd selection s'inverse 
+
+- generalisation du slider opacity (sauf le crayon?)
+
+- Magic Wand comme le remplissage avec tableau de char avec valeur
+  speciale a l'arret + 2eme phase de detection des contour -> lasso
+
+- Rotation a n degre beginOP sur le centre puis mvt souris pour  amplitude
+
+

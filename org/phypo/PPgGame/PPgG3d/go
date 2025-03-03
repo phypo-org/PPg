@@ -1,0 +1,4 @@
+LWGL_JAR=${LWJGL_PATH}/jar/lwjgl.jar:${LWJGL_PATH}/jar/lwjgl_util.jar:${LWJGL_PATH}/jar/jinput.jar:${LWJGL_PATH}/jar/lwjgl-debug.jar:${LWJGL_PATH}/jar/slick-util.jar
+
+
+java -debug -cp ../../../..:$LWGL_JAR  com/phipo/PPg/PPgG3d/PPgG3d $*

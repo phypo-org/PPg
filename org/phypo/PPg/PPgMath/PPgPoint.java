@@ -16,5 +16,5 @@ public class PPgPoint extends Point2D.Double {
 		public PPgPoint( Point2D.Double pPoint ) {
 				super( pPoint.x, pPoint.y );
 		}
-};
+}
 //*************************************************

@@ -3,24 +3,12 @@ package org.phypo.PPg.PPgImg;
 
 
 
-import org.w3c.dom.*;
-
-import java.io.*;
-import java.util.*;
-import java.lang.*;
-
-
-import java.awt.*;
-import java.awt.geom.*;
 import java.awt.Image;
-import java.awt.image.*;
-import java.awt.color.ColorSpace;
-
-
-import javax.imageio.*;
-import javax.imageio.stream.ImageOutputStream;
-
-import javax.swing.*;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.awt.image.MemoryImageSource;
+import java.awt.image.PixelGrabber;
 
 
 //*************************************************
@@ -38,7 +26,7 @@ class PPgImgTab{
 				cWidth  = pBufIn.getWidth();
 				cHeight = pBufIn.getHeight();
 
-				cTab = GetTab3D( pBufIn ); 
+				cTab = GetTab3D( pBufIn );
 		}
 		//------------------------------------------------
 		PPgImgTab( PPgImgTab pTab ){
@@ -71,7 +59,7 @@ class PPgImgTab{
 
 		static int [][][] GetTab3D( int pW, int pH ){
 
-				int [][][] lData = new int[pH][pW][4];	
+				int [][][] lData = new int[pH][pW][4];
 				return lData;
 		}
 		//------------------------------------------------
@@ -104,21 +92,21 @@ class PPgImgTab{
 				//conversion en argb
 
 				// allocation du tableau 3d
-				int [][][] lData	= GetTab3D(	lWidth, lHeight);	
-		
+				int [][][] lData	= GetTab3D(	lWidth, lHeight);
+
 				// Remplissage du tableau 3d
 				for (int lRow = 0; lRow < lHeight; lRow++) {
 						for (int lCol = 0; lCol < lWidth; lCol++) {
 								lData[lRow][lCol][0] = (lPixels[lRow * lWidth + lCol] >> 24) & 0xff;	// alpha
-								lData[lRow][lCol][0] = (lPixels[lRow * lWidth + lCol] >> 16) & 0xff;  // red 
+								lData[lRow][lCol][0] = (lPixels[lRow * lWidth + lCol] >> 16) & 0xff;  // red
 								lData[lRow][lCol][0] = (lPixels[lRow * lWidth + lCol] >>  8) & 0xff;  // green
-								lData[lRow][lCol][0] = (lPixels[lRow * lWidth + lCol]      ) & 0xff;  // blue								
+								lData[lRow][lCol][0] = (lPixels[lRow * lWidth + lCol]      ) & 0xff;  // blue
 						}
 				}
 				return lData;
 		}
 		//------------------------------------------------
-			
+
 		public static BufferedImage GetBufferedImage( int [][][] pData, int pW, int pH ){
 
 
@@ -126,11 +114,11 @@ class PPgImgTab{
 
 				int lIndex = 0;
 
-				for(int lRow = 0;lRow < pH; lRow++){	
-	
+				for(int lRow = 0;lRow < pH; lRow++){
+
 						for(int lCol = 0; lCol < pW; lCol++){
-								
-								lPixels[ lIndex++ ] = 
+
+								lPixels[ lIndex++ ] =
 										((pData[lRow][lCol][0] << 24)
 										   & 0xFF000000)
 										| ((pData[lRow][lCol][1] << 16)
@@ -152,12 +140,12 @@ class PPgImgTab{
 		//------------------------------------------------
 		//------------------------------------------------
 		public static void Correct(  int [][][] pData, int pW, int pH ){
-				for(int lRow = 0;lRow < pH; lRow++){	
+				for(int lRow = 0;lRow < pH; lRow++){
 						for(int lCol = 0; lCol < pW; lCol++){
 								for( int i=0; i< 4; i++ )
 										if( pData[lRow][lCol][i] > 255 )
 												pData[lRow][lCol][i] = 255;
-										else 
+										else
 												if( pData[lRow][lCol][i] < 0 )
 														pData[lRow][lCol][i] = 0;
 						}
@@ -165,12 +153,12 @@ class PPgImgTab{
 		}
 		//------------------------------------------------
 		public static void CorrectRGB(  int [][][] pData, int pW, int pH ){
-				for(int lRow = 0;lRow < pH; lRow++){	
+				for(int lRow = 0;lRow < pH; lRow++){
 						for(int lCol = 0; lCol < pW; lCol++){
 								for( int i=1; i< 4; i++ )
 										if( pData[lRow][lCol][i] > 255 )
 												pData[lRow][lCol][i] = 255;
-										else 
+										else
 												if( pData[lRow][lCol][i] < 0 )
 														pData[lRow][lCol][i] = 0;
 						}
@@ -180,8 +168,8 @@ class PPgImgTab{
 		//------------------------------------------------
 		//------------------------------------------------
 		public static void AddOffset( int [][][] pData, int pW, int pH, int pOffset ) {
-				
-				for(int lRow = 0;lRow < pH; lRow++){	
+
+				for(int lRow = 0;lRow < pH; lRow++){
 						for(int lCol = 0; lCol < pW; lCol++){
 								for( int i=1; i< 4; i++ )
 										pData[lRow][lCol][i] += pOffset;
@@ -191,7 +179,7 @@ class PPgImgTab{
 		//------------------------------------------------
 		public static void Scale( int [][][] pData, int pW, int pH, float pScale  ) {
 
-				for(int lRow = 0;lRow < pH; lRow++){	
+				for(int lRow = 0;lRow < pH; lRow++){
 						for(int lCol = 0; lCol < pW; lCol++){
 								for( int i=1; i< 4; i++ )
 										pData[lRow][lCol][i] *= pScale;

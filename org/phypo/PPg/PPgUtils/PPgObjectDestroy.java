@@ -7,7 +7,7 @@ public interface PPgObjectDestroy{
 
 	void destroy();
 	void toDestroy();
-	
+
 }
 //**********************************************************
 

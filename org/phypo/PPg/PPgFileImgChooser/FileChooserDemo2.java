@@ -27,16 +27,25 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 package org.phypo.PPg.PPgFileImgChooser;
 
 
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.*;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 /*
  * FileChooserDemo2.java requires these files:
@@ -74,7 +83,8 @@ public class FileChooserDemo2 extends JPanel
 
 		//------------------------------------------------
 
-    public void actionPerformed(ActionEvent e) {
+    @Override
+	public void actionPerformed(ActionEvent e) {
         //Set up the file chooser.
         if (fc == null) {
             fc = new JFileChooser(".");
@@ -117,7 +127,7 @@ public class FileChooserDemo2 extends JPanel
     private static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("FileChooserDemo2");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //Add content to the window.
         frame.add(new FileChooserDemo2());
@@ -131,7 +141,8 @@ public class FileChooserDemo2 extends JPanel
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 //Turn off metal's use of bold fonts
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
                 createAndShowGUI();

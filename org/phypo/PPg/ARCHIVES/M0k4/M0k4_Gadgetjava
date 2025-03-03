@@ -1,0 +1,18 @@
+
+
+
+//*************************************************
+
+public interface M0k4_Gadget{
+
+		public String  getName()  = 0;
+		public Icon    getIcone() = 0;
+
+		public void    openDialogOption() = 0;		
+		
+}
+
+//*************************************************
+
+
+

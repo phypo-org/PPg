@@ -7,9 +7,9 @@ package org.phypo.PPg.PPgUtils;
 public class PPgXmlTag{
 
 		public final static String TAG_XML_     = "";
-		
+
 		public final static String TAG_XML_ROOT        = "Root";
-		
+
 		public final static String TAG_XML_NAME        = "Name";
 		public final static String TAG_XML_VALUE       = "Value";
 		public final static String TAG_XML_TYPE        = "Type";
@@ -25,12 +25,12 @@ public class PPgXmlTag{
 		public final static String TAG_XML_COLOR       = "Color";
 		public final static String TAG_XML_IMAGE       = "Image";
 		public final static String TAG_XML_ICON        = "Icone";
-		
-	 
+
+
 		public final static String TAG_XML_BACKGROUND_COLOR       = "BackgroundColor";
 		public final static String TAG_XML_LOAD        = "Load";
 		public final static String TAG_XML_FILE        = "File";
-		public final static String TAG_XML_BACKGROUND  = "Background";	 
+		public final static String TAG_XML_BACKGROUND  = "Background";
 
-};
+}
 //*************************************************

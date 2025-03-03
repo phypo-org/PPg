@@ -1,0 +1,9 @@
+Main-Class: com.phipo.PPg.PPgG3d.PPgG3d
+Class-Path: org.lwjgl com.phipo.PPg.PPgUtils com.phipo.PPg.PPgWin com.phipo.PPg.PPgMath com.phipo.PPg.PPgG3d ./lwjgl/jar/lwjgl.jar ./lwjgl/jar/lwjgl_util.jar ./lwjgl/jar/jinput.jar ./lwjgl/jar/lwjgl-debug.jar  ./lwjgl/jar/slick-util.jar
+Specification-Title: PPgG3d
+Specification-Version: 1.0
+Specification-Vendor: Philippe Poupon
+Implementation-Title: PPgG3d
+Implementation-Version: build32
+Implementation-Vendor: Philippe Poupon
+Sealed: true

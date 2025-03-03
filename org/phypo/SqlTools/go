@@ -1,0 +1,5 @@
+FREECHART_JAR=${JFREECHART_PATH}/jfreechart.jar:${JFREECHART_PATH}/jcommonjar
+MARIADB_JAR=${MARIADB_PATH}/mariadb-java-client.jar
+
+
+java -debug -cp ../../..:$FREECHART_JAR:$MARIADB_JAR org/phypo/SqlTools/SqlTools -ISqlTools.ini  $*

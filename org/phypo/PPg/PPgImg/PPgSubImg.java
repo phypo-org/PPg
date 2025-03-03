@@ -4,18 +4,13 @@ package org.phypo.PPg.PPgImg;
 
 
 
-import java.awt.geom.*;
-import java.awt.*;
-import java.awt.geom.Point2D.*;
-import java.awt.event.*;
-
-
-import javax.swing.ImageIcon;
+import java.awt.Graphics2D;
+import java.awt.Image;
 
 
 //*************************************************
 public class PPgSubImg extends PPgImg {
-		
+
 		protected int cSrcX;
 		protected int cSrcY;
 		protected int cWidth;
@@ -26,7 +21,7 @@ public class PPgSubImg extends PPgImg {
 
 				cSrcX = pSrcX;
 				cSrcY = pSrcY;
-				
+
 				cWidth = pWidth;
 				cHeight = pHeight;
 
@@ -34,13 +29,13 @@ public class PPgSubImg extends PPgImg {
 		}
 
 		//------------------------------------------------
-		
+
 		public PPgSubImg( Image pImg, int pSrcX, int pSrcY, int pWidth, int pHeight ){
 				super( pImg );
 
 				cSrcX = pSrcX;
 				cSrcY = pSrcY;
-				
+
 				cWidth = pWidth;
 				cHeight = pHeight;
 
@@ -54,13 +49,15 @@ public class PPgSubImg extends PPgImg {
 		}
 		//------------------------------------------------
 
+		@Override
 		public int getWidth()  { return cWidth;  }
+		@Override
 		public int getHeight() { return cHeight; }
 
 		public void draw( Graphics2D pG, int pX, int pY ) {
 				pX -= cSemiWidth;
 				pY -= cSemiHeight;
-				pG.drawImage( getImage(),  pX, pY,  null);	
+				pG.drawImage( getImage(),  pX, pY,  null);
 		}
 
 		private Image getImage() {
@@ -70,5 +67,5 @@ public class PPgSubImg extends PPgImg {
 
 		public void prepareNextDraw( int pState, int pSequence, double pAngle ){
 		}
-};
+}
 //*************************************************

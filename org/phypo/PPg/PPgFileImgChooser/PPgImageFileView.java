@@ -27,14 +27,15 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 package org.phypo.PPg.PPgFileImgChooser;
 
+import java.awt.Image;
 import java.io.File;
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
-import javax.swing.filechooser.*;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.filechooser.FileView;
 
 //*************************************************
 /* ImageFileView.java is used by FileChooserDemo2.java. */
@@ -43,7 +44,7 @@ public class PPgImageFileView extends FileView {
 
 		static int cMaxWidth  = 50;
 		static int cMaxHeight = 50;
-		
+
 		int cLastWidth =0;
 		int cLastHeight=0;
 		//------------------------------------------------
@@ -57,39 +58,43 @@ public class PPgImageFileView extends FileView {
 								extension.equals( PPgImageUtils.gif)  ||
 								extension.equals( PPgImageUtils.bmp)  ||
 								extension.equals( PPgImageUtils.tiff) ||
-								extension.equals( PPgImageUtils.tif)  || 																								
+								extension.equals( PPgImageUtils.tif)  ||
 								extension.equals( PPgImageUtils.png)) {
 
 								return true;
 						}
 				}
 
-				return false;								
+				return false;
 		}
 		//------------------------------------------------
 
-    public String getName(File f) {
+    @Override
+	public String getName(File f) {
         return null; //let the L&F FileView figure this out
     }
 		//------------------------------------------------
 
-    public String getDescription(File f) {
+    @Override
+	public String getDescription(File f) {
 
         if( isGraphic(f) ) {
 						return new String( ""+cLastWidth +'x'+cLastHeight);
 				}
-				
+
         return null; //let the L&F FileView figure this out
     }
 		//------------------------------------------------
 
-    public Boolean isTraversable(File f) {
+    @Override
+	public Boolean isTraversable(File f) {
         return null; //let the L&F FileView figure this out
     }
 
 		//------------------------------------------------
 
-    public String getTypeDescription(File f) {
+    @Override
+	public String getTypeDescription(File f) {
         String extension = PPgImageUtils.getExtension(f);
         String type = null;
 
@@ -111,7 +116,8 @@ public class PPgImageFileView extends FileView {
     }
 		//------------------------------------------------
 
-    public Icon getIcon(File f) {
+    @Override
+	public Icon getIcon(File f) {
 
         ImageIcon icon = null;
 
@@ -120,15 +126,15 @@ public class PPgImageFileView extends FileView {
 						if(  tmpIcon != null ) {
 								cLastWidth  = tmpIcon.getIconWidth();
 								cLastHeight = tmpIcon.getIconHeight();
-								
-								
+
+
 								if(  cLastWidth > cMaxWidth  || cLastHeight > cMaxHeight ) {
 										if( tmpIcon.getIconWidth() >  tmpIcon.getIconHeight() )
 												icon = new ImageIcon( tmpIcon.getImage().getScaledInstance( cMaxWidth, -1,
 																																										Image.SCALE_FAST));
 										else
 												icon = new ImageIcon( tmpIcon.getImage().getScaledInstance( -1, cMaxHeight,
-																																										Image.SCALE_FAST));														
+																																										Image.SCALE_FAST));
 								}
 								else
 										icon = tmpIcon;

@@ -27,19 +27,20 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package org.phypo.PPg.PPgFileImgChooser;
 
 import java.io.File;
-import javax.swing.*;
-import javax.swing.filechooser.*;
+
+import javax.swing.filechooser.FileFilter;
 
 /* ImageFilter.java is used by FileChooserDemo2.java. */
 public class PPgImageFilter extends FileFilter {
 
     //Accept all directories and all gif, jpg, tiff, or png files.
-    public boolean accept(File f) {
+    @Override
+	public boolean accept(File f) {
         if (f.isDirectory()) {
             return true;
         }
@@ -63,7 +64,8 @@ public class PPgImageFilter extends FileFilter {
     }
 
     //The description of this filter
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return "Just Images";
     }
 }

@@ -2,7 +2,7 @@ package org.phypo.PPg.PPgFX;
 
 
 
-import org.phypo.PPg.PPgUtils.Log;
+import org.phypo.PPg.PPgUtils.PPgTrace;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -17,30 +17,30 @@ public class SimpleEdit extends PPgDialog  {
 	//-------------------------------------------------------------------------------------
 	protected SimpleEdit( Window iOwner, String iTitle, String iStrText, String iFoot, boolean iIsEditable, boolean iModal , boolean iFlagClose) {
 		super( iOwner, iTitle, iModal, iFlagClose   );
-	
-		Log.Dbg( "SimpleEdit size : "+iStrText.length());
-	
+
+		PPgTrace.Dbg( "SimpleEdit size : "+iStrText.length());
+
 		cText = new TextArea( iStrText);
 		getPrimPane().setCenter(cText);
 		cText.setEditable(iIsEditable);
 		cText.setFont( Font.font ("monospaced", 12));
 
-		Log.Dbg( "SimpleEdit TextArea");
-		
+		PPgTrace.Dbg( "SimpleEdit TextArea");
+
 		if( iFoot != null )
 			setFootText( iFoot );
-		
+
 		if( iModal ) {
 			cButtonClose = addToBottomRight( FxHelper.CreateButton( "Close", null, ev -> {
-				cOk = true;			
+				cOk = true;
 				close();
 			}));
 		}
-		Log.Dbg( "SimpleEdit medium");
+		PPgTrace.Dbg( "SimpleEdit medium");
 		this.setWidth(1024);
 		this.setHeight(800);
-		
-		Log.Dbg( "SimpleEdit end creation");
+
+		PPgTrace.Dbg( "SimpleEdit end creation");
 	}
 	//-------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ public class SimpleEdit extends PPgDialog  {
 	static public SimpleEdit CreateModalNotEditable( Window iOwner, String iTitle, String iStrText ) {
 		return new SimpleEdit( null, iTitle, iStrText, null, false, true, false);
 	}
-	
+
 	//-------------------------------------------------------------------------------------
 	static public SimpleEdit Create( Window iOwner,String iTitle, String iStrText ) {
 		return new SimpleEdit( null, iTitle, iStrText, null, true, false, true );

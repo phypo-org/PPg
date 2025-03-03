@@ -1,0 +1,5 @@
+
+[SQL]
+Server=MARIADB, 127.0.0.1, 3306, phipo, mypass, SesameLogDb
+RequestAlertPusher=SELECT  SrcIp, SrcPort, DestIp, DestPort, Proto, AppProto FROM SesameIdsAlertDb.AlertPusherBody;
+

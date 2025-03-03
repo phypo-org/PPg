@@ -1,0 +1,9 @@
+Main-Class: com.phipo.PPg.M0k4.DesktopAnim.DesktopAnim
+Class-Path: com.phipo.PPg.PPgUtils com.phipo.PPg.PPgWin com.phipo.PPg.PPgImg com.phipo.PPg.M0k4.DesktopAnim
+Specification-Title: DesktopAnim
+Specification-Version: 1.0
+Specification-Vendor: Philippe Poupon
+Implementation-Title: DesktopAnim
+Implementation-Version: build32
+Implementation-Vendor: Philippe Poupon
+Sealed: true

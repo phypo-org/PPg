@@ -18,18 +18,18 @@ public class DialogEdit  extends  Dialog<Pair<Boolean, String>>{
 	Button   cButtonSave         = null;
 	Button   cButtonCancel       = null;
 	TextArea cText               = null;
-	
+
 	static final String sClose  = "Close";
 	// AJOUTER Hexdump ?
-	
+
 	public DialogEdit( String iTitle, String iHeader, String iText, boolean iPermitEdit, String iStyle) {
 
 		setTitle(iTitle);
-		
+
 		if( iHeader != null)
 			setHeaderText( iHeader );
 
-		if( iPermitEdit == false ) {
+		if( !iPermitEdit ) {
 			getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
 		}
 		else {
@@ -39,11 +39,11 @@ public class DialogEdit  extends  Dialog<Pair<Boolean, String>>{
 
 		BorderPane lPane =  new BorderPane();
 		getDialogPane().setContent( lPane);
-				
+
 		lPane.setCenter ( (cText = new TextArea()) );
-	 
+
 		if( iStyle != null )cText.setStyle( iStyle );
-		if( iPermitEdit == false ) {
+		if( !iPermitEdit ) {
 			cText.editableProperty().set(false);
 		}
 		cText.setFont(Font.font ("monospaced", 12));
@@ -51,7 +51,7 @@ public class DialogEdit  extends  Dialog<Pair<Boolean, String>>{
 		cText.setWrapText(true);
 		cText.setText( iText);
 	}
-	//-----------------------------------------------	
-}	
+	//-----------------------------------------------
+}
 //*******************************************************
 

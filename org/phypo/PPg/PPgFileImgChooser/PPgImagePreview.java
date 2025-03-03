@@ -27,28 +27,34 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 package org.phypo.PPg.PPgFileImgChooser;
 
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 
 /* ImagePreview.java by FileChooserDemo2.java. */
 public class PPgImagePreview extends JComponent
                           implements PropertyChangeListener {
 
-		
+
 		static int cMaxWidth  = 200;
 		static int cMaxHeight = 400;
-		
+
 		//		JLabel cLabel = null;
 
     ImageIcon thumbnail = null;
     File file = null;
-		
+
 
     public PPgImagePreview(JFileChooser fc) {
 				//				add(  ( cLabel = new JLabel("         ")));
@@ -77,19 +83,20 @@ public class PPgImagePreview extends JComponent
 																									getScaledInstance(cMaxWidth, -1,
 																																		Image.SCALE_FAST));
 										}
-										else {												
+										else {
 												thumbnail = new ImageIcon(tmpIcon.getImage().
 																									getScaledInstance( -1, cMaxHeight,
 																																		Image.SCALE_FAST));
 										}
-										
+
             } else { //no need to miniaturize
                 thumbnail = tmpIcon;
             }
         }
     }
 
-    public void propertyChange(PropertyChangeEvent e) {
+    @Override
+	public void propertyChange(PropertyChangeEvent e) {
         boolean update = false;
         String prop = e.getPropertyName();
 
@@ -114,7 +121,8 @@ public class PPgImagePreview extends JComponent
         }
     }
 
-    protected void paintComponent(Graphics g) {
+    @Override
+	protected void paintComponent(Graphics g) {
         if (thumbnail == null) {
             loadImage();
         }

@@ -1,6 +1,6 @@
 package org.phypo.PPg.PPgFX;
 
-import org.phypo.PPg.PPgUtils.Log;
+import org.phypo.PPg.PPgUtils.PPgTrace;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -21,27 +21,27 @@ public class LongFieldFx  extends TextField {
 	public long  getValue()                 { return cValue.getValue(); }
 	public void  setValue(int newValue)      { cValue.setValue(newValue); }
 	public LongProperty valueProperty()     { return cValue; }
-	
+
 	long getMin() { return cMinValue; }
 	long getMax() { return cMaxValue; }
 
 	//---------------------------------------
 	public LongFieldFx (long cMinValue, long cMaxValue, long initialValue) {
-		if (cMinValue > cMaxValue) 
+		if (cMinValue > cMaxValue)
 			throw new IllegalArgumentException(
 					"IntField min value " + cMinValue + " greater than max value " + cMaxValue
 					);
-		if (cMaxValue < cMinValue) 			
+		if (cMaxValue < cMinValue)
 			throw new IllegalArgumentException(
 					"IntField max value " + cMinValue + " less than min value " + cMaxValue
 					);
 		if ( initialValue < cMinValue  ) {
-			Log.Err("IntField initialValue " + initialValue + " not between " + cMinValue + " and " + cMaxValue);
-			initialValue = cMinValue; 
-		} else 
+			PPgTrace.Err("IntField initialValue " + initialValue + " not between " + cMinValue + " and " + cMaxValue);
+			initialValue = cMinValue;
+		} else
 		if( initialValue > cMaxValue)  {
-			Log.Err("IntField initialValue " + initialValue + " not between " + cMinValue + " and " + cMaxValue);
-			initialValue = cMaxValue; 
+			PPgTrace.Err("IntField initialValue " + initialValue + " not between " + cMinValue + " and " + cMaxValue);
+			initialValue = cMaxValue;
 		}
 
 		// initialize the field values.

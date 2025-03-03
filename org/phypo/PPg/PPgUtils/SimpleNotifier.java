@@ -1,24 +1,25 @@
 package org.phypo.PPg.PPgUtils;
 
 
-import java.util.*;
-import java.io.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 //***********************************
 public class SimpleNotifier{
-    
+
 
     HashMap<SimpleNotifierSubject, Set<SimpleNotifierObserver> > cNotifs = new HashMap<>();
 
     //-------------------------------------
     public void register( SimpleNotifierSubject iSub, SimpleNotifierObserver iObs ){
-	
+
 	Set<SimpleNotifierObserver> lSetObs = cNotifs.get( iSub );
 	if( lSetObs == null ) {
-	    lSetObs = new  HashSet<SimpleNotifierObserver>();
+	    lSetObs = new  HashSet<>();
 	    cNotifs.put( iSub, lSetObs );
 	}
-	lSetObs.add( iObs );	    
+	lSetObs.add( iObs );
     }
     //-------------------------------------
     public void unRegister( SimpleNotifierSubject iSub, SimpleNotifierObserver iObs ){
@@ -43,7 +44,7 @@ public class SimpleNotifier{
 
 	for( SimpleNotifierSubject lSub : cNotifs.keySet() ) {
 	    unRegister( lSub, iObs );
-	}	
+	}
     }
     //-------------------------------------
     public void notify(  SimpleNotifierSubject iSub ){
@@ -53,7 +54,7 @@ public class SimpleNotifier{
 	    for(  SimpleNotifierObserver lObs : lSetObs ){
 		lObs.notify(iSub);
 	    }
-	}	
+	}
     }
     //-------------------------------------
     public <OBJECT> void notify(  SimpleNotifierSubject iSub, OBJECT iObj ){
@@ -63,10 +64,10 @@ public class SimpleNotifier{
 	    for(  SimpleNotifierObserver lObs : lSetObs ){
 		lObs.notify(iSub, iObj);
 	    }
-	}	
+	}
     }
 
 }
-    
+
 //***********************************
-	
+

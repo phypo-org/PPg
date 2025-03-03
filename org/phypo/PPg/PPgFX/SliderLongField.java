@@ -16,12 +16,12 @@ public class SliderLongField {
 	Slider   cSlider;
 
 	//---------------------------------------
-	public abstract class ChangeValue { 
+	public abstract class ChangeValue {
 		 abstract boolean change( long iValue );
 	}
 	//---------------------------------------
 	public SliderLongField( String iLabel, long iMinValue, long iMaxValue, long iValue, ChangeValue iChange) {
-		
+
 		LongFieldFx lText;
 		int lCol=0, lRow =0;
 
@@ -37,33 +37,33 @@ public class SliderLongField {
 		cSlider.setShowTickLabels(true);
 		cSlider.setMajorTickUnit(60);
 		cSlider.setBlockIncrement(1);
-		
-		cSlider.valueProperty().addListener((Observable ov)-> { 
-			if (cSlider.isPressed()) { 
+
+		cSlider.valueProperty().addListener((Observable ov)-> {
+			if (cSlider.isPressed()) {
 				String lNewVal ;
 					lNewVal = Long.toString( (long) cSlider.getValue() );
-					
-					if( lText.getText().equals(lNewVal) == false ) {
-					lText.setText( lNewVal ); 
-					
+
+					if( !lText.getText().equals(lNewVal) ) {
+					lText.setText( lNewVal );
+
 					if( iChange != null ) {
 						iChange.change((long) cSlider.getValue());
 					}
 				}
-			} 
+			}
 		});
-		
+
 		lText.textProperty().addListener(new ChangeListener<String>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, 
+			public void changed(ObservableValue<? extends String> observable, String oldValue,
 					String iNewValue) {
 					if( iNewValue.length() > 0 ) {
 
 					Long lDval = Long.parseLong(iNewValue);
-				
+
 					cSlider.setValue( lDval);
 					if( iChange != null ) {
-						iChange.change((long) lDval );
+						iChange.change(lDval );
 					}
 				}
 			}

@@ -25,12 +25,12 @@ public class Login extends Dialog<Pair<String, String>> {
 	//-----------------------
 
 	public Login( String iLabel, PPgIniFile iIni, Image iIcon,  String pSection, String pKey){
-				
+
 		setTitle("Login");
-		
+
 		setHeaderText(iLabel);
 
-		FxHelper.SetIcon( this, iIcon );		
+		FxHelper.SetIcon( this, iIcon );
 
 		// Set the button types.
 		ButtonType lLoginButtonType = new ButtonType("Login", ButtonData.OK_DONE);
@@ -45,7 +45,7 @@ public class Login extends Dialog<Pair<String, String>> {
 		TextField lUserName = new TextField();
 		lUserName.setPromptText("Username");
 
-		
+
 		PasswordField lPasswordField = new PasswordField();
 		lPasswordField.setPromptText("Password");
 
@@ -53,18 +53,18 @@ public class Login extends Dialog<Pair<String, String>> {
 		lGrid.add(lUserName, 1, 0);
 		lGrid.add(new Label("Password:"), 0, 1);
 		lGrid.add(lPasswordField, 1, 1);
-				
-		
+
+
 		String  lStr = iIni.get( pSection, pKey );
 		if( lStr != null ){
 			PPgToken lTok = new PPgToken( lStr, "", "," );
-			lUserName.setText( lTok.nextTokenStringTrim());	
+			lUserName.setText( lTok.nextTokenStringTrim());
 			lPasswordField.setText(lTok.nextTokenStringTrim());
 		}
 
 
 		// Enable/Disable login button depending on whether a username was entered.
-	
+
 		Node lLoginButton = getDialogPane().lookupButton(lLoginButtonType);
 		if( lUserName.getText().trim().isEmpty()) {
 			lLoginButton.setDisable(true);
@@ -84,7 +84,7 @@ public class Login extends Dialog<Pair<String, String>> {
 				return new Pair<>(lUserName.getText(), lPasswordField.getText());
 			}
 			return null;
-		});	
+		});
 	}
 
 }

@@ -3,7 +3,7 @@ package org.phypo.PPg.PPgData;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.phypo.PPg.PPgUtils.Log;
+import org.phypo.PPg.PPgUtils.PPgTrace;
 
 
 //*************************************************
@@ -16,50 +16,50 @@ public class DataChgNotifier {
 	//-------------------------------------------------
 	private static DataChgNotifier sInstance;   // A possible singleton
 
-	private DataChgNotifier() {;}
+	private DataChgNotifier() {}
 	//-------------------------------------------------
 	public static DataChgNotifier Instance() {
 		if( sInstance == null ) {
-			sInstance = new DataChgNotifier();			
+			sInstance = new DataChgNotifier();
 		}
 		return sInstance;
 	}
 	//-------------------------------------------------
 	// MT possible error !!!
-	
+
 	public void register( String iKey, DataChgNotifierClient iClient ) {
 		if( iKey == null ) {
-			Log.Err( "DataChgNotifier.register key is null");
+			PPgTrace.Err( "DataChgNotifier.register key is null");
 			return ;
 		}
 
 		if( iClient == null ) {
-			Log.Err( "DataChgNotifier.register client is null for key : " +  iKey );
+			PPgTrace.Err( "DataChgNotifier.register client is null for key : " +  iKey );
 			return ;
 		}
 
 		ArrayList<DataChgNotifierClient> lList = cClients.get(iKey);
 		if( lList  == null ) {
-			lList = new ArrayList<DataChgNotifierClient>();
+			lList = new ArrayList<>();
 			lList.add( iClient);
 			cClients.put( iKey,  lList );
 		} else {
-			if( lList.contains( iClient) == false ){
+			if( !lList.contains( iClient) ){
 				lList.add( iClient);
 			}
-		}			
+		}
 	}
 	//-------------------------------------------------
 	// MT possible error !!!
-	
+
 	public void unregister( String iKey, DataChgNotifierClient iClient ) {
 		if( iKey == null ) {
-			Log.Err( "DataChgNotifier.unregister key is null");
+			PPgTrace.Err( "DataChgNotifier.unregister key is null");
 			return ;
 		}
 
 		if( iClient == null ) {
-			Log.Err( "DataChgNotifier.unregister client is null for key : " +  iKey );
+			PPgTrace.Err( "DataChgNotifier.unregister client is null for key : " +  iKey );
 			return ;
 		}
 
@@ -69,14 +69,14 @@ public class DataChgNotifier {
 			if( lList.contains( iClient)  ){
 				lList.remove( iClient);
 			}
-		}			
+		}
 	}
 	//-------------------------------------------------
 	public  boolean prepareReload(String iStr, long iTimeStamp ) {
 		//	Log.Dbg3("PrepareReload <" + iStr +">");
 
 		ArrayList<DataChgNotifierClient> lList = cClients.get(iStr);
-		
+
 		if( lList == null)
 			return false;
 
@@ -89,10 +89,10 @@ public class DataChgNotifier {
 			//		Log.Dbg( "  prepareReload ? "  +iStr+"-"+iTimeStamp +  " > "+lClient.getLastTimeStamp() + " -> " +  ( iTimeStamp > lClient.getLastTimeStamp()) );
 
 			if( lClient.getNeedReload() ) {
-				Log.Dbg( ">>>>>>>>>>>>>>> DataChgNotifier Prepare NEED RELOAD : "+iStr+" : "+ (iTimeStamp -lClient.getLastTimeStamp()) );
+				PPgTrace.Dbg( ">>>>>>>>>>>>>>> DataChgNotifier Prepare NEED RELOAD : "+iStr+" : "+ (iTimeStamp -lClient.getLastTimeStamp()) );
 				lClient.setTmpTimeStamp( iTimeStamp );
 			}
-			lNeed = lNeed || lClient.getNeedReload();		
+			lNeed = lNeed || lClient.getNeedReload();
 		}
 		return lNeed;
 	}
@@ -104,23 +104,23 @@ public class DataChgNotifier {
 
 				if( lClient.getNeedReload() || lClient.getForceReload() ) {
 
-					Log.Dbg( "        DataChgNotifier.reloadIfNeeded callSynLoad " +   lClient.getNeedReload() + " " + lClient.getForceReload()  + " " +lClient.toString());
+					PPgTrace.Dbg( "        DataChgNotifier.reloadIfNeeded callSynLoad " +   lClient.getNeedReload() + " " + lClient.getForceReload()  + " " +lClient.toString());
 
 					lClient.setForceReload( ! lClient.callSyncLoad() ); // callSyncLoad make the call to load the table
-					if( lClient.getForceReload() == false ) {
+					if( !lClient.getForceReload() ) {
 						lClient.setNeedReload(  false );
 						lClient.setLastTimeStamp(  lClient.getTmpTimeStamp() );
 						//	Log.Dbg( "        DataChgNotifier setNeedReload false  timestamp : " + lClient.getLastTimeStamp());
 					}
 				}
 			}
-		} 
-	}	
+		}
+	}
 	//-------------------------------------------------
 	public  void razTimeStamps() {
-		for( ArrayList<DataChgNotifierClient>  lList :  cClients.values()) {			
+		for( ArrayList<DataChgNotifierClient>  lList :  cClients.values()) {
 			for( DataChgNotifierClient lClient : lList ) {
-				lClient.razLastTimeStamp() ;		
+				lClient.razLastTimeStamp() ;
 			}
 		}
 	}

@@ -1,7 +1,5 @@
 package org.phypo.PPg.Sql;
 
-import java.util.StringTokenizer;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +16,8 @@ public class SqlServer{
 		SYBASE,
 		MYSQL,
 		MARIADB,
-		UNKNOWN;
+		UNKNOWN,
+		POSTGRESQL;
 
 		static public ServerType Find(  String pStr ){
 
@@ -28,7 +27,7 @@ public class SqlServer{
 			}
 			return UNKNOWN;
 		}
-	};
+	}
 	public ServerType cServerType=ServerType.UNKNOWN;
 
 
@@ -38,7 +37,7 @@ public class SqlServer{
 	public String cPort= null;
 	public String cUser= null;
 	public String cPass= null;
-	public String cBase= null;    
+	public String cBase= null;
 	public String cOptions= null;
 	public String cDriver= null;
 	public Properties cCerts=null;
@@ -55,7 +54,7 @@ public class SqlServer{
 		cOptions = new String(  );
 		cDriver = new String();
 	}
-	
+
 	public SqlServer( SqlServer pSqlServer ){
 		cServerType = pSqlServer.cServerType;
 
@@ -108,14 +107,14 @@ public class SqlServer{
 			PPgToken lTok = new PPgToken( lStr, "", "," );
 
 			try{
-				cName =pName;			
-				cServerType= ServerType.Find( lTok.nextToken().toString() ); 
+				cName =pName;
+				cServerType= ServerType.Find( lTok.nextToken().toString() );
 				//cUrl = lTok.nextToken().toString();
-				cMachine =lTok.nextTokenStringTrim();			
-				cPort =lTok.nextTokenStringTrim();			
-				cUser =lTok.nextTokenStringTrim();			
-				cPass =lTok.nextTokenStringTrim();			
-				cBase =lTok.nextTokenStringTrim();			
+				cMachine =lTok.nextTokenStringTrim();
+				cPort =lTok.nextTokenStringTrim();
+				cUser =lTok.nextTokenStringTrim();
+				cPass =lTok.nextTokenStringTrim();
+				cBase =lTok.nextTokenStringTrim();
 				cOptions =lTok.nextTokenStringTrim();
 				cUrl=lTok.nextTokenStringTrim();
 				cDriver=lTok.nextTokenStringTrim();
@@ -131,15 +130,15 @@ public class SqlServer{
 	//----------------------
 	public String debugString(){
 		String lStr;
-		if( cServerType != cServerType.UNKNOWN ) {
-			lStr =  "<"+cServerType.toString()+":"+cName+":" 
+		if( cServerType != ServerType.UNKNOWN ) {
+			lStr =  "<"+cServerType.toString()+":"+cName+":"
 				+ cMachine +":" + cPort +":" + cUser+":" + cPass+":"+cBase+":" + cOptions+">";
 			}
 		else {
-			lStr =  "<"+cUrl+":"+cDriver+":"+":"+cName+":" 
+			lStr =  "<"+cUrl+":"+cDriver+":"+":"+cName+":"
 					+ cMachine +":" + cPort +":" + cUser+":" + cPass+":"+cBase+":" + cOptions+">";
 		}
-				
+
 		return  lStr;
 	}
 	//-----------------------
@@ -157,17 +156,17 @@ public class SqlServer{
 	}
 
 	public void GetCertsProperties( ){
-		
+
 	    try (InputStream input = new FileInputStream("certs.properties")) {
-	
+
 	        cCerts = new Properties();
-	
+
 	        // load a properties file
-	        cCerts.load(input);   
-		
+	        cCerts.load(input);
+
 	    } catch (IOException ex) {
 	    	System.err.println( "SqlServer : Error when reading certs.properties file" );
 	        ex.printStackTrace();
-	    }	
+	    }
 	}
-};
+}

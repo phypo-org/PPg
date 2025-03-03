@@ -26,7 +26,7 @@ public class PPgFile {
 				lOutputStream.write(bytes, 0, lSz);
 				lTotalSize+=lSz;
 			}
-			lOutputStream.close();            
+			lOutputStream.close();
 		}
 		return lTotalSize;
 	}
@@ -38,7 +38,7 @@ public class PPgFile {
 			lOutputStream = new FileOutputStream( iFile, false);
 			lOutputStream.write(iBytes, 0, iBytes.length );
 		} catch ( Exception e) {
-			Log.Err(  "PPgFile.writeFile failed for : " + iFile.getAbsolutePath() + " - Exception : " + e.toString() );			
+			PPgTrace.Err(  "PPgFile.writeFile failed for : " + iFile.getAbsolutePath() + " - Exception : " + e.toString() );
 			return false;
 		}
 		finally{
@@ -50,10 +50,10 @@ public class PPgFile {
 				e.printStackTrace();
 			}
 		}
-		return true;   
+		return true;
 	}
 	//==============================
-	// Compresse un fichier dans un tableau de byte 
+	// Compresse un fichier dans un tableau de byte
 	// Tuple 1 -> taille du fichier
 	// Tuple 2 -> taille compressé (ou alors byte.size !)
 	// Tuple 3 -> byte[]
@@ -68,11 +68,11 @@ public class PPgFile {
 
 		Tuple.Three<Long, Long, byte[]> lReturn = Tuple.Instance.new Three<>();
 
-		try ( ByteArrayOutputStream  lAOS = new ByteArrayOutputStream( (int) ((lLengthFile/10)+32) );	
+		try ( ByteArrayOutputStream  lAOS = new ByteArrayOutputStream( (int) ((lLengthFile/10)+32) );
 				GZIPOutputStream lGOS = new GZIPOutputStream(lAOS) ) {
 
 			long lRead = Files.copy( iFile.toPath(), lGOS );
-			lGOS.close();  
+			lGOS.close();
 
 			lReturn.set2(lRead);
 
@@ -97,11 +97,11 @@ public class PPgFile {
 
 		Tuple.Three<Long, Long, byte[]> lReturn = Tuple.Instance.new Three<>();
 
-		try ( ByteArrayOutputStream  lAOS = new ByteArrayOutputStream( (int) ((lLengthFile/10)+32) );	
+		try ( ByteArrayOutputStream  lAOS = new ByteArrayOutputStream( (int) ((lLengthFile/10)+32) );
 				GZIPOutputStream lGOS = new GZIPOutputStream(lAOS) ) {
 			lGOS.write(iBytesIn);
-			lGOS.finish();  
-			lGOS.close();  
+			lGOS.finish();
+			lGOS.close();
 
 			lReturn.set1( lLengthFile );
 			lReturn.set2( Long.valueOf( lAOS.size()) );
@@ -115,7 +115,7 @@ public class PPgFile {
 	public static long Decompress( final byte iBytesIn[], File iFile) throws IOException {
 
 		try ( InflaterInputStream lIIS    = new GZIPInputStream(new ByteArrayInputStream( iBytesIn ) )){
-			long lSz = Files.copy( lIIS, iFile.toPath() );			
+			long lSz = Files.copy( lIIS, iFile.toPath() );
 			lIIS.close();
 
 			return lSz;
@@ -128,7 +128,7 @@ public class PPgFile {
 			byte lData[] = lIIS.readAllBytes();
 			lIIS.close();
 
-			Log.Dbg4( "PPgFile.Decompress size : " + lData.length );
+			PPgTrace.Dbg4( "PPgFile.Decompress size : " + lData.length );
 
 			return lData;
 		}
@@ -137,7 +137,7 @@ public class PPgFile {
 	public static long aaaDecompress( byte iBytesIn[], File iFile) throws IOException {
 
 		InflaterInputStream lIIS    = new InflaterInputStream(new ByteArrayInputStream( iBytesIn ) );
-		return Files.copy( lIIS, iFile.toPath() );	
+		return Files.copy( lIIS, iFile.toPath() );
 	}
 
 	//==============================
@@ -158,16 +158,16 @@ public class PPgFile {
 		if( iFile == null ) return null;
 
 		int lIndex = iFile.lastIndexOf('.');
-		if( lIndex <= 0 ) return iFile;	
+		if( lIndex <= 0 ) return iFile;
 
 		return iFile.substring( 0, lIndex );
 	}
 	//==============================
-	static public String GetFileExtension( String iName ) {	
+	static public String GetFileExtension( String iName ) {
 		if( iName == null ) return null;
 
 		int lIndex = iName.lastIndexOf('.');
-		if( lIndex <= 0 ) return null;		
+		if( lIndex <= 0 ) return null;
 		String lExtension = iName.substring( lIndex + 1);
 		if( lExtension == null | lExtension.length() == 0)
 			return null;
@@ -179,16 +179,16 @@ public class PPgFile {
 			return false;
 
 		File lFile= new File( iFilename );
-		return Write( lFile, iTxt );	
+		return Write( lFile, iTxt );
 	}
-	//-----------------------------	
+	//-----------------------------
 	static public boolean Write( File iFile, String iTxt) {
 		try {
 			PrintStream lFout = new PrintStream( new FileOutputStream( iFile ) );
 			lFout.print(iTxt);
-			lFout.close();			
+			lFout.close();
 			return true;
-		}	catch(Exception e ) { Log.Err( e.toString() );
+		}	catch(Exception e ) { PPgTrace.Err( e.toString() );
 		e.printStackTrace();
 		}
 		return false;

@@ -27,11 +27,12 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
 
 package org.phypo.PPg.PPgFileImgChooser;
 
 import java.io.File;
+
 import javax.swing.ImageIcon;
 
 /* Utils.java is used by FileChooserDemo2.java. */
@@ -52,7 +53,7 @@ public class PPgImageUtils {
         String s = f.getName();
         int i = s.lastIndexOf('.');
 
-        if (i > 0 &&  i < s.length() - 1) { 
+        if (i > 0 &&  i < s.length() - 1) {
             ext = s.substring(i+1).toLowerCase();
         }
         return ext;

@@ -5,17 +5,17 @@ package org.phypo.PPg.PPgFX;
 public class DataViewObjString implements DataViewObj{
 	String       cLabel;
 	Object       cUserData = null;
-	
+
 	@Override
 	public String toString(){
 		return cLabel;
 	}
-	
+
 	@Override
 	public String getLabel() {
 		return  cLabel;
 	}
-	
+
 	public DataViewObjString( String iLabel ) {
 		this( iLabel, null );
 	}
@@ -41,7 +41,7 @@ public class DataViewObjString implements DataViewObj{
 	@Override
 	public void setFrom(DataViewObj iObj) {
 		cLabel = iObj.getLabel() ;
-		
+
 	}
-	
+
 }

@@ -1,0 +1,1 @@
+java -debug -splash:org/phypo/PPgEdImg/anim.gif -cp ../../.. org/phypo/PPgEdImg/PPgMain -h -l -c  $*

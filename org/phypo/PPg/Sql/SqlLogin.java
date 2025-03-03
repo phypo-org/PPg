@@ -11,10 +11,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import org.phypo.PPg.PPgUtils.PPgIniFile;
+import org.phypo.PPg.PPgUtils.PPgTrace;
 import org.phypo.PPg.PPgWin.PPgField;
 import org.phypo.PPg.PPgWin.PPgInputField;
-
-import org.phypo.PPg.PPgUtils.*;
 
 // **********************************
 @SuppressWarnings("serial")
@@ -37,7 +37,7 @@ public class SqlLogin extends JDialog
     public boolean   getValidation() { return cValidation; }
     public SqlServer getSqlServer()  { return cServer; }
 
-		
+
     //-----------------------
 
     public SqlLogin( Frame pOwner, int pX, int pY  ){
@@ -45,7 +45,7 @@ public class SqlLogin extends JDialog
 	cServer = new SqlServer();
 	init( pX, pY);
     }
-		
+
     public SqlLogin(  Frame pOwner, String pName, PPgIniFile pFileIni, String pKeySection, int pX, int pY  ){
 	super( pOwner, "Login to " +pName, true );
 	cServer = new SqlServer( pFileIni, pKeySection, pName);
@@ -65,7 +65,7 @@ public class SqlLogin extends JDialog
 	    setLocation( pX, pY );
 
 
-	Log.Trace( cServer.cMachine ); 
+	PPgTrace.Trace( cServer.cMachine );
 	getContentPane().setLayout( new BorderLayout() );
 
 	cPanel =	new JPanel();
@@ -86,7 +86,7 @@ public class SqlLogin extends JDialog
 	cFieldPass = new PPgInputField( "Pass",    cServer.cPass, PPgField.HORIZONTAL, '*'  );
 	cPanel.add( cFieldPass );
 	cFieldBase = new PPgInputField( "Base",    cServer.cBase, PPgField.HORIZONTAL  );
-	cPanel.add( cFieldBase );	
+	cPanel.add( cFieldBase );
 
 	//===============
 	JPanel lSouth = new JPanel();
@@ -110,12 +110,13 @@ public class SqlLogin extends JDialog
 	pack();
 	setVisible(true);
 
-				
+
     }
     //---------------------
-    public void actionPerformed( ActionEvent p_e ){
-				
-	if( p_e.getActionCommand().equals("ok")) {						
+    @Override
+	public void actionPerformed( ActionEvent p_e ){
+
+	if( p_e.getActionCommand().equals("ok")) {
 	    setVisible(false);
 	    cServer.cName = new String( cFieldServer.getString());
 	    //						cServer.cUrl = new String( cFieldUrl.getString());
@@ -133,10 +134,10 @@ public class SqlLogin extends JDialog
 	    dispose();
 	}
     }
-		
+
     //---------------------
-    public void ok(){				
-	cValidation = true;					
+    public void ok(){
+	cValidation = true;
 	setVisible(false);
 	dispose();
     }
