@@ -201,6 +201,7 @@ public class Player extends BorderPane // Player class extend BorderPane
 
 
 		cTableRecords.load();
+	
 		//--------------------------------------
 
 
@@ -225,6 +226,16 @@ public class Player extends BorderPane // Player class extend BorderPane
 	//--------------------------------------
 	//--------------------------------------
 	//--------------------------------------
+    	//--------------------------------------
+
+                private void showErrorPopup(String title, String header, String content) {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle(title);
+                    alert.setHeaderText(header);
+                    alert.setContentText(content);
+                    alert.showAndWait(); // Affiche la popup et attend la fermeture
+                }
+    	//--------------------------------------
 	void quit() {
 		cTableRecords.save();				
 		Conf.SaveIni();
@@ -461,6 +472,17 @@ public class Player extends BorderPane // Player class extend BorderPane
 		
 		if( lRecord != null ) {		
 			try {
+                            Path lDirBestOf = Paths.get( Conf.sDirCopyBestOf);
+                            if (Files.exists(lDirBestOf) == false ) {
+                                try {
+                                    Files.createDirectories(lDirBestOf);
+                                } catch (Exception e) {
+                                    System.err.println("Error create direcory : " + e.getMessage());
+                                    showErrorPopup("Error","Create direcory failed : " + lDirBestOf, e.getMessage());
+                                }
+                            }
+
+                            
 				Path lSrc  = Paths.get( lRecord.getPath() );//lSrc.getFileName()
 				Path lDest = Paths.get( Conf.sDirCopyBestOf ).resolve(lSrc.getFileName());
 				
